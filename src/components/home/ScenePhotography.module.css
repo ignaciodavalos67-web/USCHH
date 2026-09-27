@@ -1,0 +1,11 @@
+﻿/* Preserve portrait framing on landscape screens without stretching photos. */
+.portrait {
+  object-fit: cover;
+}
+
+@media (min-aspect-ratio: 1/1) {
+  .portrait {
+    object-fit: contain;
+    object-position: center;
+  }
+}
