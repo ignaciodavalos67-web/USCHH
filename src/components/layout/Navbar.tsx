@@ -1,11 +1,13 @@
-﻿"use client";
+"use client";
 
 import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import styles from "./Navbar.module.css";
+import { useCart } from "@/components/cart/CartProvider";
 
 export function Navbar() {
+  const cart = useCart();
   const dialog = useRef<HTMLDialogElement>(null);
   const restoreScroll = useRef<(() => void) | null>(null);
   const timer = useRef<ReturnType<typeof setTimeout> | null>(null);
@@ -45,11 +47,15 @@ export function Navbar() {
   return (
     <>
       <header className="fixed top-0 left-0 right-0 z-50 px-6 sm:px-12 py-6 flex items-center justify-between pointer-events-auto mix-blend-difference text-[#F8F7F2] transition-opacity duration-300">
-        <Link href="/" className={`${pathname === "/productos" ? "text-3xl sm:text-4xl" : "text-xl sm:text-2xl"} font-bold tracking-tight lowercase select-none hover:opacity-80 transition-opacity`} aria-label="USCHH — Inicio">uschh</Link>
+        <Link href="/" className={`${pathname !== "/" ? "text-3xl sm:text-4xl" : "text-xl sm:text-2xl"} font-bold tracking-tight lowercase select-none hover:opacity-80 transition-opacity`} aria-label="USCHH — Inicio">uschh</Link>
+        <div className="flex items-center gap-4">
+        <button type="button" onClick={() => { finishClose(); cart.openCart(); }} aria-label={`Abrir carrito, ${cart.count} unidades`} className="text-[11px] tracking-widest min-h-10 px-2 focus-visible:outline-2 focus-visible:outline-offset-4">CARRITO ({cart.count})</button>
         <button type="button" onClick={openMenu} aria-label="Abrir menú" aria-expanded={open} aria-controls="site-menu" aria-haspopup="dialog" className="group flex flex-col justify-center items-end gap-1.5 w-10 h-10 p-2 cursor-pointer focus-visible:outline-2 focus-visible:outline-offset-4">
           <span className="block w-6 h-[1.5px] bg-[#F8F7F2] group-hover:w-7 transition-all duration-300" />
           <span className="block w-4 h-[1.5px] bg-[#F8F7F2] group-hover:w-7 transition-all duration-300" />
         </button>
+
+        </div>
       </header>
       <dialog ref={dialog} id="site-menu" aria-label="Navegación principal" className={styles.overlay} data-closing={closing} onCancel={(event) => { event.preventDefault(); closeMenu(); }}>
         <div className={styles.top}>
@@ -58,8 +64,9 @@ export function Navbar() {
         </div>
         <nav className={styles.links} aria-label="Principal">
           <Link href="/" onNavigate={finishClose} aria-current={pathname === "/" ? "page" : undefined}>INICIO<span aria-hidden="true">↗</span></Link>
+          <Link href="/nuestro-producto" onNavigate={finishClose} aria-current={pathname.startsWith("/nuestro-producto") ? "page" : undefined}>NUESTRO PRODUCTO<span aria-hidden="true">↗</span></Link>
           <Link href="/productos" onNavigate={finishClose} aria-current={pathname.startsWith("/productos") ? "page" : undefined}>TIENDA<span aria-hidden="true">↗</span></Link>
-          <a href="/nosotros" aria-disabled="true" onClick={(event) => event.preventDefault()} className={styles.pending}>NOSOTROS<small>PRÓXIMAMENTE</small></a>
+          <Link href="/nosotros" onNavigate={finishClose} aria-current={pathname.startsWith("/nosotros") ? "page" : undefined}>NOSOTROS<span aria-hidden="true">↗</span></Link>
         </nav>
         <p className={styles.footer}>USCHH · HECHO EN ECUADOR</p>
       </dialog>

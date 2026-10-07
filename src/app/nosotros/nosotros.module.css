@@ -1,0 +1,59 @@
+.page { background:var(--brand-dark); color:var(--brand-offwhite); }
+.page section,.footer { padding-inline:clamp(24px,6vw,96px); }
+.container { max-width:1320px; margin-inline:auto; }
+.page h1,.page h2 { font-weight:700; letter-spacing:-.055em; line-height:1.02; }
+.eyebrow { font-family:var(--font-geist-mono); font-size:11px; letter-spacing:.14em; line-height:1.6; margin-bottom:32px; }
+.hero { padding-top:clamp(145px,13vw,200px); padding-bottom:clamp(64px,7vw,110px); }
+.hero h1 { font-size:clamp(42px,7.1vw,106px); }
+.hero h1 span { color:var(--brand-yellow); }
+.intro { display:grid; grid-template-columns:minmax(0,.9fr) minmax(0,1.1fr); gap:clamp(36px,8vw,120px); margin-top:60px; }
+.lead { color:var(--brand-yellow); font-size:clamp(22px,2.2vw,32px); line-height:1.45; letter-spacing:-.025em; max-width:490px; }
+.copy,.originStory { font-size:clamp(17px,1.3vw,20px); line-height:1.7; }
+.copy p+p,.originStory p+p { margin-top:24px; }
+.heroPhoto,.trainingPhoto,.runningPhoto { position:relative; overflow:hidden; }
+.heroPhoto { margin-top:64px; aspect-ratio:2.3; }
+.heroPhoto img { object-fit:cover; object-position:50% 55%; }
+.philosophy { background:var(--brand-offwhite); color:var(--brand-dark); padding-block:clamp(64px,8vw,120px); }
+.philosophy h2 { font-size:clamp(36px,5.25vw,78px); max-width:1200px; }
+.ownLevel { display:block; margin-top:16px; font-size:.68em; line-height:1.15; }
+.philosophyGrid { display:grid; grid-template-columns:minmax(0,1fr) minmax(0,1fr); align-items:center; gap:clamp(36px,8vw,120px); margin-top:56px; }
+.trainingPhoto { aspect-ratio:1; }
+.trainingPhoto img { object-fit:cover; object-position:35% 67%; }
+.definition { font-size:clamp(19px,1.8vw,26px); line-height:1.55; }
+.definition p+p { margin-top:30px; }
+.definition .movement { font-size:clamp(25px,2.6vw,38px); font-weight:600; letter-spacing:-.035em; line-height:1.2; }
+.origin { background:var(--brand-yellow); color:var(--brand-dark); padding-block:clamp(64px,8vw,120px); }
+.origin h2 { font-size:clamp(38px,6.7vw,100px); }
+.origin h2 span { color:var(--brand-dark); }
+.originGrid { display:grid; grid-template-columns:minmax(0,1.1fr) minmax(0,.9fr); gap:clamp(36px,8vw,120px); margin-top:60px; align-items:start; }
+.originStory { max-width:640px; }
+.originStory .beginning { font-size:clamp(26px,2.9vw,42px); font-weight:600; line-height:1.2; letter-spacing:-.035em; margin-block:44px; }
+.runningPhoto { aspect-ratio:.9; }
+.runningPhoto img { object-fit:cover; object-position:50% 50%; }
+.closing { padding-block:clamp(72px,9vw,140px); }
+.newChapter { font-size:clamp(23px,3vw,44px); font-weight:600; letter-spacing:-.035em; line-height:1.2; margin-bottom:48px; }
+.closing h2 { color:var(--brand-yellow); font-size:clamp(55px,11.8vw,178px); line-height:.95; }
+.manifesto { margin-top:56px; }
+.manifesto blockquote { font-size:clamp(19px,2vw,28px); line-height:1.5; letter-spacing:-.02em; }
+.footer { display:flex; justify-content:space-between; gap:24px; padding-block:28px; border-top:1px solid #f8f7f233; font-family:var(--font-geist-mono); font-size:11px; }
+.page a:focus-visible { outline:2px solid currentColor; outline-offset:6px; }
+@media(max-width:700px) {
+  .hero h1 { font-size:clamp(38px,9vw,62px); }
+  .desktopBreak { display:none; }
+  .intro,.philosophyGrid,.originGrid { grid-template-columns:minmax(0,1fr); gap:32px; margin-top:36px; }
+  .heroPhoto { margin-top:36px; aspect-ratio:1.15; }
+  .heroPhoto img { object-position:50% 50%; }
+  .philosophy h2 { font-size:clamp(32px,8vw,52px); }
+  .ownLevel { font-size:.78em; margin-top:20px; }
+  .trainingPhoto { aspect-ratio:1.1; }
+  .definition p+p { margin-top:24px; }
+  .origin h2 { font-size:clamp(34px,8.6vw,58px); }
+  .originStory .beginning { margin-block:32px; }
+  .runningPhoto { aspect-ratio:1; }
+  .newChapter { margin-bottom:36px; }
+  .closing h2 { font-size:clamp(49px,12.7vw,88px); }
+  .manifesto { margin-top:36px; }
+}
+.origin h2 .ecu { color:var(--brand-yellow); -webkit-text-stroke:1px var(--brand-dark); }
+.origin h2 .ad { color:#034EA2; }
+.origin h2 .or { color:#CE1126; }

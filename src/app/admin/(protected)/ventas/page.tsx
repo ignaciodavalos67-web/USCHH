@@ -1,0 +1,5 @@
+﻿import { adminService,requireAdminPage } from "@/server/admin/context";
+import { DateFilter,SalesMetrics } from "@/components/admin/AdminDisplay";
+import type { Filters } from "@/server/admin/service";
+import styles from "@/components/admin/admin.module.css";
+export default async function Sales({searchParams}: {searchParams:Promise<Filters>}){await requireAdminPage();const filters=await searchParams;const metrics=await adminService.sales(filters);return <><h1>VENTAS</h1><p className={styles.help}>Ingresos de productos pagados en USD, por fecha de pago en hora de Ecuador. Incluye PAGADO, EN PREPARACIÓN, ENVIADO y ENTREGADO. Excluye impagados, cancelados y reembolsados. El envío pagado al recibir no se cuenta como ingreso de USCHH.</p><DateFilter filters={filters}/><SalesMetrics metrics={metrics}/>{metrics.all._count._all===0 && <p className={styles.empty}>TODAVÍA NO HAY VENTAS EN ESTE PERIODO.</p>}<p className={styles.help}>Semana desde el lunes. Los filtros de fecha también limitan las métricas de hoy, semana y mes.</p></>;}

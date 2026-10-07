@@ -3,7 +3,7 @@ import Image from "next/image";
 
 import { AccentLine } from "./SceneTypography";
 
-const SCENE_3_IMAGE = "/images/trote_isbaella_ignacio.webp";
+const SCENE_3_IMAGE = "/images/piscina_bebiendo.jpg";
 
 export function Scene3Discipline() {
   return (

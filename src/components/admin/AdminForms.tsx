@@ -1,0 +1,16 @@
+﻿"use client";
+import { useState } from "react";
+import { useRouter } from "next/navigation";
+import styles from "./admin.module.css";
+export function AdminForm({action,children,label,confirmMessage}: {action:string;children?:React.ReactNode;label:string;confirmMessage?:string}){
+ const router=useRouter();const [pending,setPending]=useState(false),[message,setMessage]=useState("");
+ async function submit(event:React.FormEvent<HTMLFormElement>){event.preventDefault();if(pending)return;const form=event.currentTarget;if(confirmMessage && !window.confirm(confirmMessage))return;setPending(true);setMessage("");
+  const data=Object.fromEntries(new FormData(form));const body={...data,action,confirmed:!!confirmMessage,...(action==="product" ? {active:data.active==="on"} : {})};
+  try{const response=await fetch("/api/admin/actions",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(body)});const result=await response.json();if(response.status===401){router.push("/admin/login");return;}if(!response.ok){setMessage(result.error);return;}setMessage(result.released!==undefined ? `${result.released} reservas liberadas.` : "Cambios guardados.");if(action==="note")form.reset();router.refresh();}catch{setMessage("No pudimos confirmar la respuesta. Actualiza la página antes de volver a intentarlo.");}finally{setPending(false);}
+ }
+ return <form onSubmit={submit} className={styles.form}>{children}<button className={styles.button} disabled={pending}>{pending ? "PROCESANDO…" : label}</button><p role="status" className={styles.notice}>{message}</p></form>;
+}
+export function LoginForm(){const router=useRouter();const [pending,setPending]=useState(false),[error,setError]=useState("");async function submit(event:React.FormEvent<HTMLFormElement>){event.preventDefault();if(pending)return;const data=Object.fromEntries(new FormData(event.currentTarget));setPending(true);try{const response=await fetch("/api/admin/auth/login",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(data)});const result=await response.json();if(!response.ok){setError(result.error);return;}router.replace("/admin");router.refresh();}catch{setError("No podemos iniciar sesión ahora. Inténtalo de nuevo.");}finally{setPending(false);}}
+ return <form onSubmit={submit} className={styles.form}><label>Email<input name="email" type="email" autoComplete="username" maxLength={254} required/></label><label>Contraseña<input name="password" type="password" autoComplete="current-password" maxLength={128} required/></label><p role="alert" className={styles.notice}>{error}</p><button className={styles.button} disabled={pending}>{pending ? "VERIFICANDO…" : "INICIAR SESIÓN ↗"}</button></form>;
+}
+export function Logout(){const router=useRouter();const [error,setError]=useState("");return <div><button className={styles.logout} onClick={async()=>{try{const response=await fetch("/api/admin/auth/logout",{method:"POST"});if(!response.ok)throw new Error();router.replace("/admin/login");router.refresh();}catch{setError("No se pudo cerrar la sesión. Inténtalo de nuevo.");}}}>CERRAR SESIÓN</button><p role="alert">{error}</p></div>;}

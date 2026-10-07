@@ -1,0 +1,28 @@
+.extension {
+  display: none;
+}
+
+/* Extend only the lateral space left by the original 3:2 photograph. */
+@media (min-aspect-ratio: 3/2) {
+  .extension {
+    display: block;
+  }
+
+  .blurredImage {
+    object-fit: cover;
+    object-position: center;
+    filter: blur(26px);
+    transform: scale(1.08);
+  }
+
+  .foreground {
+    --photo-half-width: calc(100vh * 0.7501875);
+    mask-image: linear-gradient(
+      to right,
+      transparent calc(50% - var(--photo-half-width)),
+      black calc(50% - var(--photo-half-width) + 40px),
+      black calc(50% + var(--photo-half-width) - 40px),
+      transparent calc(50% + var(--photo-half-width))
+    );
+  }
+}

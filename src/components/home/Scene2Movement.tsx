@@ -1,9 +1,10 @@
 import React from "react";
 import Image from "next/image";
 import photography from "./ScenePhotography.module.css";
+import movement from "./Scene2Movement.module.css";
 import { AccentLine } from "./SceneTypography";
 
-const SCENE_2_IMAGE = "/images/IMG_9516.jpg";
+const SCENE_2_IMAGE = "/images/uschh_caminadora.jpg";
 
 export function Scene2Movement() {
   return (
@@ -14,13 +15,25 @@ export function Scene2Movement() {
     >
       {/* Background: IMG_9516.jpg — no filter, scale only in GSAP */}
       <div className="absolute inset-0 w-full h-full overflow-hidden bg-[#101820]">
+        <div
+          aria-hidden="true"
+          className={`${movement.extension} scene-2-image absolute inset-0`}
+        >
+          <Image
+            src={SCENE_2_IMAGE}
+            alt=""
+            fill
+            sizes="100vw"
+            className={movement.blurredImage}
+          />
+        </div>
         <Image
           src={SCENE_2_IMAGE}
           alt="Movimiento atlético USCHH"
           fill
           priority
           sizes="100vw"
-          className={`${photography.portrait} scene-2-image object-cover object-center`}
+          className={`${photography.portrait} ${movement.foreground} scene-2-image object-cover object-center`}
         />
         <div className="absolute inset-0 bg-black/15 bg-gradient-to-r from-[#101820]/80 via-[#101820]/40 to-transparent" />
       </div>

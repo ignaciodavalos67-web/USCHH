@@ -1,12 +1,18 @@
-﻿import type { Metadata } from "next";
+import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
-import { products } from "@/lib/products";
+import { getStorefrontProducts } from "@/server/storefront";
+import { connection } from "next/server";
 import styles from "./shop.module.css";
+import CatalogUnavailable from "./catalog-unavailable";
 
 export const metadata: Metadata = { title: "Tienda | USCHH", description: "Electrolitos en polvo USCHH. Limón y Mandarina." };
 
-export default function ShopPage() {
+export default async function ShopPage() {
+  await connection();
+  const catalog = await getStorefrontProducts();
+  if (!catalog.available) return <CatalogUnavailable />;
+  const products = catalog.products;
   return (
     <main className={styles.shop}>
       <h1 className="sr-only">Tienda USCHH</h1>
@@ -20,6 +26,8 @@ export default function ShopPage() {
             <div className={styles.details}>
               <p className={styles.eyebrow}>USCHH · Electrolitos en polvo</p>
               <h2>{product.flavor}</h2>
+              <p className={styles.price}>{product.price}</p>
+              <p className={styles.availability}>{product.availability}</p>
               <Link href={`/productos/${product.slug}`} className={styles.cta} aria-label={`Ver producto ${product.flavor}`}>VER PRODUCTO <span aria-hidden="true">↗</span></Link>
             </div>
           </article>

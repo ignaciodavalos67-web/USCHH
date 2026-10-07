@@ -44,3 +44,6 @@ next-env.d.ts
 
 .agents/
 skills-lock.json
+
+# Safe, placeholder-only environment template
+!.env.example

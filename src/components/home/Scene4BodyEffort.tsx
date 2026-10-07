@@ -3,7 +3,7 @@ import Image from "next/image";
 
 import { AccentLine } from "./SceneTypography";
 
-const SCENE_4_IMAGE = "/images/Squad.jpg";
+const SCENE_4_IMAGE = "/images/box_bebiendo.jpg";
 
 export function Scene4BodyEffort() {
   return (

@@ -1,16 +1,18 @@
 import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { products } from "@/lib/products";
+import { getStorefrontProduct } from "@/server/storefront";
+import { connection } from "next/server";
 import styles from "../shop.module.css";
-
-export function generateStaticParams() {
-  return products.map(({ slug }) => ({ slug }));
-}
+import CatalogUnavailable from "../catalog-unavailable";
+import { AddToCart } from "@/components/cart/AddToCart";
 
 export default async function ProductPage({ params }: { params: Promise<{ slug: string }> }) {
+  await connection();
   const { slug } = await params;
-  const product = products.find((item) => item.slug === slug);
+  const result = await getStorefrontProduct(slug);
+  if (!result.available) return <CatalogUnavailable />;
+  const product = result.product;
   if (!product) notFound();
 
   return (
@@ -29,6 +31,9 @@ export default async function ProductPage({ params }: { params: Promise<{ slug: 
         <div className={styles.detailInfo}>
           <p className={styles.eyebrow}>USCHH · ELECTROLITOS EN POLVO</p>
           <h1>{product.flavor}</h1>
+          <p className={styles.price}>{product.price}</p>
+          <p className={styles.availability}>{product.availability}</p>
+          <AddToCart product={product} />
           <Link href="/productos" className={styles.cta}>← VOLVER A LA TIENDA</Link>
         </div>
       </div>

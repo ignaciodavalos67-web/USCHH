@@ -1,8 +1,3 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
-// Get a free hosted Postgres database in seconds: `npx create-db`
-
 generator client {
   provider = "prisma-client"
   output   = "../src/generated/prisma"
@@ -10,4 +5,288 @@ generator client {
 
 datasource db {
   provider = "postgresql"
+}
+
+enum OrderStatus {
+  PENDING_PAYMENT
+  PAID
+  PREPARING
+  SHIPPED
+  DELIVERED
+  CANCELLED
+  REFUNDED
+}
+
+enum ShippingMode {
+  FREE
+  PAY_ON_DELIVERY
+  CALCULATED
+}
+
+enum PaymentMethod {
+  CARD
+  BANK_TRANSFER
+}
+
+enum PaymentStatus {
+  PENDING
+  PAID
+  FAILED
+  REFUNDED
+}
+
+enum InventoryMovementType {
+  RESERVATION
+  RESERVATION_CONFIRMED
+  RESERVATION_RELEASED
+  SALE
+  CANCELLATION
+  ADMIN_ADJUSTMENT
+}
+
+enum ReservationStatus {
+  NONE
+  RESERVED
+  CONFIRMED
+  RELEASED
+}
+
+enum MarketingConsentStatus {
+  NOT_GRANTED
+  GRANTED
+  WITHDRAWN
+}
+
+enum MarketingConsentSource {
+  GUEST_CHECKOUT
+  NEWSLETTER
+  ADMIN_IMPORT
+}
+
+model Product {
+  id                 String              @id @default(cuid())
+  slug               String              @unique
+  name               String
+  flavor             String
+  description        String?             @db.Text
+  price              Decimal             @db.Decimal(12, 2)
+  currency           String              @default("USD") @db.VarChar(3)
+  stock              Int                 @default(0)
+  active             Boolean             @default(true)
+  createdAt          DateTime            @default(now()) @db.Timestamptz(3)
+  updatedAt          DateTime            @updatedAt @db.Timestamptz(3)
+  orderItems         OrderItem[]
+  inventoryMovements InventoryMovement[]
+}
+
+model Order {
+  checkoutKey            String?           @unique
+  checkoutRequestHash    String?           @db.VarChar(64)
+  guestAccessHash        String?           @db.VarChar(64)
+  accessId               String?           @unique @default(uuid())
+  bankDetails            Json?
+  reservationStatus      ReservationStatus @default(NONE)
+  reservationExpiresAt   DateTime?         @db.Timestamptz(3)
+  reservedAt             DateTime?         @db.Timestamptz(3)
+  reservationConfirmedAt DateTime?         @db.Timestamptz(3)
+  reservationReleasedAt  DateTime?         @db.Timestamptz(3)
+  id                     String            @id @default(cuid())
+  // PostgreSQL sequence: concurrency-safe; display as USCHH-000124 on the server.
+  number                 Int               @unique @default(autoincrement())
+  status                 OrderStatus       @default(PENDING_PAYMENT)
+  firstName              String
+  lastName               String
+  email                  String
+  phone                  String
+  province               String
+  city                   String
+  area                   String?
+  address                String            @db.Text
+  deliveryInstructions   String?           @db.Text
+  subtotal               Decimal           @db.Decimal(12, 2)
+  shippingMode           ShippingMode
+  // Null means an unknown courier fee paid on delivery, NOT free shipping.
+  shippingAmount         Decimal?          @db.Decimal(12, 2)
+  total                  Decimal           @db.Decimal(12, 2)
+  currency               String            @default("USD") @db.VarChar(3)
+  carrier                String?
+  trackingNumber         String?
+  paidAt                 DateTime?         @db.Timestamptz(3)
+  shippedAt              DateTime?         @db.Timestamptz(3)
+  deliveredAt            DateTime?         @db.Timestamptz(3)
+  cancelledAt            DateTime?         @db.Timestamptz(3)
+  refundedAt             DateTime?         @db.Timestamptz(3)
+  createdAt              DateTime          @default(now()) @db.Timestamptz(3)
+  updatedAt              DateTime          @updatedAt @db.Timestamptz(3)
+  items                  OrderItem[]
+  payments               Payment[]
+  notes                  OrderNote[]
+
+  @@index([status, createdAt])
+  @@index([reservationStatus, reservationExpiresAt])
+  @@index([paidAt])
+  @@index([createdAt])
+}
+
+model OrderItem {
+  inventoryReservedAt DateTime?           @db.Timestamptz(3)
+  inventoryReleasedAt DateTime?           @db.Timestamptz(3)
+  id                  String              @id @default(cuid())
+  orderId             String
+  productId           String
+  productName         String
+  flavor              String
+  unitPrice           Decimal             @db.Decimal(12, 2)
+  quantity            Int
+  lineTotal           Decimal             @db.Decimal(12, 2)
+  // Sale conversion timestamp. Reserved lines were already deducted at reservation;
+  // confirmation records the conversion without deducting stock again.
+  inventoryDeductedAt DateTime?           @db.Timestamptz(3)
+  inventoryRestoredAt DateTime?           @db.Timestamptz(3)
+  createdAt           DateTime            @default(now()) @db.Timestamptz(3)
+  order               Order               @relation(fields: [orderId], references: [id], onDelete: Restrict)
+  product             Product             @relation(fields: [productId], references: [id], onDelete: Restrict)
+  inventoryMovements  InventoryMovement[]
+
+  @@unique([orderId, productId])
+  // One line per flavor also enforces the five-per-flavor database limit.
+  @@unique([orderId, flavor])
+  @@index([productId])
+}
+
+model Payment {
+  customerMarkedTransferredAt DateTime?     @db.Timestamptz(3)
+  id                          String        @id @default(cuid())
+  orderId                     String
+  method                      PaymentMethod
+  status                      PaymentStatus @default(PENDING)
+  provider                    String?
+  providerReference           String?
+  idempotencyKey              String        @unique
+  amount                      Decimal       @db.Decimal(12, 2)
+  currency                    String        @default("USD") @db.VarChar(3)
+  paidAt                      DateTime?     @db.Timestamptz(3)
+  refundedAt                  DateTime?     @db.Timestamptz(3)
+  verifiedAt                  DateTime?     @db.Timestamptz(3)
+  verifiedById                String?
+  createdAt                   DateTime      @default(now()) @db.Timestamptz(3)
+  updatedAt                   DateTime      @updatedAt @db.Timestamptz(3)
+  order                       Order         @relation(fields: [orderId], references: [id], onDelete: Restrict)
+  verifiedBy                  AdminUser?    @relation(fields: [verifiedById], references: [id], onDelete: Restrict)
+
+  @@unique([provider, providerReference])
+  @@index([orderId])
+  @@index([status, paidAt])
+}
+
+model InventoryMovement {
+  id          String                @id @default(cuid())
+  productId   String
+  orderItemId String?
+  type        InventoryMovementType
+  delta       Int
+  stockAfter  Int
+  reason      String?               @db.Text
+  adminId     String?
+  createdAt   DateTime              @default(now()) @db.Timestamptz(3)
+  product     Product               @relation(fields: [productId], references: [id], onDelete: Restrict)
+  orderItem   OrderItem?            @relation(fields: [orderItemId], references: [id], onDelete: Restrict)
+  admin       AdminUser?            @relation(fields: [adminId], references: [id], onDelete: Restrict)
+
+  // At most one audit event of each lifecycle type per order line.
+  @@unique([orderItemId, type])
+  @@index([productId, createdAt])
+  @@index([adminId])
+}
+
+model OrderNote {
+  id        String     @id @default(cuid())
+  orderId   String
+  content   String     @db.Text
+  authorId  String?
+  createdAt DateTime   @default(now()) @db.Timestamptz(3)
+  order     Order      @relation(fields: [orderId], references: [id], onDelete: Restrict)
+  author    AdminUser? @relation(fields: [authorId], references: [id], onDelete: Restrict)
+
+  @@index([orderId, createdAt])
+  @@index([authorId])
+}
+
+model AdminUser {
+  sessions           AdminSession[]
+  auditEvents        AdminAuditEvent[]
+  id                 String              @id @default(cuid())
+  email              String              @unique
+  name               String?
+  // Provisioned later; never store a plain password. No accounts are seeded.
+  passwordHash       String?             @db.Text
+  active             Boolean             @default(false)
+  createdAt          DateTime            @default(now()) @db.Timestamptz(3)
+  updatedAt          DateTime            @updatedAt @db.Timestamptz(3)
+  notes              OrderNote[]
+  verifiedPayments   Payment[]
+  inventoryMovements InventoryMovement[]
+}
+
+model AdminSession {
+  id        String    @id @default(cuid())
+  tokenHash String    @unique @db.VarChar(64)
+  adminId   String
+  expiresAt DateTime  @db.Timestamptz(3)
+  revokedAt DateTime? @db.Timestamptz(3)
+  createdAt DateTime  @default(now()) @db.Timestamptz(3)
+  admin     AdminUser @relation(fields: [adminId], references: [id], onDelete: Cascade)
+
+  @@index([expiresAt])
+  @@index([adminId])
+}
+
+model AdminLoginLimit {
+  key      String   @id @db.VarChar(64)
+  attempts Int      @default(0)
+  resetAt  DateTime @db.Timestamptz(3)
+}
+
+model AdminAuditEvent {
+  id         String    @id @default(cuid())
+  adminId    String
+  action     String
+  entityType String
+  entityId   String
+  details    Json?
+  createdAt  DateTime  @default(now()) @db.Timestamptz(3)
+  admin      AdminUser @relation(fields: [adminId], references: [id], onDelete: Restrict)
+
+  @@index([entityType, entityId, createdAt])
+  @@index([adminId, createdAt])
+}
+
+model MarketingContact {
+  id             String                  @id @default(cuid())
+  email          String                  @unique
+  status         MarketingConsentStatus  @default(NOT_GRANTED)
+  consentAt      DateTime?               @db.Timestamptz(3)
+  consentSource  MarketingConsentSource?
+  consentText    String?                 @db.Text
+  consentVersion String?
+  withdrawnAt    DateTime?               @db.Timestamptz(3)
+  createdAt      DateTime                @default(now()) @db.Timestamptz(3)
+  updatedAt      DateTime                @updatedAt @db.Timestamptz(3)
+  events         MarketingConsentEvent[]
+
+  @@index([status])
+}
+
+// Append-only consent history. Update contact + append event atomically later.
+model MarketingConsentEvent {
+  id             String                 @id @default(cuid())
+  contactId      String
+  status         MarketingConsentStatus
+  source         MarketingConsentSource
+  consentText    String?                @db.Text
+  consentVersion String?
+  occurredAt     DateTime               @default(now()) @db.Timestamptz(3)
+  contact        MarketingContact       @relation(fields: [contactId], references: [id], onDelete: Restrict)
+
+  @@index([contactId, occurredAt])
 }
