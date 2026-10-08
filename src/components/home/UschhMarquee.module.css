@@ -1,0 +1,83 @@
+.marqueeWrapper {
+  width: 100%;
+  overflow: hidden;
+  user-select: none;
+  position: relative;
+  border-radius: 0;
+}
+
+.marqueeTrack {
+  display: flex;
+  align-items: center;
+  width: max-content;
+  will-change: transform;
+}
+
+.animateRight {
+  animation: marqueeToRight linear infinite;
+}
+
+.animateLeft {
+  animation: marqueeToLeft linear infinite;
+}
+
+@keyframes marqueeToRight {
+  0% {
+    transform: translate3d(-50%, 0, 0);
+  }
+  100% {
+    transform: translate3d(0%, 0, 0);
+  }
+}
+
+@keyframes marqueeToLeft {
+  0% {
+    transform: translate3d(0%, 0, 0);
+  }
+  100% {
+    transform: translate3d(-50%, 0, 0);
+  }
+}
+
+.itemGroup {
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+.itemWord {
+  display: inline-flex;
+  align-items: center;
+  white-space: nowrap;
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: 0.16em;
+}
+
+.strikethrough {
+  text-decoration: line-through;
+  text-decoration-thickness: 2.5px;
+  text-decoration-color: currentColor;
+}
+
+.separator {
+  display: inline-block;
+  user-select: none;
+  font-weight: 700;
+}
+
+@media (max-width: 640px) {
+  .itemWord {
+    letter-spacing: 0.12em;
+  }
+  .strikethrough {
+    text-decoration-thickness: 2px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .marqueeTrack {
+    animation: none !important;
+    transform: none !important;
+  }
+}

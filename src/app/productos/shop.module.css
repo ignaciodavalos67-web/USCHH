@@ -1,25 +1,293 @@
-.storefront { background: #303236; --font-geist-mono: var(--font-geist-sans); font-family: var(--font-geist-sans), sans-serif; }
-.shop { min-height: 100dvh; padding: 140px 48px 32px; background: #303236; color: #F8F7F2; }
-.grid, .footer { max-width: 1440px; margin-inline: auto; }
-.eyebrow { font-family: var(--font-geist-mono); font-size: 11px; letter-spacing: .12em; }
-.grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 32px; padding-top: 80px; }
-.visual { display: block; position: relative; aspect-ratio: 1.15; overflow: hidden; }
-.index { color: #101820; position: absolute; top: 24px; left: 24px; font-family: var(--font-geist-mono); font-size: 10px; letter-spacing: .15em; }
-.productImage { object-fit: contain; padding: 42px 55px 24px; transition: transform 500ms ease; }
-.visual:hover .productImage { transform: translateY(-6px); }
-.details { padding: 28px 0; }
-.details h2 { font-size: clamp(30px, 3.2vw, 48px); font-weight: 600; letter-spacing: -.045em; margin: 8px 0 24px; }
-.cta { display: flex; justify-content: space-between; align-items: center; border-top: 1px solid #F8F7F240; padding-top: 18px; font-size: 11px; font-weight: 600; letter-spacing: .12em; }
-.cta span { font-size: 23px; }
-.footer { display: flex; justify-content: space-between; border-top: 1px solid #F8F7F240; margin-top: 60px; padding-top: 24px; font-size: 10px; letter-spacing: .12em; }
-.shop a:focus-visible { outline: 2px solid #F7E2A3; outline-offset: 5px; }
-@media (max-width: 767px) { .shop { padding: 120px 24px 24px; } .grid { grid-template-columns: 1fr; gap: 28px; padding-top: 56px; } .visual { aspect-ratio: 1; } .productImage { padding: 40px 32px 20px; } .footer { margin-top: 36px; } }
-@media (prefers-reduced-motion: reduce) { .productImage { transition: none; } .visual:hover .productImage { transform: none; } }
+.storefront {
+  background: #F8F7F2;
+  --font-geist-mono: var(--font-geist-sans);
+  font-family: var(--font-geist-sans), sans-serif;
+  overflow-x: hidden;
+  width: 100%;
+}
 
-.productDetail { display: grid; grid-template-columns: minmax(0, 1.7fr) minmax(0, 1fr); align-items: center; gap: 48px; max-width: 1440px; margin: 24px auto 64px; }
-.detailImageArea { position: relative; width: 100%; aspect-ratio: 2392 / 2520; }
-.detailImage { object-fit: contain; }
-.detailInfo h1 { font-size: clamp(32px, 4vw, 64px); font-weight: 600; letter-spacing: -.04em; margin: 16px 0 40px; overflow-wrap: anywhere; }
-@media (max-width: 767px) { .productDetail { grid-template-columns: minmax(0, 1fr); gap: 24px; margin-top: 8px; } }
-.price { display: flex; align-items: baseline; gap: 12px; margin-bottom: 24px; color: #F7E2A3; font-size: 28px; font-weight: 600; letter-spacing: -.03em; }
-.availability { margin-bottom: 24px; font-size: 11px; font-weight: 600; letter-spacing: .12em; }
+.shop {
+  min-height: 100dvh;
+  padding: 130px 48px 32px;
+  background: #F8F7F2;
+  color: #303236;
+  overflow-x: hidden;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.grid, .footer {
+  max-width: 1440px;
+  margin-inline: auto;
+}
+
+.eyebrow {
+  font-family: var(--font-geist-mono);
+  font-size: 11px;
+  letter-spacing: .12em;
+  color: #55585E;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 32px;
+  padding-top: 24px;
+}
+
+.visual {
+  display: block;
+  position: relative;
+  aspect-ratio: 1.15;
+  overflow: hidden;
+  border-radius: 6px;
+  box-shadow: 0 4px 20px rgba(16, 24, 32, 0.05);
+}
+
+.index {
+  color: #101820;
+  position: absolute;
+  top: 24px;
+  left: 24px;
+  font-family: var(--font-geist-mono);
+  font-size: 10px;
+  letter-spacing: .15em;
+}
+
+.productImage {
+  object-fit: contain;
+  padding: 42px 55px 24px;
+  transition: transform 500ms ease;
+}
+
+.visual:hover .productImage {
+  transform: translateY(-6px);
+}
+
+.details {
+  padding: 28px 0;
+}
+
+.details h2 {
+  font-size: clamp(30px, 3.2vw, 48px);
+  font-weight: 600;
+  letter-spacing: -.045em;
+  margin: 8px 0 16px;
+}
+
+.footer {
+  display: flex;
+  justify-content: space-between;
+  border-top: 1px solid rgba(48, 50, 54, 0.15);
+  margin-top: 60px;
+  padding-top: 24px;
+  font-size: 10px;
+  letter-spacing: .12em;
+  color: #55585E;
+}
+
+.footer a {
+  color: #303236;
+  transition: color 200ms ease;
+}
+
+.footer a:hover {
+  color: #101820;
+}
+
+.shop a:focus-visible {
+  outline: 2px solid #C28B00;
+  outline-offset: 5px;
+}
+
+/* Logotipo oficial superior perfectamente centrado horizontalmente */
+.storeLogoHeader {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  max-width: 1440px;
+  margin-inline: auto;
+  margin-bottom: 24px;
+  text-align: center;
+}
+
+.storeLogo {
+  height: 48px;
+  width: auto;
+  object-fit: contain;
+  display: block;
+  margin-inline: auto;
+}
+
+/* Botones VER PRODUCTO con acentos por sabor */
+.cta {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-radius: 4px;
+  padding: 14px 20px;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: .12em;
+  transition: all 250ms ease;
+  margin-top: 16px;
+  background: #FFFFFF;
+  box-shadow: 0 2px 8px rgba(16, 24, 32, 0.05);
+}
+
+.cta span {
+  font-size: 20px;
+  line-height: 1;
+  transition: transform 200ms ease;
+}
+
+.ctaLimon {
+  border: 1px solid #C28B00;
+  color: #101820;
+}
+
+.ctaLimon span {
+  color: #C28B00;
+}
+
+.ctaLimon:hover {
+  border-color: #A97800;
+  background: #F7E2A3;
+  color: #101820;
+  box-shadow: 0 4px 14px rgba(247, 226, 163, 0.5);
+}
+
+.ctaLimon:hover span {
+  transform: translate(3px, -3px);
+}
+
+.ctaMandarina {
+  border: 1px solid #FF6B00;
+  color: #101820;
+}
+
+.ctaMandarina span {
+  color: #FF6B00;
+}
+
+.ctaMandarina:hover {
+  border-color: #E65A00;
+  background: #FF6B00;
+  color: #FFFFFF;
+  box-shadow: 0 4px 14px rgba(255, 107, 0, 0.35);
+}
+
+.ctaMandarina:hover span {
+  color: #FFFFFF;
+  transform: translate(3px, -3px);
+}
+
+.backCta {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-top: 1px solid rgba(48, 50, 54, 0.15);
+  padding-top: 18px;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: .12em;
+  color: #303236;
+  transition: color 200ms ease;
+}
+
+.backCta:hover {
+  color: #101820;
+}
+
+@media (max-width: 767px) {
+  .shop { padding: 110px 24px 24px; }
+  .grid { grid-template-columns: 1fr; gap: 28px; padding-top: 20px; }
+  .visual { aspect-ratio: 1; }
+  .productImage { padding: 40px 32px 20px; }
+  .footer { margin-top: 36px; }
+  .storeLogo { height: 40px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .productImage { transition: none; }
+  .visual:hover .productImage { transform: none; }
+}
+
+.productDetail {
+  display: grid;
+  grid-template-columns: minmax(0, 1.3fr) minmax(0, 1fr);
+  align-items: start;
+  gap: 48px;
+  max-width: 1440px;
+  margin: 16px auto 32px;
+}
+
+.detailImageArea {
+  position: relative;
+  width: 100%;
+}
+
+.detailImage {
+  object-fit: contain;
+}
+
+.detailInfo h1 {
+  font-size: clamp(32px, 4vw, 64px);
+  font-weight: 600;
+  letter-spacing: -.04em;
+  margin: 16px 0 16px;
+  overflow-wrap: anywhere;
+  color: #101820;
+}
+
+.titleMandarina {
+  color: #FF6B00;
+}
+
+.priceMandarina {
+  color: #FF6B00 !important;
+}
+
+.titleLimon {
+  color: #B8860B;
+}
+
+.priceLimon {
+  color: #B8860B !important;
+}
+
+.flavorDescription {
+  font-size: 15px;
+  line-height: 1.6;
+  color: #4A4D54;
+  margin-bottom: 24px;
+  max-width: 520px;
+}
+
+@media (max-width: 767px) {
+  .productDetail {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 24px;
+    margin-top: 8px;
+  }
+}
+
+.price {
+  display: flex;
+  align-items: baseline;
+  gap: 12px;
+  margin-bottom: 24px;
+  color: #101820;
+  font-size: 28px;
+  font-weight: 600;
+  letter-spacing: -.03em;
+}
+
+.availability {
+  margin-bottom: 24px;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: .12em;
+  color: #55585E;
+}

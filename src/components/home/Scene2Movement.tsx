@@ -17,13 +17,13 @@ export function Scene2Movement() {
       <div className="absolute inset-0 w-full h-full overflow-hidden bg-[#101820]">
         <div
           aria-hidden="true"
-          className={`${movement.extension} scene-2-image absolute inset-0`}
+          className={`${movement.extension} absolute inset-0`}
         >
           <Image
             src={SCENE_2_IMAGE}
             alt=""
             fill
-            sizes="100vw"
+            sizes="320px"
             className={movement.blurredImage}
           />
         </div>
@@ -31,8 +31,9 @@ export function Scene2Movement() {
           src={SCENE_2_IMAGE}
           alt="Movimiento atlético USCHH"
           fill
-          priority
-          sizes="100vw"
+          preload
+          sizes="(min-aspect-ratio: 1/1) min(100vw, 150vh), 150vh"
+          quality={85}
           className={`${photography.portrait} ${movement.foreground} scene-2-image object-cover object-center`}
         />
         <div className="absolute inset-0 bg-black/15 bg-gradient-to-r from-[#101820]/80 via-[#101820]/40 to-transparent" />

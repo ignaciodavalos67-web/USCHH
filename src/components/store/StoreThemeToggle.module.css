@@ -1,0 +1,52 @@
+.toggle {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: inherit;
+  cursor: pointer;
+  border-radius: 9999px;
+  transition: opacity 200ms ease, transform 300ms ease;
+}
+
+.toggle:hover {
+  opacity: 0.75;
+}
+
+.toggle:focus-visible {
+  outline: 2px solid currentColor;
+  outline-offset: 4px;
+}
+
+.sun,
+.moon {
+  display: block;
+  animation: iconIn 300ms ease;
+}
+
+/* Modo noche (predeterminado): se muestra el sol para activar el modo día */
+.moon {
+  display: none;
+}
+
+:global([data-store-theme="day"]) .sun {
+  display: none;
+}
+
+:global([data-store-theme="day"]) .moon {
+  display: block;
+}
+
+@keyframes iconIn {
+  from { opacity: 0; transform: rotate(-30deg) scale(0.85); }
+  to { opacity: 1; transform: rotate(0) scale(1); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .toggle { transition: none; }
+  .sun, .moon { animation: none; }
+}
