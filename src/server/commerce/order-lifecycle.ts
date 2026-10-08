@@ -13,9 +13,15 @@ export function createOrderLifecycle(db: PrismaClient, requireAdmin: () => Promi
     const adminId=await authorize();
     return db.$transaction(async tx=>{
       await tx.$queryRaw`SELECT "id" FROM "Order" WHERE "id"=${orderId} FOR UPDATE`;
-      const order=await tx.order.findUniqueOrThrow({where:{id:orderId},include:{items:true,payments:true}});
-      if(["PAID","PREPARING","SHIPPED","DELIVERED"].includes(order.status) && order.reservationStatus==="CONFIRMED")return;
-      if(order.status!=="PENDING_PAYMENT" || order.reservationStatus!=="RESERVED" || !order.reservationExpiresAt || order.reservationExpiresAt<=new Date() || !order.payments.some(p=>p.method==="BANK_TRANSFER" && p.status==="PENDING"))throw new CheckoutError("STATE","El pedido no admite confirmación.",409);
+      const order=await tx.order.findUnique({where:{id:orderId},include:{items:true,payments:true}});
+      if(!order)throw new CheckoutError("STATE","Pedido no encontrado.",404);
+      const bankPayments=order.payments.filter(payment=>payment.method==="BANK_TRANSFER");
+      if(!bankPayments.length)throw new CheckoutError("STATE","El pedido no corresponde a una transferencia bancaria.",409);
+      if(bankPayments.some(payment=>payment.status==="PAID") && ["PAID","PREPARING","SHIPPED","DELIVERED"].includes(order.status) && order.reservationStatus==="CONFIRMED")return;
+      if(order.status==="CANCELLED" || order.reservationStatus==="RELEASED")throw new CheckoutError("STATE","El pedido está cancelado y no puede confirmarse automáticamente.",409);
+      if(!order.reservationExpiresAt || order.reservationExpiresAt<=new Date())throw new CheckoutError("STATE","La reserva venció. Revisa el ingreso y el inventario manualmente antes de continuar.",409);
+      const pendingBankPayments=bankPayments.filter(payment=>payment.status==="PENDING");
+      if(order.status!=="PENDING_PAYMENT" || order.reservationStatus!=="RESERVED" || !pendingBankPayments.length)throw new CheckoutError("STATE","La transferencia ya no está pendiente de confirmación.",409);
       const now=new Date();
       await tx.payment.updateMany({where:{orderId,method:"BANK_TRANSFER",status:"PENDING"},data:{status:"PAID",paidAt:now,verifiedAt:now,verifiedById:adminId}});
       for(const item of [...order.items].sort((a,b)=>a.productId.localeCompare(b.productId))){
@@ -24,7 +30,7 @@ export function createOrderLifecycle(db: PrismaClient, requireAdmin: () => Promi
         await tx.inventoryMovement.create({data:{productId:item.productId,orderItemId:item.id,type:"RESERVATION_CONFIRMED",delta:0,stockAfter:product.stock,adminId,reason:"Reserva convertida en venta; sin nuevo descuento de stock"}});
       }
       await tx.order.update({where:{id:orderId},data:{status:"PAID",paidAt:now,reservationStatus:"CONFIRMED",reservationConfirmedAt:now}});
-      await tx.adminAuditEvent.create({data:{adminId,action:"PAYMENT_CONFIRMED",entityType:"Order",entityId:orderId}});
+      await tx.adminAuditEvent.create({data:{adminId,action:"PAYMENT_CONFIRMED",entityType:"Order",entityId:orderId,details:{paymentIds:pendingBankPayments.map(payment=>payment.id),amount:pendingBankPayments[0].amount.toFixed(2),currency:pendingBankPayments[0].currency,customerMarkedTransferredAt:pendingBankPayments[0].customerMarkedTransferredAt?.toISOString() ?? null}}});
     });
   }
   async function cancelUnpaid(orderId: string, reason: string, options: {expiredOnly?:boolean} = {}) {
