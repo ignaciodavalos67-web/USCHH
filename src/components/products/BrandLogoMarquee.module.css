@@ -1,0 +1,122 @@
+.wrapper {
+  width: 100vw;
+  position: relative;
+  left: 50%;
+  right: 50%;
+  margin-left: -50vw;
+  margin-right: -50vw;
+  overflow: hidden;
+  padding: 20px 0;
+  margin-top: 18px;
+  margin-bottom: 44px;
+  user-select: none;
+  z-index: 5;
+  transition: background-color 300ms ease;
+}
+
+.flavorLimon {
+  background-color: #F7E2A3;
+  box-shadow: 0 6px 24px rgba(247, 226, 163, 0.25);
+}
+
+.flavorMandarina {
+  background-color: #FF6B00;
+  box-shadow: 0 6px 24px rgba(255, 107, 0, 0.25);
+}
+
+.flavorRed {
+  background-color: #FF1735;
+  box-shadow: 0 6px 24px rgba(255, 23, 53, 0.25);
+}
+
+.track {
+  display: flex;
+  align-items: center;
+  width: max-content;
+  will-change: transform;
+  animation: marqueeRight 24s linear infinite;
+}
+
+@keyframes marqueeRight {
+  0% {
+    transform: translate3d(-50%, 0, 0);
+  }
+  100% {
+    transform: translate3d(0%, 0, 0);
+  }
+}
+
+.group {
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
+  gap: 40px;
+  padding-right: 40px;
+}
+
+.pair {
+  display: inline-flex;
+  align-items: center;
+  gap: 40px;
+}
+
+.logoStripes {
+  height: 30px;
+  width: auto;
+  object-fit: contain;
+  display: block;
+  filter: brightness(0);
+}
+
+.monogram {
+  height: 31px;
+  width: auto;
+  object-fit: contain;
+  display: block;
+  filter: brightness(0);
+}
+
+.separator {
+  color: #101820;
+  font-size: 20px;
+  font-weight: 900;
+  line-height: 1;
+  display: inline-block;
+  opacity: 0.85;
+}
+
+@media (max-width: 767px) {
+  .wrapper {
+    padding: 16px 0;
+    margin-top: 32px;
+    margin-bottom: 44px;
+  }
+
+  .group {
+    gap: 26px;
+    padding-right: 26px;
+  }
+
+  .pair {
+    gap: 26px;
+  }
+
+  .logoStripes {
+    height: 22px;
+  }
+
+  .monogram {
+    height: 23px;
+  }
+
+  .separator {
+    font-size: 15px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .track {
+    animation: none !important;
+    transform: none !important;
+  }
+}

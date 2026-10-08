@@ -1,0 +1,94 @@
+.galleryContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  width: 100%;
+}
+
+.mainStage {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  background: #FFFFFF;
+  border: 1px solid rgba(48, 50, 54, 0.1);
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 4px 24px rgba(16, 24, 32, 0.06);
+  transition: border-color 200ms ease;
+}
+
+.mainImage {
+  object-fit: contain;
+  padding: 16px;
+  transition: opacity 250ms ease, transform 300ms ease;
+}
+
+.mainImageWhiteBg {
+  background: #FFFFFF;
+  padding: 24px;
+}
+
+.thumbsRow {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 12px;
+  width: 100%;
+}
+
+.thumbBtn {
+  position: relative;
+  aspect-ratio: 1 / 1;
+  border: 1px solid rgba(48, 50, 54, 0.12);
+  border-radius: 6px;
+  background: #FFFFFF;
+  overflow: hidden;
+  cursor: pointer;
+  padding: 0;
+  transition: transform 180ms ease, border-color 180ms ease, box-shadow 180ms ease;
+  outline: none;
+  box-shadow: 0 2px 8px rgba(16, 24, 32, 0.04);
+}
+
+.thumbBtn:hover {
+  transform: translateY(-2px);
+  border-color: rgba(48, 50, 54, 0.35);
+}
+
+.thumbBtnActiveLimon {
+  border: 2px solid #C28B00 !important;
+  box-shadow: 0 0 12px rgba(247, 226, 163, 0.6);
+  transform: translateY(-2px);
+}
+
+.thumbBtnActiveMandarina {
+  border: 2px solid #FF6B00 !important;
+  box-shadow: 0 0 12px rgba(255, 107, 0, 0.35);
+  transform: translateY(-2px);
+}
+
+.thumbImage {
+  object-fit: cover;
+  transition: transform 250ms ease;
+}
+
+.thumbBtn:hover .thumbImage {
+  transform: scale(1.05);
+}
+
+@media (max-width: 767px) {
+  .galleryContainer {
+    gap: 10px;
+  }
+  .thumbsRow {
+    gap: 8px;
+  }
+  .mainStage {
+    aspect-ratio: 1 / 1;
+  }
+  .mainImage {
+    padding: 10px;
+  }
+  .mainImageWhiteBg {
+    padding: 14px;
+  }
+}

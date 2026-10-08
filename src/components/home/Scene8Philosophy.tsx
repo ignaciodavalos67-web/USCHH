@@ -17,7 +17,8 @@ export function Scene8Philosophy() {
           src={SCENE_8_IMAGE}
           alt="Paisaje exterior al amanecer con atleta de resistencia"
           fill
-          sizes="100vw"
+          sizes="(max-aspect-ratio: 43/24) 179.17vh, 100vw"
+          fetchPriority="low"
           className="object-cover object-center"
         />
         {/* Heavy off-white veil: image shows through as warm depth, not as a distracting photo */}
