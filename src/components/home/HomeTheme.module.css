@@ -1,0 +1,60 @@
+.homeRoot {
+  --home-bg: #F8F7F2;
+  --home-fg: #101820;
+  --home-body: #55585E;
+  --home-surface: #FFFFFF;
+  --home-border: rgba(16, 24, 32, 0.08);
+  --home-pill-bg: #FFFFFF;
+  --home-pill-fg: #101820;
+  --home-btn-bg: #101820;
+  --home-btn-fg: #F8F7F2;
+  --home-footer-bg: #F7E2A3;
+  --home-footer-fg: #101820;
+  --home-footer-border: rgba(16, 24, 32, 0.15);
+  --home-footer-logo: #101820;
+  --home-footer-pill-bg: #101820;
+  --home-footer-pill-fg: #F7E2A3;
+  --home-footer-link-hover: #55585E;
+
+  background-color: var(--home-bg);
+  color: var(--home-fg);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  font-family: var(--font-geist-sans), sans-serif;
+  overflow-x: hidden;
+  width: 100%;
+}
+
+/* Modo noche en Inicio */
+.homeRoot[data-store-theme="night"] {
+  --home-bg: #101820;
+  --home-fg: #F8F7F2;
+  --home-body: #C6C7C2;
+  --home-surface: #151D26;
+  --home-border: rgba(248, 247, 242, 0.12);
+  --home-pill-bg: #151D26;
+  --home-pill-fg: #F8F7F2;
+  --home-btn-bg: #F7E2A3;
+  --home-btn-fg: #101820;
+  --home-footer-bg: #0B0F14;
+  --home-footer-fg: #F8F7F2;
+  --home-footer-border: rgba(248, 247, 242, 0.15);
+  --home-footer-logo: #F7E2A3;
+  --home-footer-pill-bg: #151D26;
+  --home-footer-pill-fg: #F7E2A3;
+  --home-footer-link-hover: #F7E2A3;
+}
+
+/* Transición suave entre modos al alternar tema */
+.homeRoot[data-store-animated],
+.homeRoot[data-store-animated] :is(section, footer, article, div, button, h2, h3, p, a, span) {
+  transition: background-color 280ms ease, color 280ms ease, border-color 280ms ease, fill 280ms ease;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .homeRoot[data-store-animated],
+  .homeRoot[data-store-animated] :is(section, footer, article, div, button, h2, h3, p, a, span) {
+    transition: none !important;
+  }
+}

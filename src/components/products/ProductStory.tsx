@@ -1,4 +1,6 @@
-import React from "react";
+"use client";
+
+import React, { useState } from "react";
 import styles from "./ProductStory.module.css";
 
 interface ProductStoryProps {
@@ -6,15 +8,114 @@ interface ProductStoryProps {
   slug: string;
 }
 
-const MINERALS = [
-  { symbol: "Na", name: "Sodio" },
-  { symbol: "K", name: "Potasio" },
-  { symbol: "Mg", name: "Magnesio" },
-  { symbol: "Ca", name: "Calcio" },
-  { symbol: "Zn", name: "Zinc" },
+interface MineralItem {
+  id: string;
+  symbol: string;
+  name: string;
+  amount: string;
+  explanation: string;
+}
+
+const MINERALS: MineralItem[] = [
+  {
+    id: "sodio",
+    symbol: "Na",
+    name: "Sodio",
+    amount: "369 mg",
+    explanation:
+      "El sodio participa en el equilibrio de líquidos y en la transmisión de señales nerviosas. Al sudar pierdes sodio; USCHH aporta 369 mg por sachet para contribuir a su reposición.",
+  },
+  {
+    id: "potasio",
+    symbol: "K",
+    name: "Potasio",
+    amount: "786 mg",
+    explanation:
+      "El potasio es el principal electrolito dentro de las células. Participa en el equilibrio de líquidos, la transmisión nerviosa y la contracción muscular.",
+  },
+  {
+    id: "magnesio",
+    symbol: "Mg",
+    name: "Magnesio",
+    amount: "86 mg",
+    explanation:
+      "El magnesio interviene en el metabolismo energético y en el funcionamiento normal de músculos y nervios.",
+  },
+  {
+    id: "calcio",
+    symbol: "Ca",
+    name: "Calcio",
+    amount: "265 mg",
+    explanation:
+      "El calcio tiene funciones que van más allá de los huesos: también participa en la contracción muscular y la transmisión de señales nerviosas.",
+  },
+  {
+    id: "zinc",
+    symbol: "Zn",
+    name: "Zinc",
+    amount: "13 mg",
+    explanation:
+      "El zinc es un mineral esencial que participa en el funcionamiento normal del sistema inmunitario y en la síntesis de proteínas.",
+  },
+  {
+    id: "aloe",
+    symbol: "Aloe",
+    name: "Aloe vera",
+    amount: "45 mg",
+    explanation:
+      "Incorporamos aloe vera como complemento de nuestra mezcla de electrolitos, sumando un ingrediente de origen vegetal a nuestra fórmula.",
+  },
+];
+
+const BENEFITS = [
+  {
+    title: "Acompaña tu hidratación",
+    desc: "Aporta minerales que participan en el equilibrio de líquidos del cuerpo.",
+  },
+  {
+    title: "Repón electrolitos después de sudar",
+    desc: "Cada sachet aporta 369 mg de sodio para contribuir a la reposición de este mineral perdido durante la sudoración.",
+  },
+  {
+    title: "Apoya la función muscular normal",
+    desc: "El potasio, el magnesio y el calcio participan en el funcionamiento normal de tus músculos.",
+  },
+  {
+    title: "Aporta magnesio para el metabolismo energético",
+    desc: "El magnesio interviene en los procesos que permiten a tu cuerpo utilizar la energía de los alimentos.",
+  },
+  {
+    title: "Complementa tu aporte de zinc",
+    desc: "El zinc participa en el funcionamiento normal del sistema inmunitario y en la síntesis de proteínas.",
+  },
+];
+
+const WHEN_TO_USE = [
+  {
+    title: "Durante actividades prolongadas",
+    desc: "Para complementar tu hidratación cuando el ejercicio se extiende y acumulas pérdidas de agua y electrolitos por el sudor.",
+  },
+  {
+    title: "Después de sudar",
+    desc: "Como parte de tu reposición de líquidos y electrolitos después de entrenar o realizar una actividad con mucha sudoración.",
+  },
+  {
+    title: "En actividades con calor",
+    desc: "El calor puede aumentar la sudoración. USCHH puede acompañar tu hidratación cuando necesitas reponer parte de los minerales perdidos.",
+  },
+  {
+    title: "Cuando entrenas en altura",
+    desc: "Si entrenas en Quito o realizas actividades en la Sierra, incluye la hidratación en tu planificación, incluso cuando hace frío. USCHH puede complementar tu aporte de electrolitos durante actividades prolongadas o con mucha sudoración. No sustituye la aclimatación ni previene el mal de altura.",
+  },
+  {
+    title: "Cuando tienes chuchaqui (resaca)",
+    desc: "Después de tomar alcohol, puedes haber perdido más líquidos por la orina. USCHH mezclado con agua puede acompañar tu hidratación al día siguiente. Hidratarte forma parte del cuidado de tu cuerpo, pero USCHH no cura el chuchaqui ni acelera la eliminación del alcohol.",
+  },
 ];
 
 export function ProductStory({ flavor, slug }: ProductStoryProps) {
+  const [expandedMineral, setExpandedMineral] = useState<string | null>("sodio");
+
   const isMandarina =
     slug?.toLowerCase().includes("mandarina") ||
     flavor?.toLowerCase().includes("man") ||
@@ -28,6 +129,10 @@ export function ProductStory({ flavor, slug }: ProductStoryProps) {
     : isLimon
     ? styles.themeLimon
     : "";
+
+  const toggleMineral = (id: string) => {
+    setExpandedMineral((prev) => (prev === id ? null : id));
+  };
 
   return (
     <section
@@ -55,108 +160,141 @@ export function ProductStory({ flavor, slug }: ProductStoryProps) {
       </div>
 
       {/* ─────────────────────────────────────────────────────────────
-          2. CARACTERÍSTICAS (5 ICONOS ELEGANTES)
+          2. COMPOSICIÓN DESTACADA
       ───────────────────────────────────────────────────────────── */}
-      <div className={styles.attributesSection}>
-        <div className={styles.sectionHeader}>
-          <span className={styles.eyebrow}>CALIDAD & TRANSPARENCIA</span>
-          <h3>Fórmula limpia y consciente</h3>
+      <div className={styles.compositionBanner}>
+        <div className={styles.compositionHeadline}>
+          <span className={styles.eyebrow}>COMPOSICIÓN DESTACADA</span>
         </div>
-
-        <div className={styles.attributesGrid}>
-          {/* 1. Vegano */}
-          <div className={styles.attributeCard}>
-            <div className={styles.iconWrapper} aria-hidden="true">
-              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                <path d="M11 20A7 7 0 0 1 9.8 6.1C15.5 5 17 4.48 19 2c1 2 2 4.18 2 8 0 5.5-4.78 10-10 10Z" />
-                <path d="M2 21c0-3 1.85-5.36 5.08-6C9.5 14.52 12 13 13 12" />
-              </svg>
-            </div>
-            <span className={styles.attributeName}>Vegano</span>
+        <h3 className={styles.compositionTitle}>
+          Cada sachet de 6 g aporta una proporción balanceada de electrolitos clave:
+        </h3>
+        <div className={styles.compositionValues}>
+          <div className={styles.compositionPill}>
+            <span>Sodio:</span>
+            <strong>369 mg</strong>
           </div>
-
-          {/* 2. Sin GMO */}
-          <div className={styles.attributeCard}>
-            <div className={styles.iconWrapper} aria-hidden="true">
-              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
-                <path d="m9 12 2 2 4-4" />
-              </svg>
-            </div>
-            <span className={styles.attributeName}>Sin GMO</span>
+          <div className={styles.compositionPill}>
+            <span>Potasio:</span>
+            <strong>786 mg</strong>
           </div>
-
-          {/* 3. Sin azúcar */}
-          <div className={styles.attributeCard}>
-            <div className={styles.iconWrapper} aria-hidden="true">
-              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                <circle cx="12" cy="12" r="10" />
-                <path d="m4.93 4.93 14.14 14.14" />
-                <path d="M12 8v8" />
-              </svg>
-            </div>
-            <span className={styles.attributeName}>Sin azúcar</span>
+          <div className={styles.compositionPill}>
+            <span>Magnesio:</span>
+            <strong>86 mg</strong>
           </div>
-
-          {/* 4. Gluten Free */}
-          <div className={styles.attributeCard}>
-            <div className={styles.iconWrapper} aria-hidden="true">
-              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                <path d="m2 2 20 20" />
-                <path d="M7 17a4 4 0 0 0 4 4h2a4 4 0 0 0 4-4v-3" />
-                <path d="M10 10V6a2 2 0 0 1 2-2h0a2 2 0 0 1 2 2v4" />
-                <path d="M12 4v10" />
-              </svg>
-            </div>
-            <span className={styles.attributeName}>Gluten Free</span>
+          <div className={styles.compositionPill}>
+            <span>Calcio:</span>
+            <strong>265 mg</strong>
           </div>
-
-          {/* 5. Sin colorantes artificiales */}
-          <div className={styles.attributeCard}>
-            <div className={styles.iconWrapper} aria-hidden="true">
-              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                <path d="M12 2.69l5.66 5.66a8 8 0 1 1-11.31 0z" />
-                <path d="m14 10-4 4" />
-              </svg>
-            </div>
-            <span className={styles.attributeName}>Sin colorantes artificiales</span>
+          <div className={styles.compositionPill}>
+            <span>Zinc:</span>
+            <strong>13 mg</strong>
+          </div>
+          <div className={styles.compositionPill}>
+            <span>Aloe vera:</span>
+            <strong>45 mg</strong>
           </div>
         </div>
       </div>
 
       {/* ─────────────────────────────────────────────────────────────
-          3. LO QUE HAY DENTRO IMPORTA
+          3. CONOCE LO QUE HAY EN TU SACHET (INTERACTIVO PLEGABLE)
       ───────────────────────────────────────────────────────────── */}
       <div className={styles.insideSection}>
         <div className={styles.sectionHeader}>
-          <span className={styles.eyebrow}>COMPOSICIÓN TRANSPARENTE</span>
+          <span className={styles.eyebrow}>CONOCE LO QUE HAY EN TU SACHET</span>
           <h3>LO QUE HAY DENTRO IMPORTA.</h3>
-          <p>Una fórmula hecha con intención.</p>
+          <p>
+            Haz clic en cada elemento para desplegar su función biológica y cómo contribuye a tu hidratación.
+          </p>
+          <span className={styles.interactiveNotice}>Toca un mineral para ver su explicación ↓</span>
         </div>
 
-        {/* 5 Minerales */}
+        {/* 6 Minerales e ingredientes interactivos */}
         <div className={styles.mineralsGrid}>
-          {MINERALS.map((mineral) => (
-            <div key={mineral.symbol} className={styles.mineralCard}>
-              <span className={styles.mineralSymbol}>{mineral.symbol}</span>
-              <span className={styles.mineralName}>{mineral.name}</span>
+          {MINERALS.map((mineral) => {
+            const isExpanded = expandedMineral === mineral.id;
+            return (
+              <div
+                key={mineral.id}
+                className={`${styles.mineralInteractiveCard} ${isExpanded ? styles.expanded : ""}`}
+              >
+                <button
+                  type="button"
+                  className={styles.mineralHeader}
+                  onClick={() => toggleMineral(mineral.id)}
+                  aria-expanded={isExpanded}
+                  aria-controls={`desc-${mineral.id}`}
+                >
+                  <div className={styles.mineralHeaderLeft}>
+                    <span className={styles.mineralSymbol}>{mineral.symbol}</span>
+                    <div className={styles.mineralTitleBlock}>
+                      <span className={styles.mineralName}>{mineral.name}</span>
+                      <span className={styles.mineralMg}>{mineral.amount}</span>
+                    </div>
+                  </div>
+                  <span className={styles.toggleIcon} aria-hidden="true">
+                    +
+                  </span>
+                </button>
+
+                {isExpanded && (
+                  <div id={`desc-${mineral.id}`} className={styles.mineralBody}>
+                    <p>{mineral.explanation}</p>
+                  </div>
+                )}
+              </div>
+            );
+          })}
+        </div>
+      </div>
+
+      {/* ─────────────────────────────────────────────────────────────
+          4. BENEFICIOS
+      ───────────────────────────────────────────────────────────── */}
+      <div className={styles.benefitsSection}>
+        <div className={styles.sectionHeader}>
+          <span className={styles.eyebrow}>BENEFICIOS FUNCIONALES</span>
+          <h3>POR QUÉ FUNCIONA USCHH</h3>
+          <p>Nutrición precisa para sostener tu esfuerzo diario y recuperación.</p>
+        </div>
+
+        <div className={styles.benefitsGrid}>
+          {BENEFITS.map((benefit, index) => (
+            <div key={index} className={styles.benefitCard}>
+              <h4 className={styles.benefitTitle}>{benefit.title}</h4>
+              <p className={styles.benefitDesc}>{benefit.desc}</p>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* ─────────────────────────────────────────────────────────────
+          5. ¿CUÁNDO USAR USCHH?
+      ───────────────────────────────────────────────────────────── */}
+      <div className={styles.whenSection}>
+        <div className={styles.sectionHeader}>
+          <span className={styles.eyebrow}>MOMENTOS DE CONSUMO</span>
+          <h3>¿CUÁNDO USAR USCHH?</h3>
+          <p>Diseñado para acompañarte en los momentos clave donde tu cuerpo más lo necesita.</p>
+        </div>
+
+        <div className={styles.whenGrid}>
+          {WHEN_TO_USE.map((item, index) => (
+            <div key={index} className={styles.whenCard}>
+              <h4 className={styles.whenTitle}>{item.title}</h4>
+              <p className={styles.whenDesc}>{item.desc}</p>
             </div>
           ))}
         </div>
 
-        {/* Aloe vera separado visualmente */}
-        <div className={styles.aloeSeparator}>
-          <div className={styles.aloeLine} aria-hidden="true" />
-          <div className={styles.aloeCard}>
-            <span>+</span> ALOE VERA
-            <span>· Extracto botánico complementario</span>
-          </div>
-          <div className={styles.aloeLine} aria-hidden="true" />
-        </div>
+        <p className={styles.whenDisclaimer}>
+          Cada cuerpo es diferente. Tus necesidades dependen de cuánto sudas, la duración de la actividad y las condiciones del entorno.
+        </p>
       </div>
 
       {/* ─────────────────────────────────────────────────────────────
-          4. MODO DE USO
+          6. MODO DE USO
       ───────────────────────────────────────────────────────────── */}
       <div className={styles.usageSection}>
         <div className={styles.sectionHeader}>

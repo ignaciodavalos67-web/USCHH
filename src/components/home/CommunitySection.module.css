@@ -1,0 +1,104 @@
+.marqueeWrapper {
+  width: 100%;
+  overflow: hidden;
+  position: relative;
+  padding: 16px 0;
+}
+
+.marqueeTrack {
+  display: flex;
+  width: max-content;
+  will-change: transform;
+  animation: continuousScroll 45s linear infinite;
+}
+
+.marqueeWrapper:hover .marqueeTrack {
+  animation-play-state: paused;
+}
+
+.group {
+  display: flex;
+  gap: 20px;
+  padding-right: 20px;
+}
+
+.card {
+  position: relative;
+  width: 320px;
+  height: 320px;
+  aspect-ratio: 1 / 1;
+  border-radius: 0 !important;
+  overflow: hidden;
+  flex-shrink: 0;
+  box-shadow: 0 4px 20px rgba(16, 24, 32, 0.08);
+  background-color: #E5E3DC;
+}
+
+@media (min-width: 640px) {
+  .card {
+    width: 360px;
+    height: 360px;
+  }
+}
+
+@media (min-width: 1024px) {
+  .card {
+    width: 400px;
+    height: 400px;
+  }
+}
+
+.image {
+  object-fit: cover;
+  border-radius: 0 !important;
+  transition: transform 600ms ease;
+}
+
+.card:hover .image {
+  transform: scale(1.05);
+}
+
+.overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to top, rgba(16, 24, 32, 0.88) 0%, rgba(16, 24, 32, 0.35) 45%, transparent 75%);
+  pointer-events: none;
+}
+
+.phraseContainer {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: 24px;
+  pointer-events: none;
+}
+
+.phrase {
+  color: #FFFFFF;
+  font-size: clamp(18px, 1.8vw, 22px);
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  line-height: 1.25;
+  margin: 0;
+  text-transform: uppercase;
+}
+
+@keyframes continuousScroll {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .marqueeTrack {
+    animation: none;
+    overflow-x: auto;
+  }
+  .card:hover .image {
+    transform: none;
+  }
+}

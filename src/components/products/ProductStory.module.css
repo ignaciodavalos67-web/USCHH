@@ -5,7 +5,7 @@
   --flavor-accent-glow: rgba(184, 134, 11, 0.4);
   width: 100%;
   max-width: 1440px;
-  margin: 0 auto 32px;
+  margin: 0 auto 48px;
   padding-top: 0;
   display: flex;
   flex-direction: column;
@@ -32,7 +32,7 @@
 .presentationBanner {
   background: #FFFFFF;
   border: 1px solid rgba(48, 50, 54, 0.1);
-  border-radius: 4px;
+  border-radius: 6px;
   padding: 32px 40px;
   display: flex;
   align-items: center;
@@ -54,6 +54,7 @@
   text-transform: uppercase;
   color: var(--flavor-accent);
   transition: color 200ms ease;
+  font-weight: 600;
 }
 
 .presentationTitle {
@@ -78,7 +79,7 @@
   padding: 16px 24px;
   background: var(--flavor-accent-bg);
   border: 1px solid var(--flavor-accent-border);
-  border-radius: 4px;
+  border-radius: 6px;
   flex-shrink: 0;
   transition: background-color 200ms ease, border-color 200ms ease;
 }
@@ -103,72 +104,69 @@
 }
 
 /* ─────────────────────────────────────────────────────────────
-   2. CARACTERÍSTICAS / ATTRIBUTES GRID
+   2. COMPOSICIÓN DESTACADA BANNER
 ───────────────────────────────────────────────────────────── */
-.attributesSection {
-  display: flex;
-  flex-direction: column;
-  gap: 24px;
-}
-
-.attributesGrid {
-  display: grid;
-  grid-template-columns: repeat(5, minmax(0, 1fr));
-  gap: 16px;
-}
-
-.attributeCard {
+.compositionBanner {
   background: #FFFFFF;
   border: 1px solid rgba(48, 50, 54, 0.1);
-  border-radius: 4px;
-  padding: 24px 16px;
+  border-radius: 6px;
+  padding: 24px 32px;
   display: flex;
   flex-direction: column;
-  align-items: center;
-  text-align: center;
-  gap: 14px;
-  box-shadow: 0 2px 10px rgba(16, 24, 32, 0.04);
-  transition: border-color 200ms ease, transform 200ms ease, box-shadow 200ms ease, background-color 280ms ease, color 280ms ease;
+  gap: 12px;
+  box-shadow: 0 4px 20px rgba(16, 24, 32, 0.04);
 }
 
-.attributeCard:hover {
-  border-color: var(--flavor-accent-glow);
-  transform: translateY(-2px);
-  box-shadow: 0 6px 18px rgba(16, 24, 32, 0.08);
-}
-
-.iconWrapper {
-  width: 44px;
-  height: 44px;
-  border-radius: 50%;
-  background: var(--flavor-accent-bg);
-  color: var(--flavor-accent);
+.compositionHeadline {
   display: flex;
   align-items: center;
-  justify-content: center;
-  transition: background-color 200ms ease, color 200ms ease;
+  gap: 10px;
 }
 
-.attributeName {
-  font-size: 12px;
+.compositionTitle {
+  font-size: 16px;
   font-weight: 700;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
+  letter-spacing: -0.01em;
   color: #101820;
-  line-height: 1.3;
+  margin: 0;
+}
+
+.compositionValues {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px 20px;
+  align-items: center;
+  font-size: 13px;
+  color: #303236;
+  font-family: var(--font-geist-mono), monospace;
+}
+
+.compositionPill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: var(--flavor-accent-bg);
+  border: 1px solid var(--flavor-accent-border);
+  padding: 6px 12px;
+  border-radius: 4px;
+  font-weight: 600;
+}
+
+.compositionPill strong {
+  color: var(--flavor-accent);
 }
 
 /* ─────────────────────────────────────────────────────────────
-   3. LO QUE HAY DENTRO IMPORTA (MINERALS + ALOE VERA)
+   3. MINERALES DESPLEGABLES (CONOCE LO QUE HAY EN TU SACHET)
 ───────────────────────────────────────────────────────────── */
 .insideSection {
   background: #FFFFFF;
   border: 1px solid rgba(48, 50, 54, 0.1);
-  border-radius: 4px;
+  border-radius: 6px;
   padding: 48px;
   display: flex;
   flex-direction: column;
-  gap: 36px;
+  gap: 32px;
   box-shadow: 0 4px 20px rgba(16, 24, 32, 0.04);
 }
 
@@ -177,12 +175,12 @@
   flex-direction: column;
   gap: 8px;
   text-align: center;
-  max-width: 600px;
+  max-width: 650px;
   margin: 0 auto;
 }
 
 .sectionHeader h3 {
-  font-size: clamp(24px, 3vw, 40px);
+  font-size: clamp(24px, 3vw, 38px);
   font-weight: 700;
   letter-spacing: -0.03em;
   color: #101820;
@@ -197,144 +195,308 @@
   font-weight: 400;
 }
 
+.interactiveNotice {
+  font-family: var(--font-geist-mono), monospace;
+  font-size: 11px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--flavor-accent);
+  margin-top: 4px;
+}
+
 .mineralsGrid {
   display: grid;
-  grid-template-columns: repeat(5, minmax(0, 1fr));
+  grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 16px;
 }
 
-.mineralCard {
+.mineralInteractiveCard {
   background: #F8F7F2;
-  border: 1px solid rgba(48, 50, 54, 0.08);
-  border-radius: 4px;
-  padding: 24px 12px;
+  border: 1px solid rgba(48, 50, 54, 0.1);
+  border-radius: 6px;
+  overflow: hidden;
+  transition: all 250ms ease;
   display: flex;
   flex-direction: column;
+  cursor: pointer;
+  text-align: left;
+  user-select: none;
+}
+
+.mineralInteractiveCard:hover {
+  border-color: var(--flavor-accent-border);
+  box-shadow: 0 6px 20px rgba(16, 24, 32, 0.06);
+  transform: translateY(-2px);
+}
+
+.mineralInteractiveCard.expanded {
+  border-color: var(--flavor-accent);
+  background: #FFFFFF;
+  box-shadow: 0 8px 24px var(--flavor-accent-bg);
+}
+
+.mineralHeader {
+  padding: 20px 24px;
+  display: flex;
   align-items: center;
-  text-align: center;
-  gap: 8px;
+  justify-content: space-between;
+  gap: 16px;
+  background: transparent;
+  border: none;
+  width: 100%;
+  cursor: pointer;
+  text-align: left;
+}
+
+.mineralHeaderLeft {
+  display: flex;
+  align-items: center;
+  gap: 16px;
 }
 
 .mineralSymbol {
   font-family: var(--font-geist-mono), monospace;
-  font-size: clamp(32px, 4vw, 48px);
+  font-size: 32px;
   font-weight: 800;
   color: var(--flavor-accent);
   line-height: 1;
-  transition: color 200ms ease;
+  min-width: 44px;
+}
+
+.mineralTitleBlock {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
 }
 
 .mineralName {
-  font-size: 11px;
+  font-size: 15px;
   font-weight: 700;
-  letter-spacing: 0.16em;
-  text-transform: uppercase;
-  color: #303236;
+  letter-spacing: -0.01em;
+  color: #101820;
 }
 
-.aloeSeparator {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 16px;
-  margin-top: 8px;
-}
-
-.aloeLine {
-  flex: 1;
-  max-width: 120px;
-  height: 1px;
-  background: rgba(48, 50, 54, 0.15);
-}
-
-.aloeCard {
-  display: inline-flex;
-  align-items: center;
-  gap: 12px;
-  padding: 12px 24px;
-  background: var(--flavor-accent-bg);
-  border: 1px solid var(--flavor-accent-border);
-  border-radius: 9999px;
-  color: var(--flavor-accent);
-  font-size: 12px;
-  font-weight: 700;
-  letter-spacing: 0.16em;
-  text-transform: uppercase;
-  transition: background-color 200ms ease, border-color 200ms ease, color 200ms ease;
-}
-
-.aloeCard span {
-  color: #55585E;
-  font-size: 11px;
-  font-weight: 400;
-  letter-spacing: 0.05em;
-  text-transform: none;
-}
-
-/* ─────────────────────────────────────────────────────────────
-   4. MODO DE USO
-───────────────────────────────────────────────────────────── */
-.usageSection {
-  display: flex;
-  flex-direction: column;
-  gap: 32px;
-}
-
-.usageSteps {
-  display: grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
-  gap: 16px;
-  position: relative;
-}
-
-.stepCard {
-  background: #FFFFFF;
-  border: 1px solid rgba(48, 50, 54, 0.1);
-  border-radius: 4px;
-  padding: 28px 20px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  text-align: center;
-  gap: 14px;
-  position: relative;
-  box-shadow: 0 2px 10px rgba(16, 24, 32, 0.04);
-}
-
-.stepNumber {
-  position: absolute;
-  top: 12px;
-  left: 14px;
+.mineralMg {
   font-family: var(--font-geist-mono), monospace;
-  font-size: 10px;
+  font-size: 12px;
   letter-spacing: 0.1em;
-  color: #8C9099;
+  font-weight: 600;
+  color: var(--flavor-accent);
 }
 
-.stepIcon {
-  width: 48px;
-  height: 48px;
+.toggleIcon {
+  width: 28px;
+  height: 28px;
   border-radius: 50%;
   background: var(--flavor-accent-bg);
   color: var(--flavor-accent);
   display: flex;
   align-items: center;
   justify-content: center;
-  margin-top: 8px;
-  transition: background-color 200ms ease, color 200ms ease;
+  font-size: 16px;
+  font-weight: 700;
+  flex-shrink: 0;
+  transition: transform 200ms ease, background-color 200ms ease;
+}
+
+.expanded .toggleIcon {
+  transform: rotate(45deg);
+  background: var(--flavor-accent);
+  color: #FFFFFF;
+}
+
+.mineralBody {
+  padding: 0 24px 20px 24px;
+  font-size: 13.5px;
+  line-height: 1.6;
+  color: #55585E;
+  border-top: 1px solid rgba(48, 50, 54, 0.06);
+  padding-top: 14px;
+  animation: fadeIn 250ms ease;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ─────────────────────────────────────────────────────────────
+   4. BENEFICIOS DESTACADOS
+───────────────────────────────────────────────────────────── */
+.benefitsSection {
+  background: #FFFFFF;
+  border: 1px solid rgba(48, 50, 54, 0.1);
+  border-radius: 6px;
+  padding: 48px;
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+  box-shadow: 0 4px 20px rgba(16, 24, 32, 0.04);
+}
+
+.benefitsGrid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 20px;
+}
+
+.benefitCard {
+  background: #F8F7F2;
+  border: 1px solid rgba(48, 50, 54, 0.08);
+  border-radius: 6px;
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  transition: all 200ms ease;
+}
+
+.benefitCard:hover {
+  border-color: var(--flavor-accent-border);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 14px rgba(16, 24, 32, 0.05);
+}
+
+.benefitTitle {
+  font-size: 16px;
+  font-weight: 700;
+  color: #101820;
+  letter-spacing: -0.01em;
+  margin: 0;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.benefitDesc {
+  font-size: 13.5px;
+  line-height: 1.55;
+  color: #55585E;
+  margin: 0;
+}
+
+/* ─────────────────────────────────────────────────────────────
+   5. ¿CUÁNDO USAR USCHH?
+───────────────────────────────────────────────────────────── */
+.whenSection {
+  background: #FFFFFF;
+  border: 1px solid rgba(48, 50, 54, 0.1);
+  border-radius: 6px;
+  padding: 48px;
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+  box-shadow: 0 4px 20px rgba(16, 24, 32, 0.04);
+}
+
+.whenGrid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 20px;
+}
+
+.whenCard {
+  background: #F8F7F2;
+  border: 1px solid rgba(48, 50, 54, 0.08);
+  border-radius: 6px;
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  transition: all 200ms ease;
+}
+
+.whenCard:hover {
+  border-color: var(--flavor-accent-border);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 14px rgba(16, 24, 32, 0.05);
+}
+
+.whenTitle {
+  font-size: 15px;
+  font-weight: 700;
+  color: #101820;
+  letter-spacing: -0.01em;
+  margin: 0;
+}
+
+.whenDesc {
+  font-size: 13.5px;
+  line-height: 1.55;
+  color: #55585E;
+  margin: 0;
+}
+
+.whenDisclaimer {
+  background: var(--flavor-accent-bg);
+  border-left: 3px solid var(--flavor-accent);
+  padding: 16px 20px;
+  border-radius: 0 4px 4px 0;
+  font-size: 13px;
+  color: #303236;
+  line-height: 1.5;
+  font-style: italic;
+  margin: 0;
+}
+
+/* ─────────────────────────────────────────────────────────────
+   6. MODO DE USO
+───────────────────────────────────────────────────────────── */
+.usageSection {
+  background: #FFFFFF;
+  border: 1px solid rgba(48, 50, 54, 0.1);
+  border-radius: 6px;
+  padding: 48px;
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+  box-shadow: 0 4px 20px rgba(16, 24, 32, 0.04);
+}
+
+.usageSteps {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 16px;
+}
+
+.stepCard {
+  background: #F8F7F2;
+  border: 1px solid rgba(48, 50, 54, 0.08);
+  border-radius: 6px;
+  padding: 24px 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  position: relative;
+}
+
+.stepNumber {
+  font-family: var(--font-geist-mono), monospace;
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--flavor-accent);
+  letter-spacing: 0.1em;
+}
+
+.stepIcon {
+  color: var(--flavor-accent);
 }
 
 .stepLabel {
-  font-size: 13px;
+  font-size: 15px;
   font-weight: 700;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
   color: #101820;
-  line-height: 1.3;
+  margin-bottom: 4px;
 }
 
 .stepSublabel {
-  font-size: 11px;
+  font-size: 12.5px;
   color: #55585E;
   margin: 0;
 }
@@ -343,12 +505,14 @@
    RESPONSIVE DESIGN
 ───────────────────────────────────────────────────────────── */
 @media (max-width: 1024px) {
-  .attributesGrid {
-    grid-template-columns: repeat(3, minmax(0, 1fr));
+  .mineralsGrid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
-  .attributeCard:nth-child(4),
-  .attributeCard:nth-child(5) {
-    grid-column: span 1;
+  .benefitsGrid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .whenGrid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
   .usageSteps {
     grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -371,60 +535,59 @@
     width: 100%;
     justify-content: center;
   }
-  .attributesGrid {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 12px;
-  }
-  .attributeCard:last-child {
-    grid-column: span 2;
-  }
-  .insideSection {
+  .insideSection,
+  .benefitsSection,
+  .whenSection,
+  .usageSection {
     padding: 28px 20px;
-    gap: 28px;
+    gap: 24px;
   }
-  .mineralsGrid {
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-    gap: 10px;
-  }
-  .mineralCard:nth-child(4),
-  .mineralCard:nth-child(5) {
-    grid-column: span 1;
-  }
-  .aloeCard {
-    flex-direction: column;
-    text-align: center;
-    gap: 4px;
-    padding: 10px 18px;
-  }
+  .mineralsGrid,
+  .benefitsGrid,
+  .whenGrid,
   .usageSteps {
     grid-template-columns: 1fr;
     gap: 12px;
   }
-  .stepCard {
-    padding: 20px;
-    flex-direction: row;
-    text-align: left;
-    gap: 16px;
-  }
-  .stepNumber {
-    position: static;
-  }
-  .stepIcon {
-    margin-top: 0;
-    flex-shrink: 0;
-  }
 }
 
-:global([data-store-root][data-store-theme="night"]) .storyContainer { --flavor-accent:var(--brand-yellow); }
-:global([data-store-root][data-store-theme="night"]) .storyContainer.themeMandarina { --flavor-accent:#FF9A55; }
-:global([data-store-root][data-store-theme="night"]) :is(.presentationBanner, .attributeCard, .insideSection, .stepCard) {
-  background:var(--store-surface);
-  border-color:var(--store-border);
+/* ─────────────────────────────────────────────────────────────
+   SOPORTE PARA MODO NOCHE (STORE DAY/NIGHT TOGGLE)
+───────────────────────────────────────────────────────────── */
+:global([data-store-root][data-store-theme="night"]) .storyContainer {
+  --flavor-accent: var(--brand-yellow);
 }
-:global([data-store-root][data-store-theme="night"]) .mineralCard { background:var(--store-bg); border-color:var(--store-border); }
-:global([data-store-root][data-store-theme="night"]) :is(.presentationTitle, .badgeLabel, .attributeName, .sectionHeader h3, .mineralName, .stepLabel) { color:var(--store-fg); }
-:global([data-store-root][data-store-theme="night"]) :is(.presentationDesc, .sectionHeader p, .aloeCard span, .stepNumber, .stepSublabel) { color:var(--store-muted); }
-:global([data-store-root][data-store-theme="night"]) .aloeLine { background:var(--store-border); }
+:global([data-store-root][data-store-theme="night"]) .storyContainer.themeMandarina {
+  --flavor-accent: #FF9A55;
+}
+:global([data-store-root][data-store-theme="night"]) :is(.presentationBanner, .compositionBanner, .insideSection, .benefitsSection, .whenSection, .usageSection) {
+  background: var(--store-surface);
+  border-color: var(--store-border);
+}
+:global([data-store-root][data-store-theme="night"]) :is(.mineralInteractiveCard, .benefitCard, .whenCard, .stepCard) {
+  background: var(--store-bg);
+  border-color: var(--store-border);
+}
+:global([data-store-root][data-store-theme="night"]) .mineralInteractiveCard.expanded {
+  background: var(--store-surface);
+  border-color: var(--flavor-accent);
+}
+:global([data-store-root][data-store-theme="night"]) :is(.presentationTitle, .badgeLabel, .sectionHeader h3, .compositionTitle, .mineralName, .benefitTitle, .whenTitle, .stepLabel) {
+  color: var(--store-fg);
+}
+:global([data-store-root][data-store-theme="night"]) :is(.presentationDesc, .sectionHeader p, .mineralBody, .benefitDesc, .whenDesc, .stepSublabel, .compositionValues) {
+  color: var(--store-muted);
+}
+:global([data-store-root][data-store-theme="night"]) .whenDisclaimer {
+  background: rgba(247, 226, 163, 0.1);
+  color: var(--store-fg);
+}
 
-.presentationBanner, .insideSection, .stepCard, .mineralCard { transition:background-color 280ms ease, color 280ms ease, border-color 280ms ease; }
-@media (prefers-reduced-motion: reduce) { .presentationBanner, .attributeCard, .insideSection, .stepCard, .mineralCard { transition:none; } }
+.presentationBanner, .insideSection, .benefitsSection, .whenSection, .usageSection, .stepCard, .mineralInteractiveCard {
+  transition: background-color 280ms ease, color 280ms ease, border-color 280ms ease;
+}
+@media (prefers-reduced-motion: reduce) {
+  .presentationBanner, .insideSection, .benefitsSection, .whenSection, .usageSection, .stepCard, .mineralInteractiveCard {
+    transition: none;
+  }
+}

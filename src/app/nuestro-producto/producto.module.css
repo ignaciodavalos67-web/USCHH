@@ -2,24 +2,233 @@
 .page section,.footer { padding-inline:clamp(24px,6vw,96px); }
 .page h1,.page h2,.page h3 { font-weight:700; letter-spacing:-.055em; line-height:1.02; }
 .page h2 { font-size:clamp(32px,5.3vw,80px); }
-.eyebrow { font-family:var(--font-geist-mono); font-size:11px; letter-spacing:.14em; margin-bottom:30px; }
+.eyebrow { font-family:var(--font-geist-mono); font-size:11px; letter-spacing:.14em; margin-bottom:30px; text-transform:uppercase; }
 .hero { background:#101820; color:#F8F7F2; padding-top:160px; padding-bottom:60px;  }
 .hero h1 { font-size:clamp(46px,6.4vw,100px); }
 .hero h1 span { color:#F7E2A3; }
 .copy { max-width:590px; font-size:clamp(16px,1.3vw,20px); line-height:1.65; margin-top:36px; }
 .copy p+p { margin-top:18px; }
 .pack img { object-fit:contain; }
+
+/* ── FÓRMULA & MINERALES DETALLADOS ── */
 .formula { background:#F7E2A3; padding-block:clamp(72px,9vw,130px); }
-.minerals { display:grid; grid-template-columns:repeat(5,minmax(0,1fr)); margin-top:70px; list-style:none; }
-.minerals li { border-top:1px solid #10182066; border-bottom:1px solid #10182066; padding:24px 0; }
-.minerals li+li { padding-left:20px; border-left:1px solid #10182033; }
-.minerals span { font-size:clamp(50px,9vw,138px); font-weight:500; line-height:1.2; letter-spacing:-.06em; }
-.minerals p { font-family:var(--font-geist-mono); font-size:12px; margin-top:16px; letter-spacing:.08em; }
-.aloe { margin-top:32px; font-size:clamp(28px,4vw,56px); font-weight:600; color:#963e0c; letter-spacing:-.04em; }
+.compositionHighlight {
+  margin-top: 48px;
+  background: rgba(16, 24, 32, 0.06);
+  border: 1px solid rgba(16, 24, 32, 0.15);
+  border-radius: 8px;
+  padding: 24px 32px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.compositionHighlight h3 {
+  font-size: 16px;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  margin: 0;
+  text-transform: uppercase;
+}
+.compositionHighlight p {
+  font-size: 14.5px;
+  line-height: 1.6;
+  color: #101820;
+  margin: 0;
+}
+
+.mineralsGridDetailed {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 24px;
+  margin-top: 56px;
+  list-style: none;
+}
+.mineralCardDetailed {
+  background: rgba(255, 255, 255, 0.65);
+  backdrop-filter: blur(8px);
+  border: 1px solid rgba(16, 24, 32, 0.12);
+  border-radius: 8px;
+  padding: 32px 28px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  transition: transform 200ms ease, box-shadow 200ms ease;
+}
+.mineralCardDetailed:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 24px rgba(16, 24, 32, 0.08);
+}
+.mineralHeaderRow {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 12px;
+  border-bottom: 1px solid rgba(16, 24, 32, 0.15);
+  padding-bottom: 14px;
+}
+.mineralSymbolLarge {
+  font-family: var(--font-geist-mono);
+  font-size: 38px;
+  font-weight: 700;
+  letter-spacing: -0.04em;
+  line-height: 1;
+}
+.mineralMgBadge {
+  font-family: var(--font-geist-mono);
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  color: #963e0c;
+}
+.mineralCardDetailed h4 {
+  font-size: 18px;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  margin: 0;
+}
+.mineralCardDetailed p {
+  font-size: 13.5px;
+  line-height: 1.6;
+  color: #303236;
+  margin: 0;
+}
+
+/* ── ATRIBUTOS & BENEFICIOS ── */
 .attributes { padding-block:50px; border-bottom:1px solid #10182033; }
 .attributes ul { display:grid; grid-template-columns:repeat(5,minmax(0,1fr)); gap:30px; list-style:none; }
 .attributes li { display:flex; flex-direction:column; align-items:center; text-align:center; gap:18px; font-size:11px; font-weight:600; letter-spacing:.06em; }
 .attributes svg { width:40px; height:40px; }
+
+.benefitsSection {
+  background: #FFFFFF;
+  padding-block: clamp(72px, 9vw, 130px);
+  border-bottom: 1px solid rgba(16, 24, 32, 0.08);
+}
+.benefitsGrid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 24px;
+  margin-top: 56px;
+  list-style: none;
+}
+.benefitItem {
+  background: #F8F7F2;
+  border: 1px solid rgba(16, 24, 32, 0.08);
+  border-radius: 8px;
+  padding: 32px 28px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.benefitItem h3 {
+  font-size: 18px;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  color: #101820;
+  margin: 0;
+}
+.benefitItem p {
+  font-size: 14px;
+  line-height: 1.6;
+  color: #55585E;
+  margin: 0;
+}
+
+/* ── MOMENTOS DE CONSUMO ── */
+.whenSection {
+  background: #F8F7F2;
+  padding-block: clamp(72px, 9vw, 130px);
+  border-bottom: 1px solid rgba(16, 24, 32, 0.08);
+}
+.whenGrid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 24px;
+  margin-top: 56px;
+  list-style: none;
+}
+.whenItem {
+  background: #FFFFFF;
+  border: 1px solid rgba(16, 24, 32, 0.08);
+  border-radius: 8px;
+  padding: 32px 28px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  box-shadow: 0 4px 16px rgba(16, 24, 32, 0.03);
+}
+.whenItem h3 {
+  font-size: 17px;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  color: #101820;
+  margin: 0;
+}
+.whenItem p {
+  font-size: 14px;
+  line-height: 1.6;
+  color: #55585E;
+  margin: 0;
+}
+.whenNote {
+  margin-top: 36px;
+  background: #F7E2A3;
+  border-left: 4px solid #963e0c;
+  padding: 20px 28px;
+  border-radius: 0 8px 8px 0;
+  font-size: 14px;
+  line-height: 1.6;
+  color: #101820;
+  font-weight: 500;
+}
+
+/* ── HIDRATACIÓN: CONOCE TU CUERPO ── */
+.hydrationSection {
+  background: #101820;
+  color: #F8F7F2;
+  padding-block: clamp(72px, 9vw, 130px);
+}
+.hydrationGrid {
+  display: grid;
+  grid-template-columns: 1fr 1.2fr;
+  gap: 6vw;
+  align-items: start;
+  margin-top: 48px;
+}
+.hydrationStat {
+  font-size: clamp(64px, 10vw, 120px);
+  font-weight: 800;
+  color: #F7E2A3;
+  line-height: 0.95;
+  letter-spacing: -0.05em;
+  font-family: var(--font-geist-mono);
+}
+.hydrationStatLabel {
+  font-size: 14px;
+  font-family: var(--font-geist-mono);
+  letter-spacing: 0.12em;
+  color: rgba(248, 247, 242, 0.7);
+  margin-top: 16px;
+  text-transform: uppercase;
+}
+.hydrationCopy {
+  font-size: clamp(16px, 1.3vw, 19px);
+  line-height: 1.7;
+  color: rgba(248, 247, 242, 0.85);
+}
+.hydrationCopy p + p {
+  margin-top: 20px;
+}
+.hydrationDisclaimer {
+  font-size: 12.5px;
+  color: rgba(248, 247, 242, 0.5);
+  font-style: italic;
+  margin-top: 28px;
+  border-top: 1px solid rgba(248, 247, 242, 0.15);
+  padding-top: 18px;
+}
+
+/* ── USO Y MOVIMIENTO ── */
 .products,.compactProducts { display:grid; grid-template-columns:1fr 1fr; gap:16px; min-width:0; }
 .pack { position:relative; aspect-ratio:.85; }
 .products figcaption,.compactProducts figcaption { text-align:center; font-size:12px; letter-spacing:.1em; margin-top:12px; }
@@ -40,31 +249,105 @@
 .compactProducts { max-width:600px; margin:40px auto; }
 .footer { display:flex; justify-content:space-between; gap:24px; padding-block:28px; border-top:1px solid #10182033; font-family:var(--font-geist-mono); font-size:11px; }
 .page a:focus-visible { outline:2px solid #b14c13; outline-offset:6px; }
-@media(max-width:900px) { .hero { grid-template-columns:1fr; padding-top:140px; } .hero h1 { font-size:clamp(46px,9vw,80px); } .copy { max-width:650px; } .products { max-width:700px; width:100%; margin:auto; } }
-@media(max-width:700px) { .minerals { grid-template-columns:repeat(3,minmax(0,1fr)); row-gap:24px; margin-top:44px; } .minerals span { font-size:64px; } .minerals li+li { padding-left:14px; } .minerals li:nth-child(4) { border-left:0; padding-left:0; } .attributes ul { grid-template-columns:repeat(2,minmax(0,1fr)); gap:36px 24px; } .attributes li:last-child { grid-column:1/-1; } .steps { grid-template-columns:1fr 1fr; gap:40px; } .steps strong { font-size:64px; } .steps strong.word { font-size:30px; } .steps li:nth-child(3) i { left:0; top:-32px; transform:rotate(90deg); }   }
+
+@media(max-width:1024px) {
+  .mineralsGridDetailed { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .benefitsGrid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .whenGrid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .hydrationGrid { grid-template-columns: 1fr; gap: 36px; }
+}
+
+@media(max-width:900px) {
+  .hero { grid-template-columns:1fr; padding-top:140px; }
+  .hero h1 { font-size:clamp(46px,9vw,80px); }
+  .copy { max-width:650px; }
+  .products { max-width:700px; width:100%; margin:auto; }
+  .heroIntro { grid-template-columns:1fr; gap:36px; }
+  .heroIntro .copy { max-width:650px; }
+  .movementIntro h2 { font-size:clamp(38px,5.2vw,48px); }
+}
+
+@media(max-width:700px) {
+  .mineralsGridDetailed { grid-template-columns: 1fr; }
+  .benefitsGrid { grid-template-columns: 1fr; }
+  .whenGrid { grid-template-columns: 1fr; }
+  .attributes ul { grid-template-columns:repeat(2,minmax(0,1fr)); gap:36px 24px; }
+  .attributes li:last-child { grid-column:1/-1; }
+  .steps { grid-template-columns:1fr 1fr; gap:40px; }
+  .steps strong { font-size:64px; }
+  .steps strong.word { font-size:30px; }
+  .steps li:nth-child(3) i { left:0; top:-32px; transform:rotate(90deg); }
+  .movementIntro h2 { font-size:clamp(36px,9vw,56px); }
+  .editorialLead { margin-top:18px; }
+}
+
 @media(prefers-reduced-motion:reduce) { .page * { scroll-behavior:auto; } }
 
 .heroIntro { display:grid; grid-template-columns:1.1fr 1fr; gap:6vw; align-items:end; }
 .heroIntro .copy { margin-top:0; }
-.movementEditorial { display:grid; grid-template-columns:minmax(0,1fr); gap:40px; }
-.movementIntro { grid-column:1; grid-row:1; }
-.movementIntro h2 { font-size:clamp(42px,5.1vw,76px); }
-.editorialLead { margin-top:30px; font-size:13px; font-weight:600; letter-spacing:.02em; line-height:1.6; }
-.movementIntro .activities { margin-top:20px; gap:8px 20px; }
-.movementImage { width:100%; max-width:760px; margin-top:28px; }
-.gymPhoto { position:relative; aspect-ratio:3/2; overflow:hidden; }
-.gymPhoto img { object-fit:cover; object-position:50% 58%; }
-.movementStatement { grid-column:1; grid-row:2; align-self:end; padding-bottom:8px; }
-@media(max-width:900px) { .heroIntro { grid-template-columns:1fr; gap:36px; } .heroIntro .copy { max-width:650px; } .movementIntro h2 { font-size:clamp(38px,5.2vw,48px); } .movementEditorial { row-gap:32px; }  }
-@media(max-width:700px) {
-  .movementEditorial { grid-template-columns:minmax(0,1fr); gap:32px; }
-  .movementIntro { grid-column:1; grid-row:1; }
-  .movementIntro h2 { font-size:clamp(42px,10vw,64px); }
-  .editorialLead { margin-top:24px; }
-
-
-  .movementStatement { grid-column:1; grid-row:2; padding:0; }
-
+.movement {
+  background: #101820;
+  color: #F8F7F2;
+  padding-block: clamp(72px, 9vw, 130px);
+  padding-inline: 0 !important;
+  width: 100%;
+  overflow: hidden;
 }
-.movementStatement { margin-top:clamp(16px,3vw,48px); }
-.movementStatement .elevate { color:#F7E2A3; font-size:clamp(52px,9vw,136px); font-weight:700; letter-spacing:-.055em; line-height:.95; margin:0; }
+
+.movementIntro {
+  padding-inline: clamp(24px, 6vw, 96px);
+  max-width: 1440px;
+  margin-inline: auto;
+  width: 100%;
+}
+.movementIntro h2 { font-size: clamp(42px, 5.1vw, 76px); }
+.editorialLead { margin-top: 24px; font-size: 13px; font-weight: 600; letter-spacing: .02em; line-height: 1.6; }
+
+.movementImage {
+  width: 100%;
+  max-width: none;
+  margin-block: clamp(36px, 5vw, 64px);
+}
+.gymPhoto {
+  position: relative;
+  width: 100vw;
+  height: clamp(420px, 54vw, 860px);
+  overflow: hidden;
+}
+.gymPhoto img {
+  object-fit: cover;
+  object-position: center 55%;
+}
+
+.movementBottom {
+  padding-inline: clamp(24px, 6vw, 96px);
+  max-width: 1440px;
+  margin-inline: auto;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+}
+.movementBottom .activities {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px 24px;
+  list-style: none;
+  max-width: 520px;
+  font-family: var(--font-geist-mono);
+  font-size: 11px;
+  line-height: 1.7;
+  color: #F7E2A3;
+  padding: 0;
+  margin: 0;
+}
+.movementStatement {
+  margin-top: clamp(24px, 4vw, 56px);
+}
+.movementStatement .elevate {
+  color: #F7E2A3;
+  font-size: clamp(52px, 9vw, 136px);
+  font-weight: 700;
+  letter-spacing: -.055em;
+  line-height: .95;
+  margin: 0;
+}
