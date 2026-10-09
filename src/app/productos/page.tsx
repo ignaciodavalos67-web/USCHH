@@ -69,10 +69,6 @@ export default async function ShopPage() {
           );
         })}
       </div>
-      <footer className={styles.footer}>
-        <Link href="/">← VOLVER A INICIO</Link>
-        <span>USCHH</span>
-      </footer>
     </main>
   );
 }

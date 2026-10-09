@@ -14,7 +14,7 @@
   border-radius: 8px;
   overflow: hidden;
   box-shadow: 0 4px 24px rgba(16, 24, 32, 0.06);
-  transition: border-color 200ms ease;
+  transition: border-color 200ms ease, background-color 280ms ease;
 }
 
 .mainImage {
@@ -44,7 +44,7 @@
   overflow: hidden;
   cursor: pointer;
   padding: 0;
-  transition: transform 180ms ease, border-color 180ms ease, box-shadow 180ms ease;
+  transition: transform 180ms ease, border-color 180ms ease, box-shadow 180ms ease, background-color 280ms ease;
   outline: none;
   box-shadow: 0 2px 8px rgba(16, 24, 32, 0.04);
 }
@@ -92,3 +92,10 @@
     padding: 14px;
   }
 }
+
+:global([data-store-root][data-store-theme="night"]) :is(.mainStage, .thumbBtn) {
+  background:var(--store-surface);
+  border-color:var(--store-border);
+}
+
+@media (prefers-reduced-motion: reduce) { .mainStage, .thumbBtn { transition:none; } }

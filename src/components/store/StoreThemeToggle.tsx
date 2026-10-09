@@ -7,6 +7,7 @@ import {
   STORE_THEME_KEY,
   applyStoreTheme,
   getStoreRoot,
+  readStoredTheme,
   type StoreTheme,
 } from "./storeTheme";
 
@@ -15,15 +16,19 @@ function subscribe(onChange: () => void) {
   if (!root) return () => {};
   const observer = new MutationObserver(onChange);
   observer.observe(root, { attributes: true, attributeFilter: [STORE_THEME_ATTR] });
-  return () => observer.disconnect();
+  const syncStorage = (event: StorageEvent) => {
+    if (event.key === STORE_THEME_KEY || event.key === null) applyStoreTheme(root, readStoredTheme());
+  };
+  window.addEventListener("storage", syncStorage);
+  return () => { observer.disconnect(); window.removeEventListener("storage", syncStorage); };
 }
 
 function getSnapshot(): StoreTheme {
-  return getStoreRoot()?.getAttribute(STORE_THEME_ATTR) === "day" ? "day" : "night";
+  return getStoreRoot()?.getAttribute(STORE_THEME_ATTR) === "night" ? "night" : "day";
 }
 
 function getServerSnapshot(): StoreTheme {
-  return "night";
+  return "day";
 }
 
 /**
@@ -38,6 +43,7 @@ export function StoreThemeToggle() {
     const root = getStoreRoot();
     if (!root) return;
     const next: StoreTheme = getSnapshot() === "day" ? "night" : "day";
+    root.setAttribute("data-store-animated", "");
     applyStoreTheme(root, next);
     try {
       localStorage.setItem(STORE_THEME_KEY, next);
@@ -51,6 +57,7 @@ export function StoreThemeToggle() {
       type="button"
       onClick={toggle}
       className={styles.toggle}
+      aria-pressed={theme === "day"}
       aria-label={theme === "day" ? "Activar modo noche" : "Activar modo día"}
       title={theme === "day" ? "Modo noche" : "Modo día"}
     >

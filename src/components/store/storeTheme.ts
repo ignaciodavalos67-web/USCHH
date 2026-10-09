@@ -4,12 +4,12 @@ export const STORE_THEME_KEY = "uschh-store-theme";
 export const STORE_THEME_ATTR = "data-store-theme";
 export const STORE_ROOT_ATTR = "data-store-root";
 
-/** Modo noche es el predeterminado: solo se marca el atributo para el modo día. */
+/** The original light storefront is the default. */
 export function readStoredTheme(): StoreTheme {
   try {
-    return localStorage.getItem(STORE_THEME_KEY) === "day" ? "day" : "night";
+    return localStorage.getItem(STORE_THEME_KEY) === "night" ? "night" : "day";
   } catch {
-    return "night";
+    return "day";
   }
 }
 
@@ -18,9 +18,8 @@ export function getStoreRoot(): HTMLElement | null {
 }
 
 export function applyStoreTheme(root: HTMLElement, theme: StoreTheme) {
-  if (theme === "day") root.setAttribute(STORE_THEME_ATTR, "day");
-  else root.removeAttribute(STORE_THEME_ATTR);
+  root.setAttribute(STORE_THEME_ATTR, theme);
 }
 
-/** Se ejecuta durante el parseo del HTML, antes de pintar, sobre el contenedor de la tienda. */
-export const STORE_THEME_SCRIPT = `(function(){try{var r=document.currentScript&&document.currentScript.parentElement;if(r&&localStorage.getItem("${STORE_THEME_KEY}")==="day")r.setAttribute("${STORE_THEME_ATTR}","day")}catch(e){}})()`;
+/** Runs inside the storefront before its children are painted. */
+export const STORE_THEME_SCRIPT = `(function(){var r=document.currentScript&&document.currentScript.parentElement;if(!r)return;var t="day";try{if(localStorage.getItem("${STORE_THEME_KEY}")==="night")t="night"}catch(e){}r.setAttribute("${STORE_THEME_ATTR}",t)})()`;

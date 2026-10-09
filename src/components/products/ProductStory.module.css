@@ -128,7 +128,7 @@
   text-align: center;
   gap: 14px;
   box-shadow: 0 2px 10px rgba(16, 24, 32, 0.04);
-  transition: border-color 200ms ease, transform 200ms ease, box-shadow 200ms ease;
+  transition: border-color 200ms ease, transform 200ms ease, box-shadow 200ms ease, background-color 280ms ease, color 280ms ease;
 }
 
 .attributeCard:hover {
@@ -414,3 +414,17 @@
     flex-shrink: 0;
   }
 }
+
+:global([data-store-root][data-store-theme="night"]) .storyContainer { --flavor-accent:var(--brand-yellow); }
+:global([data-store-root][data-store-theme="night"]) .storyContainer.themeMandarina { --flavor-accent:#FF9A55; }
+:global([data-store-root][data-store-theme="night"]) :is(.presentationBanner, .attributeCard, .insideSection, .stepCard) {
+  background:var(--store-surface);
+  border-color:var(--store-border);
+}
+:global([data-store-root][data-store-theme="night"]) .mineralCard { background:var(--store-bg); border-color:var(--store-border); }
+:global([data-store-root][data-store-theme="night"]) :is(.presentationTitle, .badgeLabel, .attributeName, .sectionHeader h3, .mineralName, .stepLabel) { color:var(--store-fg); }
+:global([data-store-root][data-store-theme="night"]) :is(.presentationDesc, .sectionHeader p, .aloeCard span, .stepNumber, .stepSublabel) { color:var(--store-muted); }
+:global([data-store-root][data-store-theme="night"]) .aloeLine { background:var(--store-border); }
+
+.presentationBanner, .insideSection, .stepCard, .mineralCard { transition:background-color 280ms ease, color 280ms ease, border-color 280ms ease; }
+@media (prefers-reduced-motion: reduce) { .presentationBanner, .attributeCard, .insideSection, .stepCard, .mineralCard { transition:none; } }

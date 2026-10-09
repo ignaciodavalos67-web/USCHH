@@ -28,16 +28,16 @@
   animation: iconIn 300ms ease;
 }
 
-/* Modo noche (predeterminado): se muestra el sol para activar el modo día */
-.moon {
+/* Day is the default; show the action that switches to night. */
+.sun {
   display: none;
 }
 
-:global([data-store-theme="day"]) .sun {
+:global([data-store-root][data-store-theme="night"]) .moon {
   display: none;
 }
 
-:global([data-store-theme="day"]) .moon {
+:global([data-store-root][data-store-theme="night"]) .sun {
   display: block;
 }
 

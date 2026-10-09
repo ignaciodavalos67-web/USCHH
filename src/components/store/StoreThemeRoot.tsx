@@ -32,6 +32,7 @@ export function StoreThemeRoot({
     <div
       ref={ref}
       className={className}
+      data-store-theme="day"
       {...{ [STORE_ROOT_ATTR]: "" }}
       suppressHydrationWarning
     >
