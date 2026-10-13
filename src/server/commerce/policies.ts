@@ -2,7 +2,7 @@ import { Prisma } from "../../generated/prisma/client";
 import { ShippingMode } from "../../generated/prisma/enums";
 
 export const MAX_QUANTITY_PER_FLAVOR = 5;
-export const FREE_SHIPPING_SUBTOTAL_USD = new Prisma.Decimal("30.00");
+export const FREE_SHIPPING_SUBTOTAL_USD = new Prisma.Decimal("0.00");
 
 export function isPurchasable(product: { active: boolean; stock: number }) {
   return product.active && product.stock > 0;

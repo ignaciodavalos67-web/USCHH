@@ -1,4 +1,4 @@
-﻿import type { toStorefrontProduct } from "@/server/commerce/storefront-product";
+import type { toStorefrontProduct } from "@/server/commerce/storefront-product";
 export type CartProduct = ReturnType<typeof toStorefrontProduct>;
 export type CartItem = { id: string; slug: string; quantity: number };
 export const CART_KEY = "uschh.cart.v1";
@@ -57,5 +57,5 @@ export function cartSummary(items: CartItem[], products: CartProduct[]) {
     return true;
   });
   if (valid) for(const item of items) subtotal+=cents(findProduct(item,products)!.unitPrice)*item.quantity;
-  return { valid, subtotal: valid ? subtotal : null, shipping: valid ? subtotal>=3000 ? "ENVÍO GRATIS" : "ENVÍO PAGADO AL RECIBIR" : null };
+  return { valid, subtotal: valid ? subtotal : null, shipping: valid ? "ENVÍO GRATIS" : null };
 }

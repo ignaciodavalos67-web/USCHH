@@ -280,6 +280,73 @@
   font-weight: 700;
 }
 
+/* ── CAJITA PAYPHONE EN CHECKOUT ── */
+.payphoneCard {
+  background: rgba(247, 226, 163, 0.05);
+  border: 1px solid rgba(247, 226, 163, 0.25);
+  border-radius: 6px;
+  padding: 24px;
+  margin-block: 20px;
+}
+
+.payphoneHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+  border-bottom: 1px solid rgba(248, 247, 242, 0.15);
+  padding-bottom: 12px;
+}
+
+.payphoneHeader h3 {
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  color: var(--brand-yellow);
+  margin: 0;
+  text-transform: uppercase;
+}
+
+.payphoneBrands {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  font-size: 11px;
+  opacity: 0.8;
+  letter-spacing: 0.04em;
+}
+
+.payphoneBoxContainer {
+  margin-top: 16px;
+  min-height: 50px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.payphoneInitBtn {
+  background: var(--brand-yellow);
+  color: var(--brand-dark);
+  font-weight: 700;
+  border: none;
+  padding: 16px 20px;
+  font-size: 12px;
+  letter-spacing: 0.08em;
+  cursor: pointer;
+  border-radius: 4px;
+  width: 100%;
+  transition: opacity 180ms ease;
+}
+
+.payphoneInitBtn:hover {
+  opacity: 0.9;
+}
+
+.payphoneInitBtn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
 @media (max-width: 767px) {
   .page { padding: 130px 24px 40px; }
   .grid { grid-template-columns: 1fr; gap: 40px; }

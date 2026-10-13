@@ -27,6 +27,8 @@ export function publicOrder(order: OrderDetails) {
     expiresAt: order.reservationExpiresAt?.toISOString() ?? null,
     customerMarkedTransferredAt: order.payments.find(p => p.method === "BANK_TRANSFER")?.customerMarkedTransferredAt?.toISOString() ?? null,
     bank: order.bankDetails as BankDetails | null,
+    paymentMethod: order.payments[0]?.method ?? "CARD",
+    paymentProvider: order.payments[0]?.provider ?? null,
     items: order.items.map(item => ({
       id: item.productId,
       quantity: item.quantity,

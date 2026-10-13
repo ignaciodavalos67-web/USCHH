@@ -1,10 +1,13 @@
-﻿import "server-only";
+import "server-only";
 import { NextResponse } from "next/server";
 import { CheckoutError } from "@/lib/checkout/validation";
 import { createOrderService } from "./orders";
 import { prisma } from "@/lib/prisma";
 import { getBankDetails } from "./bank";
+import { createPayphoneService } from "./payphone";
+import { getPayphoneConfig } from "./payphone-config";
 export const orders=createOrderService(prisma,getBankDetails);
+export const payphoneService=createPayphoneService(prisma,getPayphoneConfig);
 export function sameOrigin(request: Request) {
   const origin=request.headers.get("origin");
   if(!origin || origin!==new URL(request.url).origin)throw new CheckoutError("ORIGIN","Solicitud no válida.",403);

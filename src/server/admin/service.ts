@@ -1,6 +1,7 @@
 import "server-only";
 import { Prisma, OrderStatus, PaymentStatus, type PrismaClient } from "@/generated/prisma/client";
 import { createOrderLifecycle } from "@/server/commerce/order-lifecycle";
+import { reconcileExpiredPayphoneReservations } from "@/server/commerce/payphone";
 import { AdminError, id, text } from "./errors";
 export type Filters={q?:string;status?:string;payment?:string;waiting?:string;expired?:string;page?:string;from?:string;to?:string};
 export type TransferFilters={state?:string;page?:string};
@@ -29,12 +30,24 @@ function periodStarts(now=new Date()){
 }
 export function createAdminService(db:PrismaClient,requireAdmin:()=>Promise<{id:string}>) {
   const lifecycle=createOrderLifecycle(db,async()=>(await requireAdmin()).id);
-  async function listOrders(filters:Filters={}){await requireAdmin();const where=orderFilter(filters),page=pagination(filters.page);const [orders,count]=await Promise.all([db.order.findMany({where,orderBy:{createdAt:"desc"},skip:(page-1)*PAGE_SIZE,take:PAGE_SIZE,include:{payments:{select:{method:true,status:true,customerMarkedTransferredAt:true}}}}),db.order.count({where})]);return {orders,count,page};}
+  async function listOrders(filters:Filters={}){await requireAdmin();const where=orderFilter(filters),page=pagination(filters.page);const [orders,count]=await Promise.all([db.order.findMany({where,orderBy:{createdAt:"desc"},skip:(page-1)*PAGE_SIZE,take:PAGE_SIZE,include:{payments:{select:{method:true,status:true,provider:true,customerMarkedTransferredAt:true}}}}),db.order.count({where})]);return {orders,count,page};}
   async function transfers(filters:TransferFilters={}){await requireAdmin();const state=transferState(filters.state),page=pagination(filters.page);const paymentWhere:Prisma.PaymentWhereInput={method:"BANK_TRANSFER",...(state==="review" ? {status:"PENDING",customerMarkedTransferredAt:{not:null}} : state==="pending" ? {status:"PENDING",customerMarkedTransferredAt:null} : state==="confirmed" ? {status:"PAID"} : {status:{in:["FAILED","REFUNDED"]}})};const where:Prisma.OrderWhereInput={payments:{some:paymentWhere}};const review:Prisma.OrderWhereInput={payments:{some:{method:"BANK_TRANSFER",status:"PENDING",customerMarkedTransferredAt:{not:null}}}},pending:Prisma.OrderWhereInput={payments:{some:{method:"BANK_TRANSFER",status:"PENDING",customerMarkedTransferredAt:null}}},confirmed:Prisma.OrderWhereInput={payments:{some:{method:"BANK_TRANSFER",status:"PAID"}}},closed:Prisma.OrderWhereInput={payments:{some:{method:"BANK_TRANSFER",status:{in:["FAILED","REFUNDED"]}}}};
     const [orders,count,reviewCount,pendingCount,confirmedCount,closedCount]=await Promise.all([db.order.findMany({where,orderBy:{updatedAt:"desc"},skip:(page-1)*PAGE_SIZE,take:PAGE_SIZE,include:{items:true,payments:{where:{method:"BANK_TRANSFER"},select:{id:true,status:true,amount:true,currency:true,customerMarkedTransferredAt:true,paidAt:true,verifiedAt:true,verifiedBy:{select:{name:true,email:true}}}}}}),db.order.count({where}),db.order.count({where:review}),db.order.count({where:pending}),db.order.count({where:confirmed}),db.order.count({where:closed})]);const now=new Date();return {orders:orders.map(order=>({...order,isExpired:order.reservationStatus==="RESERVED" && !!order.reservationExpiresAt && order.reservationExpiresAt<=now})),count,page,state,counts:{review:reviewCount,pending:pendingCount,confirmed:confirmedCount,closed:closedCount}};
   }
-  async function detail(number:string){await requireAdmin();if(!/^(?:USCHH-)?\d{1,10}$/i.test(number))throw new AdminError("Pedido no encontrado.",404);const order=await db.order.findUnique({where:{number:Number(number.replace(/^USCHH-/i,""))},include:{items:{include:{inventoryMovements:{orderBy:{createdAt:"asc"}}}},payments:true,notes:{take:100,orderBy:{createdAt:"desc"},include:{author:{select:{email:true,name:true}}}},_count:{select:{notes:true}}}});if(!order)throw new AdminError("Pedido no encontrado.",404);return order;}
-  async function products(){await requireAdmin();const [products,reserved]=await Promise.all([db.product.findMany({where:{slug:{in:["limon","mandarina"]}},orderBy:{slug:"asc"}}),db.orderItem.groupBy({by:["productId"],where:{order:{reservationStatus:"RESERVED"},inventoryReleasedAt:null},_sum:{quantity:true}})]);return products.map(product=>({...product,reserved:reserved.find(row=>row.productId===product.id)?._sum.quantity ?? 0}));}
+  async function detail(number:string){await requireAdmin();if(!/^(?:USCHH-)?\d{1,10}$/i.test(number))throw new AdminError("Pedido no encontrado.",404);const order=await db.order.findUnique({where:{number:Number(number.replace(/^USCHH-/i,""))},include:{items:{include:{inventoryMovements:{orderBy:{createdAt:"asc"}}}},payments:true,notes:{take:100,orderBy:{createdAt:"desc"},include:{author:{select:{email:true,name:true}}}},_count:{select:{notes:true}},payphoneAttempt:true}});if(!order)throw new AdminError("Pedido no encontrado.",404);return order;}
+  async function products(){
+    await requireAdmin();
+    const [products, bankReserved, payphoneReserved] = await Promise.all([
+      db.product.findMany({where:{slug:{in:["limon","mandarina"]}},orderBy:{slug:"asc"}}),
+      db.orderItem.groupBy({by:["productId"],where:{order:{reservationStatus:"RESERVED"},inventoryReleasedAt:null},_sum:{quantity:true}}),
+      db.stockReservation.groupBy({by:["productId"],where:{status:"ACTIVE"},_sum:{quantity:true}})
+    ]);
+    return products.map(product => {
+      const b = bankReserved.find(row => row.productId === product.id)?._sum.quantity ?? 0;
+      const p = payphoneReserved.find(row => row.productId === product.id)?._sum.quantity ?? 0;
+      return { ...product, reserved: b + p };
+    });
+  }
   async function updateProduct(value:Record<string,unknown>){const admin=await requireAdmin();const productId=id(value.id);const price=text(value.price,"el precio",13);if(!/^\d{1,10}(\.\d{1,2})?$/.test(price) || new Prisma.Decimal(price).lte(0))throw new AdminError("El precio debe ser positivo y tener máximo dos decimales.");const stock=Number(value.stock);if(typeof value.stock!=="string" || !/^\d{1,9}$/.test(value.stock) || !Number.isSafeInteger(stock) || stock>2147483647)throw new AdminError("El stock disponible no puede ser negativo.");const active=value.active;if(typeof active!=="boolean")throw new AdminError("Disponibilidad no válida.");const reason=text(value.reason,"el motivo del ajuste",500);const expected=text(value.updatedAt,"la versión del producto",40);
     await db.$transaction(async tx=>{
       await tx.$queryRaw`SELECT "id" FROM "Product" WHERE "id"=${productId} FOR UPDATE`;
@@ -56,7 +69,17 @@ export function createAdminService(db:PrismaClient,requireAdmin:()=>Promise<{id:
       await tx.adminAuditEvent.create({data:{adminId:admin.id,action:"FULFILLMENT_CHANGED",entityType:"Order",entityId:orderId,details:{from:order.status,to:next,...(carrier ? {carrier,trackingNumber} : {})}}});
     });
   }
-  async function releaseExpired(){await requireAdmin();const expired=await db.order.findMany({where:{status:"PENDING_PAYMENT",reservationStatus:"RESERVED",reservationExpiresAt:{lte:new Date()}},orderBy:{reservationExpiresAt:"asc"},take:50,select:{id:true}});let released=0;for(const order of expired){try{await lifecycle.cancelUnpaid(order.id,"Reserva vencida de 24 horas",{expiredOnly:true});released++;}catch(error){if(error instanceof Error && "status" in error && error.status===409)continue;throw error;}}return released;}
+  async function releaseExpired(){
+    await requireAdmin();
+    const expired=await db.order.findMany({where:{status:"PENDING_PAYMENT",reservationStatus:"RESERVED",reservationExpiresAt:{lte:new Date()}},orderBy:{reservationExpiresAt:"asc"},take:50,select:{id:true}});
+    let released=0;
+    for(const order of expired){
+      try{await lifecycle.cancelUnpaid(order.id,"Reserva vencida de 24 horas",{expiredOnly:true});released++;}
+      catch(error){if(error instanceof Error && "status" in error && error.status===409)continue;throw error;}
+    }
+    const payphoneReleased = await reconcileExpiredPayphoneReservations(db);
+    return released + payphoneReleased;
+  }
   async function marketing(filters:Filters={}){await requireAdmin();const page=pagination(filters.page);const where:Prisma.MarketingContactWhereInput={status:"GRANTED",withdrawnAt:null,consentAt:{not:null},consentSource:{not:null},consentText:{not:null},consentVersion:{not:null},...(filters.q ? {email:{contains:filters.q.slice(0,100),mode:"insensitive"}} : {})};const [contacts,count]=await Promise.all([db.marketingContact.findMany({where,select:{email:true,consentAt:true,consentSource:true,consentVersion:true,status:true},orderBy:{consentAt:"desc"},take:PAGE_SIZE,skip:(page-1)*PAGE_SIZE}),db.marketingContact.count({where})]);return {contacts,count,page};}
   async function sales(filters:Filters={}){await requireAdmin();const starts=periodStarts();const where:Prisma.OrderWhereInput={status:{in:SALES_STATUSES},paidAt:{not:null,...dateRange(filters.from,filters.to)},refundedAt:null,payments:{some:{status:"PAID"},none:{status:"REFUNDED"}},currency:"USD"};const aggregate=(extra:Prisma.OrderWhereInput={})=>db.order.aggregate({where:{AND:[where,extra]},_sum:{total:true},_count:{_all:true},_avg:{total:true}});
     const [all,today,week,month,flavors]=await Promise.all([aggregate(),aggregate({paidAt:{gte:starts.today,lt:new Date()}}),aggregate({paidAt:{gte:starts.week,lt:new Date()}}),aggregate({paidAt:{gte:starts.month,lt:new Date()}}),db.orderItem.groupBy({by:["flavor"],where:{order:where},_sum:{quantity:true}})]);return {all,today,week,month,flavors,units:flavors.reduce((n,row)=>n+(row._sum.quantity ?? 0),0)};

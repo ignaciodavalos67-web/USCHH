@@ -97,12 +97,18 @@ export function TransferInstructions({ order }: { order: Order }) {
       <section className={styles.confirmationContainer}>
         <h1 className={styles.confirmationTitle}>¡PAGO CONFIRMADO!</h1>
         <div className={styles.confirmationMessage}>
-          <p>Tu transferencia ha sido verificada con éxito. Estamos preparando tu pedido para el envío.</p>
+          {order.paymentMethod === "CARD" ? (
+            <p>Tu pago con tarjeta ha sido verificado con éxito a través de PayPhone. Estamos preparando tu pedido para el envío.</p>
+          ) : (
+            <p>Tu transferencia ha sido verificada con éxito. Estamos preparando tu pedido para el envío.</p>
+          )}
           <p>Te hemos enviado la confirmación y los detalles a tu correo electrónico.</p>
         </div>
         <div className={styles.confirmationDetailsBox}>
           <div className={styles.detailRow}>
-            <span className={styles.detailLabel}>Referencia de transferencia</span>
+            <span className={styles.detailLabel}>
+              {order.paymentMethod === "CARD" ? "Número de pedido" : "Referencia de transferencia"}
+            </span>
             <span className={styles.detailValue}>{order.number}</span>
           </div>
           <div className={styles.detailRow}>

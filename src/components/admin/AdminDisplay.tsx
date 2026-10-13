@@ -4,12 +4,16 @@ import { Prisma } from "@/generated/prisma/client";
 import type { createAdminService, Filters, TransferState } from "@/server/admin/service";
 import { AdminForm, RejectTransferForm } from "./AdminForms";
 import styles from "./admin.module.css";
-export const labels:Record<string,string>={PENDING_PAYMENT:"PENDIENTE DE PAGO",PAID:"PAGADO",PREPARING:"EN PREPARACIÓN",SHIPPED:"ENVIADO",DELIVERED:"ENTREGADO",CANCELLED:"CANCELADO",REFUNDED:"REEMBOLSADO",PENDING:"PENDIENTE",FAILED:"FALLIDO",BANK_TRANSFER:"TRANSFERENCIA",CARD:"TARJETA",FREE:"GRATIS",PAY_ON_DELIVERY:"PAGADO AL RECIBIR"};
+export const labels:Record<string,string>={
+  PENDING_PAYMENT:"PENDIENTE DE PAGO",PAID:"PAGADO",PREPARING:"EN PREPARACIÓN",SHIPPED:"ENVIADO",DELIVERED:"ENTREGADO",CANCELLED:"CANCELADO",REFUNDED:"REEMBOLSADO",
+  PENDING:"PENDIENTE",FAILED:"FALLIDO",BANK_TRANSFER:"TRANSFERENCIA",CARD:"TARJETA (PAYPHONE)",PAYPHONE:"PAYPHONE",FREE:"GRATIS",PAY_ON_DELIVERY:"PAGADO AL RECIBIR",
+  UNFULFILLED:"POR PREPARAR",EXCEPTION_INSUFFICIENT_STOCK:"⚠️ EXCEPCIÓN DE INVENTARIO",
+};
 export const date=(value:Date|null|undefined)=>value ? new Intl.DateTimeFormat("es-EC",{timeZone:"America/Guayaquil",dateStyle:"medium",timeStyle:"short"}).format(value) : "—";
 export const money=(value:Prisma.Decimal|null|undefined)=>formatMoney(value ?? new Prisma.Decimal(0),"USD");
 export const status=(value:string)=>labels[value] ?? value;
 type OrderRows=Awaited<ReturnType<ReturnType<typeof createAdminService>["listOrders"]>>["orders"];
-export function OrdersTable({orders}: {orders:OrderRows}){if(!orders.length)return <p className={styles.empty}>NO HAY PEDIDOS PARA ESTOS FILTROS.</p>;return <div className={styles.tableWrap}><table><thead><tr>{["Pedido / Fecha","Cliente","Total","Pago","Estado","Transferencia","Zona"].map(label=><th key={label}>{label}</th>)}</tr></thead><tbody>{orders.map(order=><tr key={order.id}><td><Link href={`/admin/pedidos/${formatOrderNumber(order.number)}`}>{formatOrderNumber(order.number)} ↗</Link><small>{date(order.createdAt)}</small></td><td>{order.firstName} {order.lastName}</td><td>{money(order.total)}</td><td>{order.payments.map((p,i)=><small key={i}>{status(p.method)} · {status(p.status)}</small>)}</td><td>{status(order.status)}</td><td>{order.payments.some(p=>p.customerMarkedTransferredAt) ? "AVISADA POR CLIENTE" : "SIN AVISO"}</td><td>{order.city}</td></tr>)}</tbody></table></div>;}
+export function OrdersTable({orders}: {orders:OrderRows}){if(!orders.length)return <p className={styles.empty}>NO HAY PEDIDOS PARA ESTOS FILTROS.</p>;return <div className={styles.tableWrap}><table><thead><tr>{["Pedido / Fecha","Cliente","Total","Pago","Estado","Transferencia","Zona"].map(label=><th key={label}>{label}</th>)}</tr></thead><tbody>{orders.map(order=><tr key={order.id}><td><Link href={`/admin/pedidos/${formatOrderNumber(order.number)}`}>{formatOrderNumber(order.number)} ↗</Link><small>{date(order.createdAt)}</small></td><td>{order.firstName} {order.lastName}</td><td>{money(order.total)}</td><td>{order.payments.map((p,i)=><small key={i}>{status(p.method)}{p.provider ? ` (${p.provider})` : ""} · {status(p.status)}</small>)}</td><td>{status(order.status)}</td><td>{order.payments.some(p=>p.method==="CARD") ? "TARJETA" : order.payments.some(p=>p.customerMarkedTransferredAt) ? "AVISADA POR CLIENTE" : "SIN AVISO"}</td><td>{order.city}</td></tr>)}</tbody></table></div>;}
 type TransferRows=Awaited<ReturnType<ReturnType<typeof createAdminService>["transfers"]>>["orders"];
 export function TransfersTable({orders}: {orders:TransferRows}){
   if(!orders.length)return <p className={styles.empty}>NO HAY TRANSFERENCIAS EN ESTE ESTADO.</p>;

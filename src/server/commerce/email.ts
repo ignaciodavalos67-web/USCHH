@@ -13,6 +13,7 @@ export type ConfirmedOrderEmailData = {
   subtotal: Prisma.Decimal;
   total: Prisma.Decimal;
   currency: string;
+  paymentMethod?: string;
   items: {
     productName: string;
     flavor: string;
@@ -35,9 +36,14 @@ export async function sendOrderConfirmationEmail(order: ConfirmedOrderEmailData)
     )
     .join("\n");
 
+  const paymentVerifiedText =
+    order.paymentMethod === "CARD"
+      ? "¡Tu pago con tarjeta ha sido verificado y confirmado con éxito a través de PayPhone!"
+      : "¡Tu transferencia bancaria ha sido verificada y confirmada con éxito!";
+
   const emailBody = `Hola ${customerName},
 
-¡Tu transferencia bancaria ha sido verificada y confirmada con éxito!
+${paymentVerifiedText}
 
 Tu pedido ${formattedNumber} está en preparación y pronto comenzará su camino hacia ti.
 

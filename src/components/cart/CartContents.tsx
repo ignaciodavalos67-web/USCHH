@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 import Image from "next/image";
 import Link from "next/link";
 import { cartSummary, cents, displayMoney, findProduct, maxQuantity } from "@/lib/cart/cart";
@@ -31,7 +31,7 @@ export function CartContents({drawer=false}: {drawer?: boolean}) {
     })}</ul>
     <div className={styles.totals}>
       <p><span>SUBTOTAL DE PRODUCTOS</span><strong>{cart.verified && summary.valid ? displayMoney(summary.subtotal!) : "—"}</strong></p>
-      {cart.verified && summary.valid ? <><p className={styles.shipping}>{summary.shipping}</p><p><span>TOTAL DE PRODUCTOS A PAGAR</span><strong>{displayMoney(summary.subtotal!)}</strong></p>{summary.subtotal!<3000 && <small>El envío se paga al recibir. Su importe no está incluido.</small>}</> : <p className={styles.notice}>Revisa o elimina los productos no disponibles para continuar.</p>}
+      {cart.verified && summary.valid ? <><p className={styles.shipping}>{summary.shipping}</p><p><span>TOTAL DE PRODUCTOS A PAGAR</span><strong>{displayMoney(summary.subtotal!)}</strong></p><small>Envío gratuito incluido.</small></> : <p className={styles.notice}>Revisa o elimina los productos no disponibles para continuar.</p>}
       {cart.verified && !cart.refreshing && summary.valid ? <Link className={styles.checkout} href="/checkout" onClick={cart.closeCart}>CONTINUAR AL CHECKOUT ↗</Link> : <button className={styles.checkout} disabled>CONTINUAR AL CHECKOUT</button>}
       {drawer && <Link className={styles.action} href="/carrito" onClick={cart.closeCart}>VER CARRITO COMPLETO ↗</Link>}
       <small>Disponibilidad y precios sujetos a verificación al comprar.</small>

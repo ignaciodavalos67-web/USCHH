@@ -3,21 +3,15 @@ import { test } from "node:test";
 import { Prisma } from "../../generated/prisma/client";
 import { calculateShipping, assertFlavorQuantities, formatOrderNumber, formatMoney, isPurchasable } from "./policies";
 
-test("shipping threshold is exact; unknown courier fee stays null", () => {
-  for (const value of ["0.00", "15.00", "29.99"]) {
-    const result = calculateShipping(new Prisma.Decimal(value));
-    assert.equal(result.shippingMode, "PAY_ON_DELIVERY");
-    assert.equal(result.shippingAmount, null);
-    assert.equal(result.total.toFixed(2), value);
-  }
-  for (const value of ["30.00", "30.01", "150.00"]) {
+test("shipping threshold is exact; free shipping applies to all orders", () => {
+  for (const value of ["0.00", "19.80", "39.60", "150.00"]) {
     const result = calculateShipping(new Prisma.Decimal(value));
     assert.equal(result.shippingMode, "FREE");
     assert.equal(result.shippingAmount?.toFixed(2), "0.00");
     assert.equal(result.total.toFixed(2), value);
   }
   for (const value of ["-1.00", "0.001", "NaN", "Infinity"]) assert.throws(() => calculateShipping(new Prisma.Decimal(value)));
-  assert.throws(() => calculateShipping(new Prisma.Decimal("30"), "EUR"));
+  assert.throws(() => calculateShipping(new Prisma.Decimal("19.80"), "EUR"));
 });
 
 test("quantity limit aggregates duplicate lines per flavor, not entire order", () => {
@@ -41,6 +35,6 @@ test("database sequence numbers format without truncation", () => {
 });
 
 test("money is formatted from exact decimals, never floating-point prices", () => {
-  assert.equal(formatMoney(new Prisma.Decimal("15.00"), "USD"), "$15.00");
+  assert.equal(formatMoney(new Prisma.Decimal("19.80"), "USD"), "$19.80");
   assert.equal(formatMoney(new Prisma.Decimal("0.1").plus("0.2"), "USD"), "$0.30");
 });

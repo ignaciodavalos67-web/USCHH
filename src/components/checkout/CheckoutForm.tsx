@@ -10,15 +10,70 @@ import { cartSummary, cents, displayMoney, findProduct } from "@/lib/cart/cart";
 import type { BankDetails } from "@/server/commerce/bank";
 import styles from "./checkout.module.css";
 
+function loadPayphoneSdk(): Promise<void> {
+  return new Promise((resolve, reject) => {
+    if (typeof window === "undefined") return resolve();
+
+    if (!document.querySelector('link[href*="payphone-payment-box.css"]')) {
+      const link = document.createElement("link");
+      link.rel = "stylesheet";
+      link.href = "https://cdn.payphonetodoesposible.com/box/v2.0/payphone-payment-box.css";
+      document.head.appendChild(link);
+    }
+
+    if ((window as unknown as { PPaymentButtonBox?: unknown }).PPaymentButtonBox) {
+      return resolve();
+    }
+
+    const existing = document.querySelector('script[src*="payphone-payment-box.js"]');
+    if (existing) {
+      let count = 0;
+      const poll = setInterval(() => {
+        count++;
+        if ((window as unknown as { PPaymentButtonBox?: unknown }).PPaymentButtonBox || count > 40) {
+          clearInterval(poll);
+          resolve();
+        }
+      }, 50);
+      return;
+    }
+
+    const script = document.createElement("script");
+    script.type = "module";
+    script.src = "https://cdn.payphonetodoesposible.com/box/v2.0/payphone-payment-box.js";
+    script.onload = () => {
+      let count = 0;
+      const poll = setInterval(() => {
+        count++;
+        if ((window as unknown as { PPaymentButtonBox?: unknown }).PPaymentButtonBox || count > 40) {
+          clearInterval(poll);
+          resolve();
+        }
+      }, 50);
+    };
+    script.onerror = () => reject(new Error("No se pudo cargar el SDK de PayPhone."));
+    document.head.appendChild(script);
+  });
+}
+
 export function CheckoutForm() {
   const cart = useCart(),
     router = useRouter();
   const [configured, setConfigured] = useState<boolean | null>(null);
   const [bankDetails, setBankDetails] = useState<BankDetails | null>(null);
+  const [payphoneAvailable, setPayphoneAvailable] = useState<boolean>(false);
+  const [selectedMethod, setSelectedMethod] = useState<"BANK_TRANSFER" | "PAYPHONE">("BANK_TRANSFER");
+
   const [copied, setCopied] = useState(false);
   const [pending, setPending] = useState(false);
   const [error, setError] = useState("");
+
+  const [ppPreparing, setPpPreparing] = useState(false);
+  const [ppReady, setPpReady] = useState(false);
+  const [ppError, setPpError] = useState("");
+
   const busy = useRef(false);
+  const formRef = useRef<HTMLFormElement>(null);
   const refresh = cart.refresh;
 
   useEffect(() => {
@@ -36,6 +91,9 @@ export function CheckoutForm() {
         setConfigured(data.bankTransferAvailable);
         if (data.bankDetails) {
           setBankDetails(data.bankDetails);
+        }
+        if (data.payphoneAvailable) {
+          setPayphoneAvailable(true);
         }
         const attempt = sessionStorage.getItem(ATTEMPT_KEY);
         if (attempt) {
@@ -76,8 +134,80 @@ export function CheckoutForm() {
     }
   }
 
+  async function initializePayphone() {
+    if (ppPreparing || !valid || !formRef.current) return;
+    const form = new FormData(formRef.current);
+    const customer = Object.fromEntries(
+      ["firstName", "lastName", "email", "phone", "province", "area", "address", "deliveryInstructions"].map(
+        (key) => [key, form.get(key)]
+      )
+    ) as Record<string, string>;
+
+    if (
+      !customer.firstName?.trim() ||
+      !customer.lastName?.trim() ||
+      !customer.email?.trim() ||
+      !customer.phone?.trim() ||
+      !customer.area?.trim() ||
+      !customer.address?.trim()
+    ) {
+      setPpError("Completa todos los datos de entrega requeridos antes de habilitar el pago con tarjeta.");
+      return;
+    }
+
+    setPpPreparing(true);
+    setPpError("");
+
+    try {
+      const payload = {
+        customer,
+        items: cart.items,
+        paymentMethod: "CARD",
+        marketingConsent: form.get("marketingConsent") === "on",
+      };
+
+      const res = await fetch("/api/checkout/payphone/prepare", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload),
+      });
+
+      const config = await res.json();
+      if (!res.ok) {
+        setPpError(config.error || "No se pudo preparar la transacción con PayPhone.");
+        return;
+      }
+
+      await loadPayphoneSdk();
+      setPpReady(true);
+
+      setTimeout(() => {
+        try {
+          const PPBox = (window as unknown as { PPaymentButtonBox?: new (c: unknown) => { render: (id: string) => void } })
+            .PPaymentButtonBox;
+          if (PPBox) {
+            new PPBox(config).render("pp-button");
+          } else {
+            setPpError("El SDK de PayPhone no respondió. Por favor reintenta.");
+          }
+        } catch (e: unknown) {
+          setPpError(e instanceof Error ? e.message : "Error al mostrar el botón de PayPhone.");
+        }
+      }, 100);
+    } catch {
+      setPpError("Error de conexión al preparar el pago con tarjeta.");
+    } finally {
+      setPpPreparing(false);
+    }
+  }
+
   async function submit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
+    if (selectedMethod === "PAYPHONE") {
+      void initializePayphone();
+      return;
+    }
+
     if (busy.current || !valid || !configured) return;
     const form = new FormData(event.currentTarget);
     const value = {
@@ -131,25 +261,51 @@ export function CheckoutForm() {
 
   return (
     <div className={styles.grid}>
-      <form onSubmit={submit} className={styles.form}>
+      <form ref={formRef} onSubmit={submit} className={styles.form}>
         <h2>DATOS DE ENTREGA</h2>
         <p className={styles.note}>Entregas en Quito, Cumbayá, Tumbaco, Puembo y Los Chillos.</p>
         <div className={styles.fields}>
           <label>
             Nombre
-            <input name="firstName" autoComplete="given-name" required maxLength={80} />
+            <input
+              name="firstName"
+              autoComplete="given-name"
+              required
+              maxLength={80}
+              onChange={() => ppReady && setPpReady(false)}
+            />
           </label>
           <label>
             Apellido
-            <input name="lastName" autoComplete="family-name" required maxLength={80} />
+            <input
+              name="lastName"
+              autoComplete="family-name"
+              required
+              maxLength={80}
+              onChange={() => ppReady && setPpReady(false)}
+            />
           </label>
           <label>
             Email
-            <input name="email" type="email" autoComplete="email" required maxLength={254} />
+            <input
+              name="email"
+              type="email"
+              autoComplete="email"
+              required
+              maxLength={254}
+              onChange={() => ppReady && setPpReady(false)}
+            />
           </label>
           <label>
             Teléfono
-            <input name="phone" type="tel" autoComplete="tel" required maxLength={30} />
+            <input
+              name="phone"
+              type="tel"
+              autoComplete="tel"
+              required
+              maxLength={30}
+              onChange={() => ppReady && setPpReady(false)}
+            />
           </label>
           <label>
             Provincia
@@ -159,7 +315,12 @@ export function CheckoutForm() {
           </label>
           <label>
             Ciudad / Sector
-            <select name="area" required defaultValue="">
+            <select
+              name="area"
+              required
+              defaultValue=""
+              onChange={() => ppReady && setPpReady(false)}
+            >
               <option value="" disabled>
                 Selecciona tu zona
               </option>
@@ -172,7 +333,13 @@ export function CheckoutForm() {
           </label>
           <label className={styles.full}>
             Dirección completa
-            <input name="address" autoComplete="street-address" required maxLength={500} />
+            <input
+              name="address"
+              autoComplete="street-address"
+              required
+              maxLength={500}
+              onChange={() => ppReady && setPpReady(false)}
+            />
           </label>
           <label className={styles.full}>
             Instrucciones adicionales de entrega (opcional)
@@ -187,23 +354,42 @@ export function CheckoutForm() {
               type="radio"
               name="paymentMethod"
               value="BANK_TRANSFER"
-              defaultChecked
+              checked={selectedMethod === "BANK_TRANSFER"}
+              onChange={() => {
+                setSelectedMethod("BANK_TRANSFER");
+                setError("");
+              }}
               disabled={!configured}
             />
             TRANSFERENCIA BANCARIA
           </label>
           <label>
-            <input type="radio" disabled /> TARJETA — PRÓXIMAMENTE
+            <input
+              type="radio"
+              name="paymentMethod"
+              value="PAYPHONE"
+              checked={selectedMethod === "PAYPHONE"}
+              onChange={() => {
+                setSelectedMethod("PAYPHONE");
+                setPpReady(false);
+                setPpError("");
+                setError("");
+              }}
+              disabled={!payphoneAvailable}
+            />
+            {payphoneAvailable
+              ? "PAGAR CON TARJETA — PAYPHONE"
+              : "PAGAR CON TARJETA — PRÓXIMAMENTE"}
           </label>
         </fieldset>
 
-        {configured === false && (
+        {selectedMethod === "BANK_TRANSFER" && configured === false && (
           <p className={styles.notice}>
             La transferencia bancaria todavía no está disponible. No se creará ningún pedido.
           </p>
         )}
 
-        {configured && (
+        {selectedMethod === "BANK_TRANSFER" && configured && (
           <div className={styles.bankCard}>
             <div className={styles.bankHeader}>
               <h3>DATOS DE LA CUENTA USCHH</h3>
@@ -253,15 +439,78 @@ export function CheckoutForm() {
               <strong>{valid ? displayMoney(summary.subtotal!) : "—"}</strong>
             </div>
 
-            {valid && summary.subtotal! < 3000 && (
-              <p className={styles.bankShippingNote}>
-                * El costo de entrega se cancela al recibir el paquete. Realiza la transferencia únicamente por el valor de los productos ({displayMoney(summary.subtotal!)}).
-              </p>
-            )}
-            {valid && summary.subtotal! >= 3000 && (
+            {valid && (
               <p className={styles.bankShippingNote}>
                 ✓ Envío gratuito incluido en tu pedido.
               </p>
+            )}
+          </div>
+        )}
+
+        {selectedMethod === "PAYPHONE" && (
+          <div className={styles.payphoneCard}>
+            <div className={styles.payphoneHeader}>
+              <h3>PAGAR CON TARJETA — PAYPHONE</h3>
+              <span className={styles.payphoneBrands}>Visa · Mastercard · Diners · Discover</span>
+            </div>
+            <p className={styles.note} style={{ marginBottom: "16px" }}>
+              Pago 100% seguro a través de la pasarela oficial PayPhone. Aceptamos tarjetas de débito y crédito nacionales e internacionales.
+            </p>
+
+            <div className={styles.bankTotalBanner} style={{ marginTop: 0, marginBottom: "16px" }}>
+              <span>TOTAL A COBRAR CON TARJETA:</span>
+              <strong>{valid ? displayMoney(summary.subtotal!) : "—"}</strong>
+            </div>
+
+            {valid && (
+              <p className={styles.bankShippingNote} style={{ marginBottom: "16px" }}>
+                ✓ Envío gratuito incluido en tu pedido.
+              </p>
+            )}
+
+            {ppError && (
+              <p role="alert" className={styles.notice} style={{ color: "#FF453A" }}>
+                {ppError}
+              </p>
+            )}
+
+            {!ppReady ? (
+              <button
+                type="button"
+                onClick={initializePayphone}
+                className={styles.payphoneInitBtn}
+                disabled={!valid || ppPreparing}
+              >
+                {ppPreparing ? "PREPARANDO PASARELA SEGURA…" : "HABILITAR PAGO CON TARJETA"}
+              </button>
+            ) : (
+              <div>
+                <p className={styles.note} style={{ marginBottom: "12px", textAlign: "center" }}>
+                  Haz clic en el botón de PayPhone para ingresar los datos de tu tarjeta de forma segura:
+                </p>
+                <div className={styles.payphoneBoxContainer}>
+                  <div id="pp-button" />
+                </div>
+                <button
+                  type="button"
+                  onClick={() => {
+                    setPpReady(false);
+                    void initializePayphone();
+                  }}
+                  style={{
+                    background: "none",
+                    border: "none",
+                    color: "var(--brand-yellow)",
+                    fontSize: "11px",
+                    cursor: "pointer",
+                    textDecoration: "underline",
+                    display: "block",
+                    margin: "12px auto 0",
+                  }}
+                >
+                  ↻ ¿Cambiaste tus datos? Recargar pasarela
+                </button>
+              </div>
             )}
           </div>
         )}
@@ -271,9 +520,11 @@ export function CheckoutForm() {
           {CONSENT_TEXT}
         </label>
 
-        <p role="alert" className={styles.notice}>
-          {error}
-        </p>
+        {error && (
+          <p role="alert" className={styles.notice}>
+            {error}
+          </p>
+        )}
 
         {!valid && cart.ready && (
           <p className={styles.notice}>
@@ -284,17 +535,21 @@ export function CheckoutForm() {
           </p>
         )}
 
-        <button
-          type="submit"
-          className={`${styles.primary} ${styles.transferSubmitBtn}`}
-          disabled={!valid || !configured || pending}
-        >
-          {pending ? "REGISTRANDO SOLICITUD…" : "¡TRANSFERENCIA YA HECHA!"}
-        </button>
+        {selectedMethod === "BANK_TRANSFER" && (
+          <>
+            <button
+              type="submit"
+              className={`${styles.primary} ${styles.transferSubmitBtn}`}
+              disabled={!valid || !configured || pending}
+            >
+              {pending ? "REGISTRANDO SOLICITUD…" : "¡TRANSFERENCIA YA HECHA!"}
+            </button>
 
-        <p className={styles.note}>
-          Al pulsar este botón registraremos tu solicitud con estado pendiente de confirmación. Tu pedido será procesado una vez que verifiquemos la recepción del pago en nuestra cuenta.
-        </p>
+            <p className={styles.note}>
+              Al pulsar este botón registraremos tu solicitud con estado pendiente de confirmación. Tu pedido será procesado una vez que verifiquemos la recepción del pago en nuestra cuenta.
+            </p>
+          </>
+        )}
       </form>
 
       <aside className={styles.summary} aria-label="Resumen del pedido">
@@ -324,14 +579,12 @@ export function CheckoutForm() {
             </p>
             <p>{summary.shipping}</p>
             <p className={styles.total}>
-              <span>TOTAL A TRANSFERIR</span>
-              <strong>{displayMoney(summary.subtotal!) }</strong>
+              <span>TOTAL A COBRAR</span>
+              <strong>{displayMoney(summary.subtotal!)}</strong>
             </p>
-            {summary.subtotal! < 3000 && (
-              <p className={styles.note}>
-                El envío se paga al recibir. Su importe no está incluido en la transferencia.
-              </p>
-            )}
+            <p className={styles.note}>
+              ✓ Envío gratuito incluido en tu compra.
+            </p>
           </>
         ) : (
           <p className={styles.notice}>Sin total válido hasta verificar los productos.</p>

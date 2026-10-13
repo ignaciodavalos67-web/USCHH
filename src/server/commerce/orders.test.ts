@@ -1,4 +1,4 @@
-﻿import assert from "node:assert/strict";
+import assert from "node:assert/strict";
 import { after, before, beforeEach, test } from "node:test";
 import { randomUUID } from "node:crypto";
 import { validateCheckout } from "@/lib/checkout/validation";
@@ -17,13 +17,13 @@ before(async()=>{database=await isolatedCommerceDatabase();});
 after(async()=>{if(database)await database.close();});
 beforeEach(async()=>{
   await database.memory.exec('TRUNCATE "MarketingConsentEvent","MarketingContact","InventoryMovement","OrderNote","Payment","OrderItem","Order","AdminUser","Product" RESTART IDENTITY CASCADE');
-  await database.client.product.createMany({data:[{id:"lemon",slug:"limon",name:"USCHH Limón",flavor:"LIMÓN",price:"15.00",stock:5},{id:"orange",slug:"mandarina",name:"USCHH Mandarina",flavor:"MANDARINA",price:"15.00",stock:5}]});
+  await database.client.product.createMany({data:[{id:"lemon",slug:"limon",name:"USCHH Limón",flavor:"LIMÓN",price:"19.80",stock:5},{id:"orange",slug:"mandarina",name:"USCHH Mandarina",flavor:"MANDARINA",price:"19.80",stock:5}]});
 });
 test("valid checkout creates unpaid order/payment, reservation and exact authoritative totals",async()=>{
   const result=await service().create(input(),randomUUID(),guest);
-  assert.equal(result.number,"USCHH-000001");assert.equal(result.total,"$15.00");assert.equal(result.shippingMode,"PAY_ON_DELIVERY");
+  assert.equal(result.number,"USCHH-000001");assert.equal(result.total,"$19.80");assert.equal(result.shippingMode,"FREE");
   const order=await database.client.order.findFirstOrThrow({include:{items:true,payments:true}});
-  assert.equal(order.status,"PENDING_PAYMENT");assert.equal(order.reservationStatus,"RESERVED");assert.equal(order.payments[0].status,"PENDING");assert.equal(order.payments[0].method,"BANK_TRANSFER");assert.equal(order.shippingAmount,null);
+  assert.equal(order.status,"PENDING_PAYMENT");assert.equal(order.reservationStatus,"RESERVED");assert.equal(order.payments[0].status,"PENDING");assert.equal(order.payments[0].method,"BANK_TRANSFER");assert.equal(order.shippingAmount?.toFixed(2),"0.00");
   assert.equal(order.reservationExpiresAt!.getTime()-order.reservedAt!.getTime(),24*3600000);
   assert.equal((await database.client.product.findUniqueOrThrow({where:{id:"lemon"}})).stock,4);
   assert.equal((await database.client.inventoryMovement.findFirstOrThrow()).type,"RESERVATION");
@@ -51,14 +51,14 @@ test("inactive, empty and insufficient stock are rejected with no partial record
 test("server ignores manipulated price, total, shipping and status; uses latest price",async()=>{
   await database.client.product.update({where:{id:"lemon"},data:{price:"17.25"}});
   const result=await service().create(input(1,{price:0,subtotal:0,total:0,shippingMode:"FREE",status:"PAID",items:[{id:"lemon",slug:"limon",quantity:1,price:0,stock:999}]}),randomUUID(),guest);
-  assert.equal(result.total,"$17.25");assert.equal(result.status,"PENDING_PAYMENT");assert.equal(result.shippingMode,"PAY_ON_DELIVERY");
+  assert.equal(result.total,"$17.25");assert.equal(result.status,"PENDING_PAYMENT");assert.equal(result.shippingMode,"FREE");
 });
-test("free shipping starts at authoritative $30 with known zero fee",async()=>{
-  const result=await service().create(input(2),randomUUID(),guest);assert.equal(result.shippingMode,"FREE");assert.equal(result.total,"$30.00");
+test("free shipping is included on orders with known zero fee",async()=>{
+  const result=await service().create(input(2),randomUUID(),guest);assert.equal(result.shippingMode,"FREE");assert.equal(result.total,"$39.60");
   assert.equal((await database.client.order.findFirstOrThrow()).shippingAmount?.toFixed(2),"0.00");
 });
 test("five units per flavor permits five of each but not duplicated flavor overflow",async()=>{
-  const result=await service().create(input(5,{items:[{id:"lemon",slug:"limon",quantity:5},{id:"orange",slug:"mandarina",quantity:5}]}),randomUUID(),guest);assert.equal(result.total,"$150.00");
+  const result=await service().create(input(5,{items:[{id:"lemon",slug:"limon",quantity:5},{id:"orange",slug:"mandarina",quantity:5}]}),randomUUID(),guest);assert.equal(result.total,"$198.00");
 });
 test("retry and concurrent duplicate submission reserve once; payload or session mismatch rejected",async()=>{
   const key=randomUUID();const results=await Promise.all([service().create(input(2),key,guest),service().create(input(2),key,guest)]);
