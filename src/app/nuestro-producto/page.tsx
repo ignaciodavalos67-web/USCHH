@@ -3,110 +3,18 @@ import Image from "next/image";
 import Link from "next/link";
 import { Navbar } from "@/components/layout/Navbar";
 import { Reveal } from "@/components/nosotros/NosotrosReveal";
+import {
+  NutrientAccordion,
+  BenefitsAccordion,
+  WhenToUseAccordion,
+} from "./InteractiveProductBlocks";
 import styles from "./producto.module.css";
 
 export const metadata: Metadata = {
   title: "Nuestro producto | USCHH",
-  description: "Conoce los Electrolitos USCHH: ingredientes, composición por sachet, beneficios, momentos de uso y ciencia de hidratación.",
+  description:
+    "Conoce los Electrolitos USCHH: ingredientes, composición por sachet, beneficios, momentos de uso y ciencia de hidratación.",
 };
-
-interface MineralDetail {
-  symbol: string;
-  name: string;
-  amount: string;
-  description: string;
-}
-
-const detailedMinerals: MineralDetail[] = [
-  {
-    symbol: "Na",
-    name: "Sodio",
-    amount: "369 mg",
-    description:
-      "El sodio participa en el equilibrio de líquidos y en la transmisión de señales nerviosas. Al sudar pierdes sodio; USCHH aporta 369 mg por sachet para contribuir a su reposición.",
-  },
-  {
-    symbol: "K",
-    name: "Potasio",
-    amount: "786 mg",
-    description:
-      "El potasio es el principal electrolito dentro de las células. Participa en el equilibrio de líquidos, la transmisión nerviosa y la contracción muscular.",
-  },
-  {
-    symbol: "Mg",
-    name: "Magnesio",
-    amount: "86 mg",
-    description:
-      "El magnesio interviene en el metabolismo energético y en el funcionamiento normal de músculos y nervios.",
-  },
-  {
-    symbol: "Ca",
-    name: "Calcio",
-    amount: "265 mg",
-    description:
-      "El calcio tiene funciones que van más allá de los huesos: también participa en la contracción muscular y la transmisión de señales nerviosas.",
-  },
-  {
-    symbol: "Zn",
-    name: "Zinc",
-    amount: "13 mg",
-    description:
-      "El zinc es un mineral esencial que participa en el funcionamiento normal del sistema inmunitario y en la síntesis de proteínas.",
-  },
-  {
-    symbol: "Aloe",
-    name: "Aloe vera",
-    amount: "45 mg",
-    description:
-      "Incorporamos aloe vera como complemento de nuestra mezcla de electrolitos, sumando un ingrediente de origen vegetal a nuestra fórmula.",
-  },
-];
-
-const benefitsList = [
-  {
-    title: "Acompaña tu hidratación",
-    description: "Aporta minerales que participan en el equilibrio de líquidos del cuerpo.",
-  },
-  {
-    title: "Repón electrolitos después de sudar",
-    description: "Cada sachet aporta 369 mg de sodio para contribuir a la reposición de este mineral perdido durante la sudoración.",
-  },
-  {
-    title: "Apoya la función muscular normal",
-    description: "El potasio, el magnesio y el calcio participan en el funcionamiento normal de tus músculos.",
-  },
-  {
-    title: "Aporta magnesio para el metabolismo energético",
-    description: "El magnesio interviene en los procesos que permiten a tu cuerpo utilizar la energía de los alimentos.",
-  },
-  {
-    title: "Complementa tu aporte de zinc",
-    description: "El zinc participa en el funcionamiento normal del sistema inmunitario y en la síntesis de proteínas.",
-  },
-];
-
-const whenToUseList = [
-  {
-    title: "Durante actividades prolongadas",
-    description: "Para complementar tu hidratación cuando el ejercicio se extiende y acumulas pérdidas de agua y electrolitos por el sudor.",
-  },
-  {
-    title: "Después de sudar",
-    description: "Como parte de tu reposición de líquidos y electrolitos después de entrenar o realizar una actividad con mucha sudoración.",
-  },
-  {
-    title: "En actividades con calor",
-    description: "El calor puede aumentar la sudoración. USCHH puede acompañar tu hidratación cuando necesitas reponer parte de los minerales perdidos.",
-  },
-  {
-    title: "Cuando entrenas en altura",
-    description: "Si entrenas en Quito o realizas actividades en la Sierra, incluye la hidratación en tu planificación, incluso cuando hace frío. USCHH puede complementar tu aporte de electrolitos durante actividades prolongadas o con mucha sudoración. No sustituye la aclimatación ni previene el mal de altura.",
-  },
-  {
-    title: "Cuando tienes chuchaqui (resaca)",
-    description: "Después de tomar alcohol, puedes haber perdido más líquidos por la orina. USCHH mezclado con agua puede acompañar tu hidratación al día siguiente. Hidratarte forma parte del cuidado de tu cuerpo, pero USCHH no cura el chuchaqui ni acelera la eliminación del alcohol.",
-  },
-];
 
 const attributes = [
   ["VEGANO", "M12 21V11M12 15C3 15 3 7 3 3c7 0 9 4 9 8M12 18c9 0 9-8 9-12-7 0-9 4-9 8"],
@@ -171,7 +79,7 @@ export default function ProductPage() {
           </div>
         </section>
 
-        {/* 2. FÓRMULA, COMPOSICIÓN DESTACADA & MINERALES DETALLADOS */}
+        {/* 2. FÓRMULA, COMPOSICIÓN DESTACADA & CADA NUTRIENTE (ACORDEÓN INTERACTIVO) */}
         <section className={styles.formula} aria-labelledby="formula-heading">
           <Reveal>
             <p className={styles.eyebrow}>CONOCE LO QUE HAY EN TU SACHET</p>
@@ -192,23 +100,8 @@ export default function ProductPage() {
             </p>
           </div>
 
-          {/* Grid detallado con la explicación de cada mineral e ingrediente */}
-          <ul className={styles.mineralsGridDetailed}>
-            {detailedMinerals.map((mineral, index) => (
-              <li key={mineral.symbol}>
-                <Reveal delay={index * 60}>
-                  <div className={styles.mineralCardDetailed}>
-                    <div className={styles.mineralHeaderRow}>
-                      <span className={styles.mineralSymbolLarge}>{mineral.symbol}</span>
-                      <span className={styles.mineralMgBadge}>{mineral.amount}</span>
-                    </div>
-                    <h4>{mineral.name}</h4>
-                    <p>{mineral.description}</p>
-                  </div>
-                </Reveal>
-              </li>
-            ))}
-          </ul>
+          {/* Bloques interactivos desplegables para cada nutriente */}
+          <NutrientAccordion />
         </section>
 
         {/* 3. ATRIBUTOS LIMPIOS */}
@@ -233,7 +126,7 @@ export default function ProductPage() {
           </ul>
         </section>
 
-        {/* 4. BENEFICIOS FUNCIONALES */}
+        {/* 4. RESPALDO REAL A TU CUERPO (BENEFICIOS - ACORDEÓN INTERACTIVO) */}
         <section className={styles.benefitsSection} aria-labelledby="benefits-heading">
           <Reveal>
             <p className={styles.eyebrow}>BENEFICIOS FUNCIONALES</p>
@@ -244,21 +137,11 @@ export default function ProductPage() {
             </h2>
           </Reveal>
 
-          <ul className={styles.benefitsGrid}>
-            {benefitsList.map((benefit, index) => (
-              <li key={benefit.title}>
-                <Reveal delay={index * 60}>
-                  <div className={styles.benefitItem}>
-                    <h3>{benefit.title}</h3>
-                    <p>{benefit.description}</p>
-                  </div>
-                </Reveal>
-              </li>
-            ))}
-          </ul>
+          {/* Bloques interactivos desplegables para beneficios */}
+          <BenefitsAccordion />
         </section>
 
-        {/* 5. ¿CUÁNDO USAR USCHH? */}
+        {/* 5. ¿CUÁNDO USAR USCHH? (MOMENTOS - ACORDEÓN INTERACTIVO) */}
         <section className={styles.whenSection} aria-labelledby="when-heading">
           <Reveal>
             <p className={styles.eyebrow}>MOMENTOS DE CONSUMO</p>
@@ -269,18 +152,8 @@ export default function ProductPage() {
             </h2>
           </Reveal>
 
-          <ul className={styles.whenGrid}>
-            {whenToUseList.map((item, index) => (
-              <li key={item.title}>
-                <Reveal delay={index * 60}>
-                  <div className={styles.whenItem}>
-                    <h3>{item.title}</h3>
-                    <p>{item.description}</p>
-                  </div>
-                </Reveal>
-              </li>
-            ))}
-          </ul>
+          {/* Bloques interactivos desplegables para momentos de uso */}
+          <WhenToUseAccordion />
 
           <p className={styles.whenNote}>
             Cada cuerpo es diferente. Tus necesidades dependen de cuánto sudas, la duración de la actividad y las
@@ -355,7 +228,7 @@ export default function ProductPage() {
           </ol>
         </section>
 
-        {/* 8. MOVIMIENTO */}
+        {/* 8. MOVIMIENTO (EDITORIAL SIN FOTO DE GIMNASIO) */}
         <section className={styles.movement} aria-labelledby="movement-heading">
           <div className={styles.movementIntro}>
             <h2 id="movement-heading">
@@ -367,18 +240,6 @@ export default function ProductPage() {
             </h2>
             <p className={styles.editorialLead}>ENTRENA. CORRE. MUÉVETE. VIVE.</p>
           </div>
-
-          <Reveal className={styles.movementImage}>
-            <div className={styles.gymPhoto}>
-              <Image
-                src="/products/producto_fondo_gym.jpg"
-                alt="Pack de electrolitos USCHH Limón en el gimnasio"
-                fill
-                sizes="100vw"
-                priority
-              />
-            </div>
-          </Reveal>
 
           <div className={styles.movementBottom}>
             <ul className={styles.activities}>

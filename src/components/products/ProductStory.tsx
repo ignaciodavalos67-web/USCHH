@@ -69,24 +69,24 @@ const MINERALS: MineralItem[] = [
 
 const BENEFITS = [
   {
-    title: "Acompaña tu hidratación",
-    desc: "Aporta minerales que participan en el equilibrio de líquidos del cuerpo.",
+    title: "Complementa tu hidratación",
+    desc: "Combina agua con minerales que ayudan a mantener el equilibrio de líquidos en tu cuerpo.",
   },
   {
-    title: "Repón electrolitos después de sudar",
-    desc: "Cada sachet aporta 369 mg de sodio para contribuir a la reposición de este mineral perdido durante la sudoración.",
+    title: "Ayuda a reponer lo que pierdes al sudar",
+    desc: "Aporta electrolitos, como el sodio, que tu cuerpo pierde a través del sudor.",
   },
   {
-    title: "Apoya la función muscular normal",
-    desc: "El potasio, el magnesio y el calcio participan en el funcionamiento normal de tus músculos.",
+    title: "Apoya el funcionamiento de tus músculos",
+    desc: "Contiene potasio, magnesio y calcio, minerales que participan en la contracción y relajación muscular.",
   },
   {
-    title: "Aporta magnesio para el metabolismo energético",
-    desc: "El magnesio interviene en los procesos que permiten a tu cuerpo utilizar la energía de los alimentos.",
+    title: "Contribuye al aprovechamiento de la energía",
+    desc: "El magnesio ayuda a tu cuerpo a transformar los nutrientes de los alimentos en energía.",
   },
   {
-    title: "Complementa tu aporte de zinc",
-    desc: "El zinc participa en el funcionamiento normal del sistema inmunitario y en la síntesis de proteínas.",
+    title: "Apoya el funcionamiento de tus defensas",
+    desc: "El zinc contribuye al funcionamiento normal del sistema inmunitario.",
   },
 ];
 

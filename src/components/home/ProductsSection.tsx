@@ -81,9 +81,6 @@ export function ProductsSection() {
                 style={{ backgroundColor: "#F7E2A3" }}
                 aria-label="Ver USCHH Electrolitos — Limón"
               >
-                <span className={shopStyles.index} aria-hidden="true">
-                  01 / USCHH
-                </span>
                 <Image
                   src="/products/uschh-limon-sin-fondo-con-sombra.png"
                   alt="Envase USCHH Electrolitos en polvo sabor Limón"
@@ -119,9 +116,6 @@ export function ProductsSection() {
                 style={{ backgroundColor: "#EBC6A7" }}
                 aria-label="Ver USCHH Electrolitos — Mandarina"
               >
-                <span className={shopStyles.index} aria-hidden="true">
-                  02 / USCHH
-                </span>
                 <Image
                   src="/products/uschh-mandarina-sin-fondo-con-sombra.png"
                   alt="Envase USCHH Electrolitos en polvo sabor Mandarina"

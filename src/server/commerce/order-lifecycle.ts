@@ -1,6 +1,7 @@
-﻿import "server-only";
+import "server-only";
 import type { PrismaClient } from "@/generated/prisma/client";
 import { CheckoutError } from "@/lib/checkout/validation";
+import { sendOrderConfirmationEmail } from "./email";
 
 // No public route or server action exports these operations. Phase 5 must supply
 // a trusted server-side session verifier; browser-provided admin IDs are forbidden.
@@ -11,7 +12,7 @@ export function createOrderLifecycle(db: PrismaClient, requireAdmin: () => Promi
   }
   async function confirmPayment(orderId: string) {
     const adminId=await authorize();
-    return db.$transaction(async tx=>{
+    await db.$transaction(async tx=>{
       await tx.$queryRaw`SELECT "id" FROM "Order" WHERE "id"=${orderId} FOR UPDATE`;
       const order=await tx.order.findUnique({where:{id:orderId},include:{items:true,payments:true}});
       if(!order)throw new CheckoutError("STATE","Pedido no encontrado.",404);
@@ -32,6 +33,13 @@ export function createOrderLifecycle(db: PrismaClient, requireAdmin: () => Promi
       await tx.order.update({where:{id:orderId},data:{status:"PAID",paidAt:now,reservationStatus:"CONFIRMED",reservationConfirmedAt:now}});
       await tx.adminAuditEvent.create({data:{adminId,action:"PAYMENT_CONFIRMED",entityType:"Order",entityId:orderId,details:{paymentIds:pendingBankPayments.map(payment=>payment.id),amount:pendingBankPayments[0].amount.toFixed(2),currency:pendingBankPayments[0].currency,customerMarkedTransferredAt:pendingBankPayments[0].customerMarkedTransferredAt?.toISOString() ?? null}}});
     });
+    // Send customer confirmation email asynchronously after successful commit
+    try {
+      const confirmedOrder = await db.order.findUniqueOrThrow({ where: { id: orderId }, include: { items: true } });
+      void sendOrderConfirmationEmail(confirmedOrder);
+    } catch (err) {
+      console.error("[EMAIL ERROR] Error triggering confirmation email:", err);
+    }
   }
   async function cancelUnpaid(orderId: string, reason: string, options: {expiredOnly?:boolean} = {}) {
     const adminId=await authorize();if(!reason.trim() || reason.length>500)throw new CheckoutError("REASON","Indica el motivo de cancelación.");

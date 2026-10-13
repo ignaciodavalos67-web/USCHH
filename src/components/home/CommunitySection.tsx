@@ -14,8 +14,8 @@ const cards: CommunityCard[] = [
   {
     id: "running",
     phrase: "Para los que eligen moverse.",
-    image: "/images/comunidad_runner.jpg",
-    alt: "Atleta corriendo al aire libre",
+    image: "/images/trote_isbaella_ignacio.webp",
+    alt: "Atletas trotando al aire libre",
   },
   {
     id: "fuerza",

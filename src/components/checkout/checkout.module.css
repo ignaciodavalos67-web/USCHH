@@ -9,12 +9,12 @@
 .note { font-size: 12px; line-height: 1.7; opacity: .75; margin-bottom: 24px; }
 .notice { color: var(--brand-yellow); font-size: 13px; line-height: 1.6; margin-block: 16px; }
 .notice a { text-decoration: underline; display: block; margin-top: 12px; }
-.payment { border: 0; padding: 0; margin-block: 32px; }
+.payment { border: 0; padding: 0; margin-block: 28px; }
 .payment legend { font-size: 12px; font-weight: 600; letter-spacing: .1em; margin-bottom: 20px; }
 .payment label, .consent { display: flex; align-items: flex-start; gap: 12px; padding-block: 12px; font-size: 13px; line-height: 1.6; }
 .payment input, .consent input { accent-color: var(--brand-yellow); width: 18px; height: 18px; flex-shrink: 0; margin-top: 2px; }
 .consent { border-top: 1px solid #F8F7F240; padding-top: 24px; }
-.primary { background: var(--brand-yellow); color: var(--brand-dark); display: block; width: 100%; padding: 20px 16px; font-size: 11px; font-weight: 600; letter-spacing: .08em; margin-block: 24px; cursor: pointer; }
+.primary { background: var(--brand-yellow); color: var(--brand-dark); display: block; width: 100%; padding: 20px 16px; font-size: 11px; font-weight: 600; letter-spacing: .08em; margin-block: 24px; cursor: pointer; border: none; }
 .primary:disabled { opacity: .45; cursor: not-allowed; }
 .summary { border-top: 1px solid #F8F7F240; padding-top: 24px; align-self: start; }
 .line { border-bottom: 1px solid #F8F7F240; padding-block: 16px; line-height: 1.7; }
@@ -29,4 +29,265 @@
 .bank dd { overflow-wrap: anywhere; font-size: 14px; }
 .back { display: block; border-top: 1px solid #F8F7F240; padding-top: 24px; font-size: 11px; letter-spacing: .1em; margin-top: 48px; }
 .page :focus-visible { outline: 2px solid var(--brand-yellow); outline-offset: 4px; }
-@media (max-width: 767px) { .page { padding: 130px 24px 40px; } .grid { grid-template-columns: 1fr; gap: 40px; } .fields { grid-template-columns: 1fr; } .bank { grid-template-columns: 1fr; gap: 8px; } .bank dd { margin-bottom: 12px; } }
+
+/* ── DATOS BANCARIOS EN CHECKOUT ── */
+.bankCard {
+  background: rgba(247, 226, 163, 0.08);
+  border: 1px solid rgba(247, 226, 163, 0.35);
+  border-radius: 6px;
+  padding: 24px;
+  margin-block: 20px;
+}
+
+.bankHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 18px;
+  border-bottom: 1px solid rgba(248, 247, 242, 0.15);
+  padding-bottom: 12px;
+}
+
+.bankHeader h3 {
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  color: var(--brand-yellow);
+  margin: 0;
+  text-transform: uppercase;
+}
+
+.bankBadge {
+  font-family: var(--font-geist-mono);
+  font-size: 10px;
+  font-weight: 700;
+  background: var(--brand-yellow);
+  color: var(--brand-dark);
+  padding: 3px 8px;
+  border-radius: 3px;
+  letter-spacing: 0.08em;
+}
+
+.bankGrid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px 20px;
+  margin: 0;
+}
+
+.bankItem {
+  display: flex;
+  flex-direction: column;
+}
+
+.bankItem dt {
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  opacity: 0.7;
+  margin-bottom: 4px;
+}
+
+.bankItem dd {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--brand-offwhite);
+  margin: 0;
+}
+
+.bankAccountRow {
+  grid-column: 1 / -1;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  background: rgba(16, 24, 32, 0.65);
+  border: 1px solid rgba(247, 226, 163, 0.3);
+  padding: 12px 16px;
+  border-radius: 4px;
+  margin-top: 4px;
+}
+
+.accountNumber {
+  font-family: var(--font-geist-mono);
+  font-size: 17px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  color: var(--brand-yellow);
+  margin: 0;
+}
+
+.copyBtn {
+  background: var(--brand-yellow);
+  color: var(--brand-dark);
+  border: none;
+  padding: 8px 14px;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  cursor: pointer;
+  border-radius: 3px;
+  transition: opacity 180ms ease, transform 180ms ease;
+  white-space: nowrap;
+}
+
+.copyBtn:hover {
+  opacity: 0.9;
+  transform: translateY(-1px);
+}
+
+.bankTotalBanner {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  margin-top: 18px;
+  padding-top: 14px;
+  border-top: 1px solid rgba(248, 247, 242, 0.15);
+  font-size: 12px;
+}
+
+.bankTotalBanner strong {
+  font-size: 22px;
+  color: var(--brand-yellow);
+}
+
+.bankShippingNote {
+  font-size: 11px;
+  line-height: 1.5;
+  opacity: 0.75;
+  margin-top: 8px;
+  margin-bottom: 0;
+}
+
+.transferSubmitBtn {
+  font-size: 13px !important;
+  font-weight: 800 !important;
+  letter-spacing: 0.1em !important;
+  padding: 20px 20px !important;
+  box-shadow: 0 4px 20px rgba(247, 226, 163, 0.25);
+  transition: transform 180ms ease, box-shadow 180ms ease;
+}
+
+.transferSubmitBtn:hover:not(:disabled) {
+  transform: translateY(-1px);
+  box-shadow: 0 6px 24px rgba(247, 226, 163, 0.35);
+}
+
+/* ── PANTALLA DE CONFIRMACIÓN DE TRANSFERENCIA ── */
+.confirmationContainer {
+  max-width: 680px;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(248, 247, 242, 0.15);
+  border-radius: 8px;
+  padding: clamp(24px, 4vw, 44px);
+}
+
+.confirmationTitle {
+  font-size: clamp(24px, 3.2vw, 36px);
+  font-weight: 800;
+  color: var(--brand-yellow);
+  letter-spacing: -0.03em;
+  line-height: 1.15;
+  margin-bottom: 24px;
+}
+
+.confirmationMessage {
+  font-size: 15px;
+  line-height: 1.7;
+  color: rgba(248, 247, 242, 0.92);
+  margin-bottom: 32px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.confirmationDetailsBox {
+  background: rgba(16, 24, 32, 0.7);
+  border: 1px solid rgba(247, 226, 163, 0.25);
+  border-radius: 6px;
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.detailRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+  font-size: 13px;
+  border-bottom: 1px solid rgba(248, 247, 242, 0.08);
+  padding-bottom: 12px;
+}
+
+.detailRow:last-child {
+  border-bottom: none;
+  padding-bottom: 0;
+}
+
+.detailLabel {
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  opacity: 0.7;
+}
+
+.detailValue {
+  font-weight: 700;
+  color: var(--brand-offwhite);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.statusPending {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: rgba(247, 226, 163, 0.15);
+  color: var(--brand-yellow);
+  border: 1px solid rgba(247, 226, 163, 0.4);
+  padding: 4px 10px;
+  border-radius: 4px;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.statusConfirmed {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: rgba(52, 199, 89, 0.15);
+  color: #34C759;
+  border: 1px solid rgba(52, 199, 89, 0.4);
+  padding: 4px 10px;
+  border-radius: 4px;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.statusRejected {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: rgba(255, 69, 58, 0.15);
+  color: #FF453A;
+  border: 1px solid rgba(255, 69, 58, 0.4);
+  padding: 4px 10px;
+  border-radius: 4px;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+@media (max-width: 767px) {
+  .page { padding: 130px 24px 40px; }
+  .grid { grid-template-columns: 1fr; gap: 40px; }
+  .fields { grid-template-columns: 1fr; }
+  .bank { grid-template-columns: 1fr; gap: 8px; }
+  .bank dd { margin-bottom: 12px; }
+  .bankGrid { grid-template-columns: 1fr; }
+  .bankAccountRow { flex-direction: column; align-items: stretch; gap: 10px; }
+  .copyBtn { width: 100%; text-align: center; }
+  .detailRow { flex-direction: column; align-items: flex-start; gap: 4px; }
+}

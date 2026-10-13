@@ -26,7 +26,7 @@ export default async function ShopPage() {
       <BrandLogoMarquee backgroundColor="#F7E2A3" />
 
       <div className={styles.grid}>
-        {products.map((product, index) => {
+        {products.map((product) => {
           const isMandarina =
             product.slug.toLowerCase().includes("mandarina") ||
             product.flavor.toLowerCase().includes("man");
@@ -40,9 +40,6 @@ export default async function ShopPage() {
                 style={{ backgroundColor: product.background }}
                 aria-label={`Ver USCHH Electrolitos — ${product.flavor}`}
               >
-                <span className={styles.index} aria-hidden="true">
-                  0{index + 1} / USCHH
-                </span>
                 <Image
                   src={product.image}
                   alt={`Envase USCHH Electrolitos en polvo sabor ${product.flavor}`}

@@ -51,7 +51,7 @@ export function PhilosophySection() {
             className="text-base sm:text-lg leading-relaxed mb-6 font-normal"
             style={{ color: "var(--home-body, #55585E)" }}
           >
-            En USCHH creemos que la suplementación debe ser honesta, eficaz y transparente. No formulamos para llenar espacio ni seguimos tendencias pasajeras: cada mineral y electrolito cumple un rol fisiológico concreto para acompañar tu esfuerzo.
+            USCHH no es solo una marca que vende suplementos. USCHH fue creado para motivar, inspirar y educar a las personas a conocer mejor su cuerpo, sus hábitos y lo que consumen.
           </p>
 
           <p

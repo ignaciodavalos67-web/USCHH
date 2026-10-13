@@ -23,7 +23,7 @@ export default function NosotrosPage() {
             <div className={styles.copy}>
               <p>Vivimos en un mercado lleno de opciones, pero donde muchas veces falta lo más importante: entender qué estás consumiendo, por qué lo estás consumiendo y qué propósito tiene cada ingrediente.</p>
               <p>Por eso creamos USCHH: para transformar la manera en la que vemos los suplementos a través de productos funcionales, transparentes y creados con intención.</p>
-              <p>Queremos ser una marca que no solo venda suplementos. Queremos motivar, inspirar y educar a las personas a conocer mejor su cuerpo, sus hábitos y lo que consumen.</p>
+              <p>USCHH no es solo una marca que vende suplementos. USCHH fue creado para motivar, inspirar y educar a las personas a conocer mejor su cuerpo, sus hábitos y lo que consumen.</p>
             </div>
           </div>
           <Reveal className={styles.heroPhoto}><Image src="/images/row.jpg" alt="Dos deportistas entrenando en máquinas de remo con camisetas USCHH" fill sizes="(max-width: 700px) 100vw, 1280px" /></Reveal>
