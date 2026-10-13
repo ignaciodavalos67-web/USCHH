@@ -10,11 +10,15 @@ export type BankDetails = {
 };
 
 export function getBankDetails(): BankDetails | null {
+  const enabled = process.env.BANK_TRANSFER_ENABLED?.trim();
+  if (enabled !== "true") return null;
+
   const name = process.env.BANK_NAME?.trim();
   const holder = process.env.BANK_ACCOUNT_HOLDER?.trim();
   const type = process.env.BANK_ACCOUNT_TYPE?.trim();
   const number = process.env.BANK_ACCOUNT_NUMBER?.trim();
-  if (process.env.BANK_TRANSFER_ENABLED !== "true" || !name || !holder || !type || !number) return null;
+  if (!name || !holder || !type || !number) return null;
+
   return {
     name,
     holder,
