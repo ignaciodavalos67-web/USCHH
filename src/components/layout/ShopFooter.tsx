@@ -5,8 +5,14 @@ export function ShopFooter() {
   return (
     <footer className={styles.footer}>
       <div className={styles.labels}>
-        <span>Instagram</span>
-        <span>TikTok</span>
+        <a
+          href="https://www.instagram.com/uschh_/"
+          target="_blank"
+          rel="noopener noreferrer"
+          className={styles.socialLink}
+        >
+          Instagram
+        </a>
         <span>Términos</span>
       </div>
       <ShopFooterLogo className={styles.logo} />

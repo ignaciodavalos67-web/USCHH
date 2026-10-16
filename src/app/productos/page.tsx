@@ -59,7 +59,7 @@ export default async function ShopPage() {
                   className={`${styles.cta} ${ctaClass}`}
                   aria-label={`Ver producto ${product.flavor}`}
                 >
-                  VER PRODUCTO <span aria-hidden="true">↗</span>
+                  VER PRODUCTO
                 </Link>
               </div>
             </article>

@@ -1,6 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import shopStyles from "@/app/productos/shop.module.css";
+import { ShopFooterLogo } from "@/components/layout/ShopFooterLogo";
 
 export function ProductsSection() {
   return (
@@ -38,24 +39,55 @@ export function ProductsSection() {
             </h2>
 
             <p
-              className="text-base sm:text-lg leading-relaxed mb-6 font-normal"
+              className="text-base sm:text-lg leading-relaxed mb-7 font-normal"
               style={{ color: "var(--home-body, #55585E)" }}
             >
               Formulado con electrolitos biodisponibles que reponen exactamente lo que tu cuerpo pierde al sudar: sodio, potasio, magnesio, calcio y zinc con extracto de aloe vera.
             </p>
 
-            {/* Pouch Specification Pill */}
-            <div
-              className="inline-flex items-center gap-2.5 text-xs sm:text-sm font-semibold tracking-wider rounded-full px-4 py-2 w-fit mb-8 shadow-sm select-none"
-              style={{
-                fontFamily: "var(--font-geist-mono)",
-                backgroundColor: "var(--home-surface, #FFFFFF)",
-                border: "1px solid var(--home-border, rgba(16, 24, 32, 0.08))",
-                color: "var(--home-fg, #101820)",
-              }}
-            >
-              <span className="w-2 h-2 rounded-full bg-[#C28B00]" />
-              <span>1 POUCH — 15 SACHETS DE 6 G</span>
+            {/* 3 Círculos negros al estilo de los elementos del empaque: 1 POUCH, 15 SACHETS, 6 G */}
+            <div className="flex items-center gap-4 sm:gap-5 mb-8 select-none">
+              <div
+                className="w-[76px] h-[76px] sm:w-[82px] sm:h-[82px] rounded-full flex flex-col items-center justify-center text-center leading-none"
+                style={{
+                  border: "2.2px solid var(--home-fg, #101820)",
+                  color: "var(--home-fg, #101820)",
+                }}
+              >
+                <span className="text-xl sm:text-2xl font-extrabold tracking-tight">1</span>
+                <span
+                  className="text-[9px] sm:text-[10px] font-bold tracking-widest uppercase mt-1"
+                  style={{ fontFamily: "var(--font-geist-mono)" }}
+                >
+                  POUCH
+                </span>
+              </div>
+
+              <div
+                className="w-[76px] h-[76px] sm:w-[82px] sm:h-[82px] rounded-full flex flex-col items-center justify-center text-center leading-none"
+                style={{
+                  border: "2.2px solid var(--home-fg, #101820)",
+                  color: "var(--home-fg, #101820)",
+                }}
+              >
+                <span className="text-xl sm:text-2xl font-extrabold tracking-tight">15</span>
+                <span
+                  className="text-[9px] sm:text-[10px] font-bold tracking-widest uppercase mt-1"
+                  style={{ fontFamily: "var(--font-geist-mono)" }}
+                >
+                  SACHETS
+                </span>
+              </div>
+
+              <div
+                className="w-[76px] h-[76px] sm:w-[82px] sm:h-[82px] rounded-full flex flex-col items-center justify-center text-center leading-none"
+                style={{
+                  border: "2.2px solid var(--home-fg, #101820)",
+                  color: "var(--home-fg, #101820)",
+                }}
+              >
+                <span className="text-xl sm:text-2xl font-extrabold tracking-tight">6 G</span>
+              </div>
             </div>
 
             {/* Button Conoce nuestro producto */}
@@ -103,7 +135,7 @@ export function ProductsSection() {
                   className={`${shopStyles.cta} ${shopStyles.ctaLimon}`}
                   aria-label="Ver producto Limón"
                 >
-                  VER PRODUCTO <span aria-hidden="true">↗</span>
+                  VER PRODUCTO
                 </Link>
               </div>
             </article>
@@ -138,32 +170,82 @@ export function ProductsSection() {
                   className={`${shopStyles.cta} ${shopStyles.ctaMandarina}`}
                   aria-label="Ver producto Mandarina"
                 >
-                  VER PRODUCTO <span aria-hidden="true">↗</span>
+                  VER PRODUCTO
                 </Link>
               </div>
             </article>
           </div>
         </div>
 
-        {/* Beneficios y electrolitos: limpio, minimalista, SIN EMOJIS */}
-        <div
-          className="mt-16 md:mt-20 rounded-xl md:rounded-full py-4 px-6 md:px-10 flex flex-wrap items-center justify-around gap-4 text-xs md:text-sm font-semibold tracking-widest uppercase shadow-sm select-none"
-          style={{
-            fontFamily: "var(--font-geist-mono)",
-            backgroundColor: "var(--home-surface, #FFFFFF)",
-            border: "1px solid var(--home-border, rgba(16, 24, 32, 0.08))",
-            color: "var(--home-fg, #303236)",
-          }}
-        >
-          <span>5 ELECTROLITOS CLAVE</span>
-          <span style={{ opacity: 0.3 }} aria-hidden="true">·</span>
-          <span>CON ALOE VERA</span>
-          <span style={{ opacity: 0.3 }} aria-hidden="true">·</span>
-          <span>15 SACHETS DE 6 G</span>
-          <span style={{ opacity: 0.3 }} aria-hidden="true">·</span>
-          <span>DISOLUCIÓN EN 400 ML</span>
-          <span style={{ opacity: 0.3 }} aria-hidden="true">·</span>
-          <span>HECHO EN ECUADOR</span>
+        {/* Sello circular USCHH con logo oficial en el centro y atributos alrededor */}
+        <div className="mt-12 md:mt-16 flex justify-center select-none">
+          <div
+            className="relative w-[220px] h-[220px] sm:w-[250px] sm:h-[250px] flex items-center justify-center"
+            style={{ color: "var(--home-fg, #101820)" }}
+            aria-label="5 electrolitos clave, con aloe vera, 15 sachets de 6 g, hecho en Ecuador, disolución en 400 ml"
+          >
+            <svg
+              viewBox="0 0 360 360"
+              className="w-full h-full overflow-visible"
+              aria-hidden="true"
+            >
+              <defs>
+                {/* Arco superior en sentido horario (276°) */}
+                <path
+                  id="uschh-seal-top-arc"
+                  d="M 86.32 284.04 A 140 140 0 1 1 273.68 284.04"
+                  fill="none"
+                />
+                {/* Arco inferior en sentido antihorario para lectura natural (72°) */}
+                <path
+                  id="uschh-seal-bottom-arc"
+                  d="M 93.01 299.73 A 148 148 0 0 0 266.99 299.73"
+                  fill="none"
+                />
+              </defs>
+
+              <text
+                fill="currentColor"
+                fontSize="10.5"
+                fontWeight="600"
+                letterSpacing="1.8px"
+                style={{ fontFamily: "var(--font-geist-mono), monospace" }}
+              >
+                <textPath
+                  href="#uschh-seal-top-arc"
+                  startOffset="50%"
+                  textAnchor="middle"
+                  textLength="644"
+                  lengthAdjust="spacing"
+                >
+                  DISOLUCIÓN EN 400 ML • 5 ELECTROLITOS CLAVE • CON ALOE VERA • 15 SACHETS DE 6 G
+                </textPath>
+              </text>
+
+              <text
+                fill="currentColor"
+                fontSize="10.5"
+                fontWeight="600"
+                letterSpacing="1.8px"
+                style={{ fontFamily: "var(--font-geist-mono), monospace" }}
+              >
+                <textPath
+                  href="#uschh-seal-bottom-arc"
+                  startOffset="50%"
+                  textAnchor="middle"
+                  textLength="174"
+                  lengthAdjust="spacing"
+                >
+                  •   HECHO EN ECUADOR   •
+                </textPath>
+              </text>
+            </svg>
+
+            {/* Logo oficial verdadero de USCHH centrado */}
+            <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
+              <ShopFooterLogo className="w-[104px] sm:w-[118px] h-auto" />
+            </div>
+          </div>
         </div>
       </div>
     </section>

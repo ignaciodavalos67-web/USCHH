@@ -1,318 +1,916 @@
+/* ═════════════════════════════════════════════════════════════════════
+   PRODUCT STORY — DISEÑO EDITORIAL DE INFORMACIÓN DE PRODUCTO
+   USCHH SPORTS NUTRITION
+   ═════════════════════════════════════════════════════════════════════ */
+
 .storyContainer {
   --flavor-accent: #B8860B;
-  --flavor-accent-bg: rgba(247, 226, 163, 0.35);
-  --flavor-accent-border: rgba(184, 134, 11, 0.3);
-  --flavor-accent-glow: rgba(184, 134, 11, 0.4);
+  --flavor-accent-subtle: rgba(184, 134, 11, 0.08);
+  --flavor-accent-border: rgba(184, 134, 11, 0.25);
+  --flavor-accent-glow: rgba(184, 134, 11, 0.35);
+
+  --story-bg-card: #FFFFFF;
+  --story-bg-subtle: #F8F7F2;
+  --story-border: rgba(16, 24, 32, 0.12);
+  --story-border-strong: rgba(16, 24, 32, 0.18);
+  --story-text: #101820;
+  --story-muted: #55585E;
+  --story-dim: #8A8D93;
+
   width: 100%;
   max-width: 1440px;
-  margin: 0 auto 48px;
-  padding-top: 0;
+  margin: 24px auto 64px;
   display: flex;
   flex-direction: column;
-  gap: 72px;
+  gap: 0;
+  box-sizing: border-box;
+}
+
+/* Variantes de color por sabor */
+.themeLimon {
+  --flavor-accent: #B8860B;
+  --flavor-accent-subtle: rgba(184, 134, 11, 0.08);
+  --flavor-accent-border: rgba(184, 134, 11, 0.25);
+  --flavor-accent-glow: rgba(184, 134, 11, 0.35);
 }
 
 .themeMandarina {
   --flavor-accent: #FF6B00;
-  --flavor-accent-bg: rgba(255, 107, 0, 0.12);
-  --flavor-accent-border: rgba(255, 107, 0, 0.35);
-  --flavor-accent-glow: rgba(255, 107, 0, 0.5);
+  --flavor-accent-subtle: rgba(255, 107, 0, 0.08);
+  --flavor-accent-border: rgba(255, 107, 0, 0.28);
+  --flavor-accent-glow: rgba(255, 107, 0, 0.45);
 }
 
-.themeLimon {
-  --flavor-accent: #B8860B;
-  --flavor-accent-bg: rgba(247, 226, 163, 0.35);
-  --flavor-accent-border: rgba(184, 134, 11, 0.3);
-  --flavor-accent-glow: rgba(184, 134, 11, 0.4);
-}
-
-/* ─────────────────────────────────────────────────────────────
-   1. PRESENTACIÓN / FORMAT BANNER
-───────────────────────────────────────────────────────────── */
-.presentationBanner {
-  background: #FFFFFF;
-  border: 1px solid rgba(48, 50, 54, 0.1);
-  border-radius: 6px;
-  padding: 32px 40px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 32px;
-  box-shadow: 0 4px 20px rgba(16, 24, 32, 0.04);
-}
-
-.presentationLeft {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-}
-
+/* Tipografía de ceja y títulos compartidos */
 .eyebrow {
   font-family: var(--font-geist-mono), monospace;
   font-size: 11px;
   letter-spacing: 0.18em;
   text-transform: uppercase;
   color: var(--flavor-accent);
-  transition: color 200ms ease;
   font-weight: 600;
+  display: inline-block;
+  margin-bottom: 12px;
 }
 
-.presentationTitle {
-  font-size: clamp(20px, 2.4vw, 32px);
+.sectionTitle {
+  font-size: clamp(26px, 3.2vw, 42px);
   font-weight: 700;
-  letter-spacing: -0.03em;
-  color: #101820;
-  margin: 0;
-}
-
-.presentationDesc {
-  font-size: 14px;
-  color: #55585E;
-  margin: 0;
-  line-height: 1.5;
-}
-
-.presentationBadge {
-  display: flex;
-  align-items: center;
-  gap: 16px;
-  padding: 16px 24px;
-  background: var(--flavor-accent-bg);
-  border: 1px solid var(--flavor-accent-border);
-  border-radius: 6px;
-  flex-shrink: 0;
-  transition: background-color 200ms ease, border-color 200ms ease;
-}
-
-.badgeNumber {
-  font-size: 36px;
-  font-weight: 800;
-  color: var(--flavor-accent);
-  line-height: 1;
-  font-family: var(--font-geist-mono), monospace;
-  transition: color 200ms ease;
-}
-
-.badgeLabel {
-  display: flex;
-  flex-direction: column;
-  font-size: 11px;
-  font-weight: 600;
-  letter-spacing: 0.12em;
-  color: #101820;
-  line-height: 1.3;
-}
-
-/* ─────────────────────────────────────────────────────────────
-   2. COMPOSICIÓN DESTACADA BANNER
-───────────────────────────────────────────────────────────── */
-.compositionBanner {
-  background: #FFFFFF;
-  border: 1px solid rgba(48, 50, 54, 0.1);
-  border-radius: 6px;
-  padding: 24px 32px;
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-  box-shadow: 0 4px 20px rgba(16, 24, 32, 0.04);
-}
-
-.compositionHeadline {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-}
-
-.compositionTitle {
-  font-size: 16px;
-  font-weight: 700;
-  letter-spacing: -0.01em;
-  color: #101820;
-  margin: 0;
-}
-
-.compositionValues {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 10px 20px;
-  align-items: center;
-  font-size: 13px;
-  color: #303236;
-  font-family: var(--font-geist-mono), monospace;
-}
-
-.compositionPill {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  background: var(--flavor-accent-bg);
-  border: 1px solid var(--flavor-accent-border);
-  padding: 6px 12px;
-  border-radius: 4px;
-  font-weight: 600;
-}
-
-.compositionPill strong {
-  color: var(--flavor-accent);
-}
-
-/* ─────────────────────────────────────────────────────────────
-   3. MINERALES DESPLEGABLES (CONOCE LO QUE HAY EN TU SACHET)
-───────────────────────────────────────────────────────────── */
-.insideSection {
-  background: #FFFFFF;
-  border: 1px solid rgba(48, 50, 54, 0.1);
-  border-radius: 6px;
-  padding: 48px;
-  display: flex;
-  flex-direction: column;
-  gap: 32px;
-  box-shadow: 0 4px 20px rgba(16, 24, 32, 0.04);
-}
-
-.sectionHeader {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-  text-align: center;
-  max-width: 650px;
-  margin: 0 auto;
-}
-
-.sectionHeader h3 {
-  font-size: clamp(24px, 3vw, 38px);
-  font-weight: 700;
-  letter-spacing: -0.03em;
-  color: #101820;
+  letter-spacing: -0.035em;
+  line-height: 1.1;
+  color: var(--story-text);
   margin: 0;
   text-transform: uppercase;
 }
 
-.sectionHeader p {
+.sectionLead {
   font-size: 15px;
-  color: #55585E;
-  margin: 0;
-  font-weight: 400;
+  line-height: 1.6;
+  color: var(--story-muted);
+  max-width: 680px;
+  margin: 12px 0 0;
 }
 
-.interactiveNotice {
-  font-family: var(--font-geist-mono), monospace;
-  font-size: 11px;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
-  color: var(--flavor-accent);
-  margin-top: 4px;
-}
-
-.mineralsGrid {
-  display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 16px;
-}
-
-.mineralInteractiveCard {
-  background: #F8F7F2;
-  border: 1px solid rgba(48, 50, 54, 0.1);
-  border-radius: 6px;
-  overflow: hidden;
-  transition: all 250ms ease;
+/* Secciones abiertas sin contenedores rectangulares exteriores,
+   separadas únicamente por una línea horizontal fina */
+.formatSection,
+.compositionSection,
+.benefitsSection,
+.lifestyleSection,
+.prepSection {
+  padding: 56px 0;
+  background: transparent;
+  border: none;
+  border-bottom: 1px solid var(--story-border);
+  border-radius: 0;
+  box-shadow: none;
   display: flex;
   flex-direction: column;
-  cursor: pointer;
-  text-align: left;
-  user-select: none;
+  gap: 36px;
+  transition: border-color 280ms ease, color 280ms ease;
 }
 
-.mineralInteractiveCard:hover {
-  border-color: var(--flavor-accent-border);
-  box-shadow: 0 6px 20px rgba(16, 24, 32, 0.06);
-  transform: translateY(-2px);
+.prepSection {
+  border-bottom: none;
+  padding-bottom: 16px;
 }
 
-.mineralInteractiveCard.expanded {
-  border-color: var(--flavor-accent);
-  background: #FFFFFF;
-  box-shadow: 0 8px 24px var(--flavor-accent-bg);
+/* ─────────────────────────────────────────────────────────────────────
+   1. FORMATO Y PRESENTACIÓN
+───────────────────────────────────────────────────────────────────── */
+.formatGrid {
+  display: grid;
+  grid-template-columns: minmax(0, 1.35fr) minmax(0, 1fr);
+  gap: 48px;
+  align-items: center;
 }
 
-.mineralHeader {
-  padding: 20px 24px;
+.formatMain {
+  display: flex;
+  flex-direction: column;
+}
+
+.formatTitle {
+  font-size: clamp(24px, 2.8vw, 36px);
+  font-weight: 700;
+  letter-spacing: -0.03em;
+  line-height: 1.15;
+  color: var(--story-text);
+  margin: 0;
+}
+
+.formatStatsStrip {
   display: flex;
   align-items: center;
   justify-content: space-between;
+  padding: 12px 0;
+  background: transparent;
+  border: none;
+}
+
+.statCell {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 10px;
+}
+
+.statCircle {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  border: 2.2px solid var(--flavor-accent);
+  background: transparent;
+  color: var(--flavor-accent);
+  transition: all 200ms ease;
+}
+
+.statValue {
+  font-family: var(--font-geist-sans), sans-serif;
+  font-size: 20px;
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  line-height: 1;
+  color: currentColor;
+}
+
+.statLabel {
+  font-family: var(--font-geist-mono), monospace;
+  font-size: 10px;
+  letter-spacing: 0.12em;
+  font-weight: 600;
+  color: var(--story-muted);
+  text-transform: uppercase;
+}
+
+.statDivider {
+  width: 1px;
+  height: 56px;
+  background: var(--story-border);
+}
+
+/* ─────────────────────────────────────────────────────────────────────
+   2 Y 3. COMPOSICIÓN Y MINERALES ACTIVOS
+───────────────────────────────────────────────────────────────────── */
+.sectionHeader {
+  display: flex;
+  flex-direction: column;
+}
+
+.formulaSummaryBar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
   gap: 16px;
+  padding: 12px 0 12px 20px;
+  background: transparent;
+  border-left: 2px solid var(--flavor-accent);
+}
+
+.formulaLabel {
+  font-family: var(--font-geist-mono), monospace;
+  font-size: 11px;
+  letter-spacing: 0.14em;
+  font-weight: 700;
+  color: var(--flavor-accent);
+}
+
+.formulaExpression {
+  font-family: var(--font-geist-mono), monospace;
+  font-size: 13px;
+  color: var(--story-text);
+  letter-spacing: 0.02em;
+}
+
+.formulaExpression strong {
+  color: var(--flavor-accent);
+  font-weight: 700;
+}
+
+.formulaTotalBadge {
+  font-family: var(--font-geist-mono), monospace;
+  font-size: 11px;
+  letter-spacing: 0.14em;
+  font-weight: 700;
+  color: var(--flavor-accent);
+}
+
+/* Explorador dividido */
+.mineralsExplorer {
+  display: grid;
+  grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr);
+  gap: 40px;
+  align-items: stretch;
+}
+
+.mineralsList {
+  display: flex;
+  flex-direction: column;
+  border-top: 1px solid var(--story-border);
+}
+
+.mineralRow {
+  display: flex;
+  flex-direction: column;
+  border-bottom: 1px solid var(--story-border);
+  transition: background-color 200ms ease;
+}
+
+.mineralRowButton {
+  display: grid;
+  grid-template-columns: 64px minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 16px;
+  padding: 20px 16px;
   background: transparent;
   border: none;
   width: 100%;
   cursor: pointer;
   text-align: left;
+  transition: all 200ms ease;
 }
 
-.mineralHeaderLeft {
-  display: flex;
-  align-items: center;
-  gap: 16px;
+.mineralRowButton:hover {
+  background: var(--flavor-accent-subtle);
 }
 
-.mineralSymbol {
-  font-family: var(--font-geist-mono), monospace;
-  font-size: 32px;
-  font-weight: 800;
-  color: var(--flavor-accent);
-  line-height: 1;
-  min-width: 44px;
+.rowActive .mineralRowButton {
+  background: var(--flavor-accent-subtle);
 }
 
-.mineralTitleBlock {
-  display: flex;
-  flex-direction: column;
-  gap: 2px;
-}
-
-.mineralName {
-  font-size: 15px;
-  font-weight: 700;
-  letter-spacing: -0.01em;
-  color: #101820;
-}
-
-.mineralMg {
-  font-family: var(--font-geist-mono), monospace;
-  font-size: 12px;
-  letter-spacing: 0.1em;
-  font-weight: 600;
-  color: var(--flavor-accent);
-}
-
-.toggleIcon {
-  width: 28px;
-  height: 28px;
-  border-radius: 50%;
-  background: var(--flavor-accent-bg);
-  color: var(--flavor-accent);
+.symbolCell {
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 16px;
-  font-weight: 700;
-  flex-shrink: 0;
-  transition: transform 200ms ease, background-color 200ms ease;
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  border: 2.2px solid var(--story-text);
+  background: transparent;
+  color: var(--story-text);
+  transition: all 200ms ease;
 }
 
-.expanded .toggleIcon {
-  transform: rotate(45deg);
+.rowActive .symbolCell {
+  border-color: var(--flavor-accent);
   background: var(--flavor-accent);
   color: #FFFFFF;
 }
 
-.mineralBody {
-  padding: 0 24px 20px 24px;
+.symbolText {
+  font-family: var(--font-geist-sans), sans-serif;
+  font-size: 19px;
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  color: currentColor;
+  line-height: 1;
+}
+
+.aloeSvg {
+  width: 28px;
+  height: 28px;
+  display: block;
+  color: currentColor;
+}
+
+.nameCell {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.mineralName {
+  font-size: 16px;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  color: var(--story-text);
+}
+
+.mineralRole {
+  font-size: 12.5px;
+  color: var(--story-muted);
+}
+
+.amountCell {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.mineralAmount {
+  font-family: var(--font-geist-mono), monospace;
+  font-size: 15px;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  color: var(--flavor-accent);
+}
+
+.rowChevron {
+  font-size: 16px;
+  color: var(--story-dim);
+  transition: transform 200ms ease, color 200ms ease;
+}
+
+.rowActive .rowChevron {
+  color: var(--flavor-accent);
+  transform: translateX(4px);
+}
+
+/* Detalle inline para móviles */
+.mobileMineralDetail {
+  display: none;
+  padding: 12px 16px 20px;
   font-size: 13.5px;
   line-height: 1.6;
-  color: #55585E;
-  border-top: 1px solid rgba(48, 50, 54, 0.06);
-  padding-top: 14px;
-  animation: fadeIn 250ms ease;
+  color: var(--story-muted);
+  border-top: 1px dashed var(--story-border);
+  background: var(--flavor-accent-subtle);
+  animation: fadeIn 220ms ease;
+}
+
+/* Spotlight interactivo escritorio */
+.mineralSpotlight {
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 40px;
+  background: var(--story-bg-card);
+  border: 1px solid var(--story-border);
+  min-height: 380px;
+}
+
+.watermarkSymbol {
+  position: absolute;
+  right: -10px;
+  bottom: -30px;
+  font-family: var(--font-geist-sans), sans-serif;
+  font-size: 180px;
+  font-weight: 900;
+  line-height: 1;
+  color: var(--story-border);
+  opacity: 0.55;
+  pointer-events: none;
+  user-select: none;
+}
+
+.watermarkAloeSvg {
+  width: 170px;
+  height: 170px;
+  display: block;
+}
+
+.spotlightContent {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.spotlightBadge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-family: var(--font-geist-mono), monospace;
+  font-size: 10px;
+  letter-spacing: 0.16em;
+  color: var(--flavor-accent);
+  font-weight: 700;
+}
+
+.badgePulse {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--flavor-accent);
+  box-shadow: 0 0 0 3px var(--flavor-accent-glow);
+}
+
+.spotlightHeader {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.spotlightName {
+  font-size: clamp(28px, 3vw, 42px);
+  font-weight: 800;
+  letter-spacing: -0.04em;
+  color: var(--story-text);
+  margin: 0;
+  text-transform: uppercase;
+}
+
+.spotlightAmount {
+  font-family: var(--font-geist-mono), monospace;
+  font-size: 24px;
+  font-weight: 800;
+  color: var(--flavor-accent);
+}
+
+.spotlightRole {
+  font-size: 13.5px;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--story-muted);
+  margin: 0;
+}
+
+.spotlightDivider {
+  width: 48px;
+  height: 2px;
+  background: var(--flavor-accent);
+  margin: 10px 0;
+}
+
+.spotlightExplanation {
+  font-size: 15px;
+  line-height: 1.7;
+  color: var(--story-text);
+  margin: 0;
+  max-width: 440px;
+}
+
+.spotlightFooter {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-top: 24px;
+  margin-top: 24px;
+  border-top: 1px solid var(--story-border);
+  font-family: var(--font-geist-mono), monospace;
+  font-size: 10px;
+  letter-spacing: 0.14em;
+  color: var(--story-dim);
+}
+
+/* ─────────────────────────────────────────────────────────────────────
+   4. BENEFICIOS NUTRICIONALES
+───────────────────────────────────────────────────────────────────── */
+.benefitsHeader {
+  display: grid;
+  grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr);
+  gap: 48px;
+  align-items: end;
+  padding-bottom: 24px;
+  border-bottom: 1px solid var(--story-border);
+}
+
+.benefitsManifesto {
+  font-size: clamp(15px, 1.3vw, 17px);
+  line-height: 1.65;
+  font-style: italic;
+  color: var(--story-muted);
+  margin: 0;
+  border-left: 2px solid var(--flavor-accent);
+  padding-left: 20px;
+}
+
+.benefitsList {
+  display: flex;
+  flex-direction: column;
+}
+
+.benefitRow {
+  display: grid;
+  grid-template-columns: 80px minmax(0, 1fr);
+  gap: 24px;
+  align-items: baseline;
+  padding: 24px 0;
+  border-bottom: 1px solid var(--story-border);
+  transition: padding-left 200ms ease;
+}
+
+.benefitRow:last-child {
+  border-bottom: none;
+}
+
+.benefitRow:hover {
+  padding-left: 12px;
+}
+
+.benefitNum {
+  font-family: var(--font-geist-mono), monospace;
+  font-size: 20px;
+  font-weight: 800;
+  color: var(--flavor-accent);
+  letter-spacing: 0.1em;
+}
+
+.benefitBody {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.benefitTitle {
+  font-size: 17px;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  color: var(--story-text);
+  margin: 0;
+}
+
+.benefitDesc {
+  font-size: 14.5px;
+  line-height: 1.6;
+  color: var(--story-muted);
+  margin: 0;
+  max-width: 820px;
+}
+
+/* ─────────────────────────────────────────────────────────────────────
+   5. MOMENTOS DE CONSUMO
+───────────────────────────────────────────────────────────────────── */
+.lifestyleContent {
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+}
+
+.lifestyleHeader {
+  display: flex;
+  flex-direction: column;
+}
+
+.momentsTimeline {
+  display: flex;
+  flex-direction: column;
+  border-top: 1px solid var(--story-border);
+}
+
+.momentItem {
+  display: grid;
+  grid-template-columns: 58px minmax(0, 1fr);
+  gap: 20px;
+  align-items: flex-start;
+  padding: 22px 0;
+  border-bottom: 1px solid var(--story-border);
+}
+
+.momentIcon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 58px;
+  height: 58px;
+  border-radius: 14px;
+  background: var(--flavor-accent-subtle);
+  border: 1px solid var(--flavor-accent-border);
+  color: var(--flavor-accent);
+  transition: transform 240ms ease, background-color 240ms ease, border-color 240ms ease;
+}
+
+.momentItem:hover .momentIcon {
+  transform: translateY(-2px) scale(1.04);
+}
+
+.momentBody {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.momentTag {
+  font-family: var(--font-geist-mono), monospace;
+  font-size: 10px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--story-dim);
+  font-weight: 600;
+}
+
+.momentTitle {
+  font-size: 16px;
+  font-weight: 700;
+  letter-spacing: -0.015em;
+  color: var(--story-text);
+  margin: 0;
+}
+
+.momentDesc {
+  font-size: 14px;
+  line-height: 1.65;
+  color: var(--story-muted);
+  margin: 0;
+  max-width: 860px;
+}
+
+.disclaimerBox {
+  padding: 12px 0 12px 18px;
+  background: transparent;
+  border-left: 2px solid var(--flavor-accent);
+  font-size: 13px;
+  line-height: 1.55;
+  color: var(--story-muted);
+}
+
+.disclaimerBox p {
+  margin: 0;
+}
+
+/* ─────────────────────────────────────────────────────────────────────
+   6. PREPARACIÓN
+───────────────────────────────────────────────────────────────────── */
+.prepHeader {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 24px;
+}
+
+.prepHeaderLeft {
+  display: flex;
+  flex-direction: column;
+}
+
+.prepFormulaBadge {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 0;
+  background: transparent;
+  border: none;
+  font-family: var(--font-geist-mono), monospace;
+  font-size: 12px;
+  letter-spacing: 0.1em;
+  color: var(--story-text);
+}
+
+.prepMathPlus {
+  color: var(--flavor-accent);
+  font-weight: 800;
+}
+
+.prepFormulaBadge strong {
+  color: var(--flavor-accent);
+  font-weight: 700;
+}
+
+.prepStepsGrid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 24px;
+  padding-top: 8px;
+}
+
+.stepItem {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding: 24px 0 0;
+  background: transparent;
+  border: none;
+  border-top: 1px solid var(--story-border);
+  transition: border-color 200ms ease;
+}
+
+.stepItem:hover {
+  border-top-color: var(--flavor-accent);
+}
+
+.stepTop {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.stepNum {
+  font-family: var(--font-geist-mono), monospace;
+  font-size: 18px;
+  font-weight: 800;
+  line-height: 1;
+  color: var(--flavor-accent);
+  letter-spacing: 0.08em;
+}
+
+.stepArrow {
+  font-size: 18px;
+  color: var(--story-dim);
+}
+
+.stepIcon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 72px;
+  height: 72px;
+  border-radius: 14px;
+  background: var(--flavor-accent-subtle);
+  border: 1px solid var(--flavor-accent-border);
+  color: var(--flavor-accent);
+  transition: transform 240ms ease, background-color 240ms ease, border-color 240ms ease;
+}
+
+.stepItem:hover .stepIcon {
+  transform: translateY(-3px) scale(1.04);
+}
+
+.stepTextBlock {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.stepAction {
+  font-size: 18px;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  color: var(--story-text);
+  margin: 0;
+}
+
+.stepSublabel {
+  font-size: 14px;
+  line-height: 1.55;
+  color: var(--story-muted);
+  margin: 0;
+}
+
+.prepFooterBar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 16px;
+  padding-top: 24px;
+  border-top: 1px solid var(--story-border);
+  font-family: var(--font-geist-mono), monospace;
+  font-size: 11px;
+  letter-spacing: 0.1em;
+  color: var(--story-muted);
+}
+
+.prepTip {
+  max-width: 680px;
+}
+
+.prepOrigin {
+  font-weight: 600;
+  color: var(--flavor-accent);
+}
+
+/* ─────────────────────────────────────────────────────────────────────
+   RESPONSIVE DESIGN (Prioridad Móvil)
+───────────────────────────────────────────────────────────────────── */
+@media (max-width: 1024px) {
+  .formatGrid {
+    grid-template-columns: 1fr;
+    gap: 28px;
+  }
+  .mineralsExplorer {
+    grid-template-columns: 1fr;
+  }
+  .mineralSpotlight {
+    display: none;
+  }
+  .mobileMineralDetail {
+    display: block;
+  }
+  .rowActive.rowMobileClosed .mineralRowButton {
+    background: transparent;
+  }
+  .rowActive.rowMobileClosed .symbolCell {
+    border-color: var(--story-text);
+    background: transparent;
+    color: var(--story-text);
+  }
+  .rowActive.rowMobileClosed .rowChevron {
+    color: var(--story-dim);
+    transform: none;
+  }
+  .prepStepsGrid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .benefitsHeader {
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+}
+
+@media (max-width: 767px) {
+  .storyContainer {
+    margin: 16px auto 48px;
+  }
+  .formatSection,
+  .compositionSection,
+  .benefitsSection,
+  .lifestyleSection,
+  .prepSection {
+    padding: 36px 0;
+    gap: 24px;
+  }
+  .formatStatsStrip {
+    justify-content: space-around;
+    gap: 12px;
+  }
+  .statDivider {
+    height: 44px;
+  }
+  .momentItem {
+    grid-template-columns: 48px minmax(0, 1fr);
+    gap: 14px;
+  }
+  .momentIcon {
+    width: 48px;
+    height: 48px;
+    border-radius: 12px;
+  }
+  .formulaSummaryBar {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  .benefitRow {
+    grid-template-columns: 44px minmax(0, 1fr);
+    gap: 14px;
+    padding: 18px 0;
+  }
+  .prepStepsGrid {
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+  .prepHeader {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  .prepFooterBar {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}
+
+/* ─────────────────────────────────────────────────────────────────────
+   SOPORTE PARA MODO NOCHE (STORE DAY/NIGHT TOGGLE)
+───────────────────────────────────────────────────────────────────── */
+:global([data-store-root][data-store-theme="night"]) .storyContainer {
+  --flavor-accent: var(--brand-yellow);
+  --flavor-accent-subtle: rgba(247, 226, 163, 0.08);
+  --flavor-accent-border: rgba(247, 226, 163, 0.25);
+  --flavor-accent-glow: rgba(247, 226, 163, 0.35);
+
+  --story-bg-card: #141C24;
+  --story-bg-subtle: #0F161E;
+  --story-border: rgba(248, 247, 242, 0.14);
+  --story-border-strong: rgba(248, 247, 242, 0.22);
+  --story-text: #F8F7F2;
+  --story-muted: #C6C7C2;
+  --story-dim: #7E8289;
+}
+
+:global([data-store-root][data-store-theme="night"]) .storyContainer.themeMandarina {
+  --flavor-accent: #FF9A55;
+  --flavor-accent-subtle: rgba(255, 154, 85, 0.08);
+  --flavor-accent-border: rgba(255, 154, 85, 0.28);
+  --flavor-accent-glow: rgba(255, 154, 85, 0.45);
+}
+
+:global([data-store-root][data-store-theme="night"]) .rowActive .symbolCell {
+  color: #101820;
+}
+
+:global([data-store-root][data-store-animated]) :is(
+  .formatSection,
+  .compositionSection,
+  .benefitsSection,
+  .lifestyleSection,
+  .prepSection,
+  .statCell,
+  .mineralRowButton,
+  .mineralSpotlight,
+  .stepItem
+) {
+  transition: background-color 280ms ease, color 280ms ease, border-color 280ms ease;
 }
 
 @keyframes fadeIn {
@@ -326,268 +924,11 @@
   }
 }
 
-/* ─────────────────────────────────────────────────────────────
-   4. BENEFICIOS DESTACADOS
-───────────────────────────────────────────────────────────── */
-.benefitsSection {
-  background: #FFFFFF;
-  border: 1px solid rgba(48, 50, 54, 0.1);
-  border-radius: 6px;
-  padding: 48px;
-  display: flex;
-  flex-direction: column;
-  gap: 32px;
-  box-shadow: 0 4px 20px rgba(16, 24, 32, 0.04);
-}
-
-.benefitsGrid {
-  display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 20px;
-}
-
-.benefitCard {
-  background: #F8F7F2;
-  border: 1px solid rgba(48, 50, 54, 0.08);
-  border-radius: 6px;
-  padding: 24px;
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-  transition: all 200ms ease;
-}
-
-.benefitCard:hover {
-  border-color: var(--flavor-accent-border);
-  transform: translateY(-2px);
-  box-shadow: 0 4px 14px rgba(16, 24, 32, 0.05);
-}
-
-.benefitTitle {
-  font-size: 16px;
-  font-weight: 700;
-  color: #101820;
-  letter-spacing: -0.01em;
-  margin: 0;
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
-
-.benefitDesc {
-  font-size: 13.5px;
-  line-height: 1.55;
-  color: #55585E;
-  margin: 0;
-}
-
-/* ─────────────────────────────────────────────────────────────
-   5. ¿CUÁNDO USAR USCHH?
-───────────────────────────────────────────────────────────── */
-.whenSection {
-  background: #FFFFFF;
-  border: 1px solid rgba(48, 50, 54, 0.1);
-  border-radius: 6px;
-  padding: 48px;
-  display: flex;
-  flex-direction: column;
-  gap: 32px;
-  box-shadow: 0 4px 20px rgba(16, 24, 32, 0.04);
-}
-
-.whenGrid {
-  display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 20px;
-}
-
-.whenCard {
-  background: #F8F7F2;
-  border: 1px solid rgba(48, 50, 54, 0.08);
-  border-radius: 6px;
-  padding: 24px;
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-  transition: all 200ms ease;
-}
-
-.whenCard:hover {
-  border-color: var(--flavor-accent-border);
-  transform: translateY(-2px);
-  box-shadow: 0 4px 14px rgba(16, 24, 32, 0.05);
-}
-
-.whenTitle {
-  font-size: 15px;
-  font-weight: 700;
-  color: #101820;
-  letter-spacing: -0.01em;
-  margin: 0;
-}
-
-.whenDesc {
-  font-size: 13.5px;
-  line-height: 1.55;
-  color: #55585E;
-  margin: 0;
-}
-
-.whenDisclaimer {
-  background: var(--flavor-accent-bg);
-  border-left: 3px solid var(--flavor-accent);
-  padding: 16px 20px;
-  border-radius: 0 4px 4px 0;
-  font-size: 13px;
-  color: #303236;
-  line-height: 1.5;
-  font-style: italic;
-  margin: 0;
-}
-
-/* ─────────────────────────────────────────────────────────────
-   6. MODO DE USO
-───────────────────────────────────────────────────────────── */
-.usageSection {
-  background: #FFFFFF;
-  border: 1px solid rgba(48, 50, 54, 0.1);
-  border-radius: 6px;
-  padding: 48px;
-  display: flex;
-  flex-direction: column;
-  gap: 32px;
-  box-shadow: 0 4px 20px rgba(16, 24, 32, 0.04);
-}
-
-.usageSteps {
-  display: grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
-  gap: 16px;
-}
-
-.stepCard {
-  background: #F8F7F2;
-  border: 1px solid rgba(48, 50, 54, 0.08);
-  border-radius: 6px;
-  padding: 24px 20px;
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
-  position: relative;
-}
-
-.stepNumber {
-  font-family: var(--font-geist-mono), monospace;
-  font-size: 13px;
-  font-weight: 700;
-  color: var(--flavor-accent);
-  letter-spacing: 0.1em;
-}
-
-.stepIcon {
-  color: var(--flavor-accent);
-}
-
-.stepLabel {
-  font-size: 15px;
-  font-weight: 700;
-  color: #101820;
-  margin-bottom: 4px;
-}
-
-.stepSublabel {
-  font-size: 12.5px;
-  color: #55585E;
-  margin: 0;
-}
-
-/* ─────────────────────────────────────────────────────────────
-   RESPONSIVE DESIGN
-───────────────────────────────────────────────────────────── */
-@media (max-width: 1024px) {
-  .mineralsGrid {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
-  .benefitsGrid {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
-  .whenGrid {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
-  .usageSteps {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
-}
-
-@media (max-width: 767px) {
-  .storyContainer {
-    margin-top: 40px;
-    gap: 48px;
-    padding-top: 0;
-  }
-  .presentationBanner {
-    flex-direction: column;
-    align-items: flex-start;
-    padding: 24px;
-    gap: 20px;
-  }
-  .presentationBadge {
-    width: 100%;
-    justify-content: center;
-  }
-  .insideSection,
-  .benefitsSection,
-  .whenSection,
-  .usageSection {
-    padding: 28px 20px;
-    gap: 24px;
-  }
-  .mineralsGrid,
-  .benefitsGrid,
-  .whenGrid,
-  .usageSteps {
-    grid-template-columns: 1fr;
-    gap: 12px;
-  }
-}
-
-/* ─────────────────────────────────────────────────────────────
-   SOPORTE PARA MODO NOCHE (STORE DAY/NIGHT TOGGLE)
-───────────────────────────────────────────────────────────── */
-:global([data-store-root][data-store-theme="night"]) .storyContainer {
-  --flavor-accent: var(--brand-yellow);
-}
-:global([data-store-root][data-store-theme="night"]) .storyContainer.themeMandarina {
-  --flavor-accent: #FF9A55;
-}
-:global([data-store-root][data-store-theme="night"]) :is(.presentationBanner, .compositionBanner, .insideSection, .benefitsSection, .whenSection, .usageSection) {
-  background: var(--store-surface);
-  border-color: var(--store-border);
-}
-:global([data-store-root][data-store-theme="night"]) :is(.mineralInteractiveCard, .benefitCard, .whenCard, .stepCard) {
-  background: var(--store-bg);
-  border-color: var(--store-border);
-}
-:global([data-store-root][data-store-theme="night"]) .mineralInteractiveCard.expanded {
-  background: var(--store-surface);
-  border-color: var(--flavor-accent);
-}
-:global([data-store-root][data-store-theme="night"]) :is(.presentationTitle, .badgeLabel, .sectionHeader h3, .compositionTitle, .mineralName, .benefitTitle, .whenTitle, .stepLabel) {
-  color: var(--store-fg);
-}
-:global([data-store-root][data-store-theme="night"]) :is(.presentationDesc, .sectionHeader p, .mineralBody, .benefitDesc, .whenDesc, .stepSublabel, .compositionValues) {
-  color: var(--store-muted);
-}
-:global([data-store-root][data-store-theme="night"]) .whenDisclaimer {
-  background: rgba(247, 226, 163, 0.1);
-  color: var(--store-fg);
-}
-
-.presentationBanner, .insideSection, .benefitsSection, .whenSection, .usageSection, .stepCard, .mineralInteractiveCard {
-  transition: background-color 280ms ease, color 280ms ease, border-color 280ms ease;
-}
 @media (prefers-reduced-motion: reduce) {
-  .presentationBanner, .insideSection, .benefitsSection, .whenSection, .usageSection, .stepCard, .mineralInteractiveCard {
-    transition: none;
+  :global([data-store-root][data-store-animated]) * {
+    transition: none !important;
+  }
+  .mobileMineralDetail {
+    animation: none;
   }
 }

@@ -59,7 +59,7 @@ export default async function ProductPage({ params }: { params: Promise<{ slug: 
           />
         </div>
         <div className={styles.detailInfo}>
-          <p className={styles.eyebrow}>USCHH · ELECTROLITOS EN POLVO</p>
+          <p className={styles.eyebrow}>USCHH ELECTROLITOS EN POLVO</p>
           <h1 className={titleClass}>{product.flavor}</h1>
           <p className={styles.flavorDescription}>{individualDescription}</p>
           <p className={`${styles.price} ${priceClass}`}>{product.price}</p>

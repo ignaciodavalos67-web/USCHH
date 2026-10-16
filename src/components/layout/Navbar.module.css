@@ -1,3 +1,46 @@
+.navbar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 50;
+  height: 72px;
+  padding: 0 24px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  pointer-events: auto;
+  background-color: rgba(16, 24, 32, 0.95);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border-bottom: 1px solid rgba(248, 247, 242, 0.08);
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.04);
+  color: #F8F7F2;
+  transition: background-color 240ms ease, color 240ms ease, border-color 240ms ease;
+}
+
+@media (min-width: 640px) {
+  .navbar {
+    padding: 0 48px;
+  }
+}
+
+:global([data-store-root][data-store-theme="day"]) .navbar {
+  background-color: rgba(248, 247, 242, 0.95);
+  border-bottom: 1px solid rgba(16, 24, 32, 0.08);
+  color: #101820;
+}
+
+:global([data-store-root][data-store-theme="night"]) .navbar {
+  background-color: rgba(16, 24, 32, 0.95);
+  border-bottom: 1px solid rgba(248, 247, 242, 0.08);
+  color: #F8F7F2;
+}
+
+:global([data-store-root][data-store-animated]) .navbar {
+  transition: background-color 280ms ease, color 280ms ease, border-color 280ms ease;
+}
+
 .overlay,
 .overlay:modal {
   position: fixed;

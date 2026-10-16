@@ -59,11 +59,6 @@ export function AddToCart({ product }: { product: CartProduct }) {
             ? "VERIFICANDO…"
             : "AÑADIR AL CARRITO"}
         </span>
-        {product.purchasable && !pending && (
-          <span aria-hidden="true" className={styles.btnArrow}>
-            ↗
-          </span>
-        )}
       </button>
       <p className={styles.notice} role="status">
         {feedback}

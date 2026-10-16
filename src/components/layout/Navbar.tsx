@@ -67,7 +67,7 @@ export function Navbar({ storeTheme = false, minimal = false }: NavbarProps) {
 
   return (
     <>
-      <header className="fixed top-0 left-0 right-0 z-50 px-6 sm:px-12 py-6 flex items-center justify-between pointer-events-auto mix-blend-difference text-[#F8F7F2] transition-opacity duration-300">
+      <header className={styles.navbar}>
         <Link
           href="/"
           className={`${
@@ -87,7 +87,7 @@ export function Navbar({ storeTheme = false, minimal = false }: NavbarProps) {
               type="button"
               onClick={handleOpenCart}
               aria-label={`Abrir carrito, ${cart.count} unidades`}
-              className="text-[11px] tracking-widest min-h-10 px-2 focus-visible:outline-2 focus-visible:outline-offset-4 cursor-pointer"
+              className="text-[11px] tracking-widest min-h-10 px-2 focus-visible:outline-2 focus-visible:outline-offset-4 cursor-pointer hover:opacity-80 transition-opacity"
             >
               CARRITO ({cart.count})
             </button>
@@ -103,9 +103,9 @@ export function Navbar({ storeTheme = false, minimal = false }: NavbarProps) {
             aria-haspopup="dialog"
             className="group flex flex-col justify-center items-end gap-[5px] w-12 h-12 p-2 cursor-pointer focus-visible:outline-2 focus-visible:outline-offset-4"
           >
-            <span className="block w-7 sm:w-8 h-[2px] bg-[#F8F7F2] group-hover:w-8 transition-all duration-300" />
-            <span className="block w-5 sm:w-6 h-[2px] bg-[#F8F7F2] group-hover:w-8 transition-all duration-300" />
-            <span className="block w-7 sm:w-8 h-[2px] bg-[#F8F7F2] group-hover:w-8 transition-all duration-300" />
+            <span className="block w-7 sm:w-8 h-[2px] bg-current group-hover:w-8 transition-all duration-300" />
+            <span className="block w-5 sm:w-6 h-[2px] bg-current group-hover:w-8 transition-all duration-300" />
+            <span className="block w-7 sm:w-8 h-[2px] bg-current group-hover:w-8 transition-all duration-300" />
           </button>
         </div>
       </header>

@@ -96,7 +96,7 @@ export function HomeFooter() {
             </h4>
             <div className="flex flex-col gap-3 font-bold text-sm tracking-wider uppercase">
               <a
-                href="https://instagram.com/uschh.ec"
+                href="https://www.instagram.com/uschh_/"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="hover:translate-x-1 transition-all duration-200 inline-flex items-center gap-1.5 w-fit"

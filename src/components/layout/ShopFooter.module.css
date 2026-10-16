@@ -20,6 +20,16 @@
   text-transform: uppercase;
 }
 
+.socialLink {
+  color: inherit;
+  text-decoration: none;
+  transition: opacity 200ms ease;
+}
+
+.socialLink:hover {
+  opacity: 0.7;
+}
+
 .logo {
   display: block;
   width: 100%;
