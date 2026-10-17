@@ -7,6 +7,7 @@ export type ConfirmedOrderEmailData = {
   email: string;
   firstName: string;
   lastName: string;
+  idNumber?: string | null;
   address: string;
   city: string;
   province: string;
@@ -23,53 +24,85 @@ export type ConfirmedOrderEmailData = {
   }[];
 };
 
+function escapeHtml(value: string): string {
+  return value
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#39;");
+}
+
 export async function sendOrderConfirmationEmail(order: ConfirmedOrderEmailData): Promise<boolean> {
   const formattedNumber = formatOrderNumber(order.number);
   const formattedTotal = formatMoney(order.total, order.currency);
-  const customerName = `${order.firstName} ${order.lastName}`.trim();
+  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL?.trim() || "https://uschh-ec.com";
 
-  const subject = `¡Tu pedido ${formattedNumber} de USCHH ha sido confirmado!`;
-  const itemsText = order.items
-    .map(
-      (item) =>
-        `- ${item.quantity} × ${item.productName} (${item.flavor}) — ${formatMoney(item.lineTotal, order.currency)}`
+  const subject = `¡Gracias por tu compra! Pedido #${formattedNumber} confirmado`;
+
+  const productsSummary = order.items
+    .map((item) =>
+      order.items.length > 1
+        ? `${item.productName} (${item.flavor}) × ${item.quantity}`
+        : `${item.productName} (${item.flavor})`
     )
-    .join("\n");
+    .join(", ");
 
-  const paymentVerifiedText =
-    order.paymentMethod === "CARD"
-      ? "¡Tu pago con tarjeta ha sido verificado y confirmado con éxito a través de PayPhone!"
-      : "¡Tu transferencia bancaria ha sido verificada y confirmada con éxito!";
+  const totalQuantity = order.items.reduce((sum, item) => sum + item.quantity, 0);
+  const fullAddress = `${order.address}, ${order.city}, ${order.province}`;
 
-  const emailBody = `Hola ${customerName},
+  const emailText = `¡Gracias por tu compra!
 
-${paymentVerifiedText}
+Tu pedido #${formattedNumber} está confirmado y ya estamos preparando todo para que pronto tengas tu USCHH contigo.
 
-Tu pedido ${formattedNumber} está en preparación y pronto comenzará su camino hacia ti.
+Resumen de tu pedido
 
-DETALLES DEL PEDIDO:
-Referencia: ${formattedNumber}
-Total pagado: ${formattedTotal}
+Producto: ${productsSummary}
+Cantidad: ${totalQuantity}
+Total: ${formattedTotal}
+Dirección de entrega: ${fullAddress}
 
-PRODUCTOS:
-${itemsText}
+Te enviaremos una actualización cuando tu pedido esté en camino.
 
-DIRECCIÓN DE ENTREGA:
-${order.address}
-${order.city}, ${order.province}
+Gracias por confiar en nosotros y por ser parte de esta comunidad que recién empieza.
 
-Te notificaremos tan pronto como tu paquete sea despachado.
-
-¡Gracias por confiar en USCHH y permitirnos acompañarte en tu movimiento!
+Nos vemos en movimiento. ⚡
 
 Equipo USCHH
-info@uschh.com
+Eleva tu potencial.
+
+Visita nuestra página web: ${siteUrl}
 `;
+
+  const emailHtml = `<div style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; color: #111111; line-height: 1.6; max-width: 560px;">
+  <p style="font-size: 18px; font-weight: 700; margin: 0 0 16px 0;">¡Gracias por tu compra!</p>
+  <p style="margin: 0 0 20px 0;">
+    Tu pedido <strong>#${escapeHtml(formattedNumber)}</strong> está confirmado y ya estamos preparando todo para que pronto tengas tu USCHH contigo.
+  </p>
+  <p style="margin: 0 0 8px 0;"><strong>Resumen de tu pedido</strong></p>
+  <p style="margin: 0 0 20px 0;">
+    Producto: ${escapeHtml(productsSummary)}<br />
+    Cantidad: ${totalQuantity}<br />
+    Total: ${escapeHtml(formattedTotal)}<br />
+    Dirección de entrega: ${escapeHtml(fullAddress)}
+  </p>
+  <p style="margin: 0 0 16px 0;">Te enviaremos una actualización cuando tu pedido esté en camino.</p>
+  <p style="margin: 0 0 16px 0;">Gracias por confiar en nosotros y por ser parte de esta comunidad que recién empieza.</p>
+  <p style="margin: 0 0 20px 0;"><strong>Nos vemos en movimiento. ⚡</strong></p>
+  <p style="margin: 0 0 20px 0;">
+    Equipo USCHH<br />
+    Eleva tu potencial.
+  </p>
+  <p style="margin: 0;">
+    <a href="${escapeHtml(siteUrl)}" style="color: #111111; font-weight: 600; text-decoration: underline;">Visita nuestra página web</a>
+  </p>
+</div>`;
 
   // 1. If RESEND_API_KEY is available, send via Resend API
   if (process.env.RESEND_API_KEY?.trim()) {
     try {
-      const fromEmail = process.env.EMAIL_FROM?.trim() || "USCHH <pedidos@uschh.com>";
+      const fromEmail = process.env.EMAIL_FROM?.trim() || "USCHH <pedidos@uschh-ec.com>";
+      const replyTo = process.env.EMAIL_REPLY_TO?.trim() || "uschh.suplementos@gmail.com";
       const res = await fetch("https://api.resend.com/emails", {
         method: "POST",
         headers: {
@@ -78,9 +111,11 @@ info@uschh.com
         },
         body: JSON.stringify({
           from: fromEmail,
+          reply_to: replyTo,
           to: order.email,
           subject,
-          text: emailBody,
+          text: emailText,
+          html: emailHtml,
         }),
       });
 

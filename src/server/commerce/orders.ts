@@ -20,6 +20,7 @@ export function publicOrder(order: OrderDetails) {
     shippingMode: order.shippingMode,
     email: order.email,
     customerName: `${order.firstName} ${order.lastName}`,
+    idNumber: order.idNumber ?? null,
     phone: order.phone,
     address: order.address,
     city: order.city,

@@ -120,6 +120,7 @@ model Order {
   fulfillmentStatus      FulfillmentStatus @default(UNFULFILLED)
   firstName              String
   lastName               String
+  idNumber               String?           @db.VarChar(30)
   email                  String
   phone                  String
   province               String

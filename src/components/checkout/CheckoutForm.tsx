@@ -138,7 +138,7 @@ export function CheckoutForm() {
     if (ppPreparing || !valid || !formRef.current) return;
     const form = new FormData(formRef.current);
     const customer = Object.fromEntries(
-      ["firstName", "lastName", "email", "phone", "province", "area", "address", "deliveryInstructions"].map(
+      ["firstName", "lastName", "idNumber", "email", "phone", "province", "area", "address", "deliveryInstructions"].map(
         (key) => [key, form.get(key)]
       )
     ) as Record<string, string>;
@@ -212,7 +212,7 @@ export function CheckoutForm() {
     const form = new FormData(event.currentTarget);
     const value = {
       customer: Object.fromEntries(
-        ["firstName", "lastName", "email", "phone", "province", "area", "address", "deliveryInstructions"].map(
+        ["firstName", "lastName", "idNumber", "email", "phone", "province", "area", "address", "deliveryInstructions"].map(
           (key) => [key, form.get(key)]
         )
       ),
@@ -282,6 +282,16 @@ export function CheckoutForm() {
               autoComplete="family-name"
               required
               maxLength={80}
+              onChange={() => ppReady && setPpReady(false)}
+            />
+          </label>
+          <label className={styles.full}>
+            Cédula, RUC o Pasaporte (opcional, para facturación)
+            <input
+              name="idNumber"
+              autoComplete="off"
+              maxLength={30}
+              placeholder="Ej. 1712345678"
               onChange={() => ppReady && setPpReady(false)}
             />
           </label>

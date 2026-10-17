@@ -1,4 +1,4 @@
-﻿import { DELIVERY_AREAS } from "./config";
+import { DELIVERY_AREAS } from "./config";
 export class CheckoutError extends Error {
   constructor(public code: string, message: string, public status = 400) { super(message); }
 }
@@ -8,13 +8,15 @@ export function validateCheckout(value: unknown) {
   const source = body.customer;
   if (!source || typeof source !== "object") throw new CheckoutError("CUSTOMER", "Completa tus datos de entrega.");
   const customer = source as Record<string, unknown>;
-  const labels: Record<string,string> = { firstName:"el nombre",lastName:"el apellido",email:"el email",phone:"el teléfono",address:"la dirección",deliveryInstructions:"las instrucciones de entrega" };
+  const labels: Record<string,string> = { firstName:"el nombre",lastName:"el apellido",idNumber:"la cédula, RUC o pasaporte",email:"el email",phone:"el teléfono",address:"la dirección",deliveryInstructions:"las instrucciones de entrega" };
   const text = (field: string, max: number, required = true) => {
     const value = customer[field];
     const controls=field==="deliveryInstructions" ? /[\u0000-\u0008\u000b\u000c\u000e-\u001f]/ : /[\u0000-\u001f]/;
     if (typeof value !== "string" || value.trim().length > max || (required && !value.trim()) || controls.test(value)) throw new CheckoutError("CUSTOMER", `Revisa ${labels[field] ?? "los datos de entrega"}.`);
     return value.trim();
   };
+  const rawIdNumber = customer.idNumber === undefined || customer.idNumber === null ? "" : text("idNumber", 30, false);
+  if (rawIdNumber && (!/^[A-Za-z0-9 .-]{5,30}$/.test(rawIdNumber) || rawIdNumber.replace(/[^A-Za-z0-9]/g, "").length < 5)) throw new CheckoutError("ID_NUMBER", "Introduce un número de cédula, RUC o pasaporte válido.");
   const email = text("email", 254).toLowerCase();
   if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) throw new CheckoutError("EMAIL", "Introduce un email válido.");
   const phone = text("phone", 30);
@@ -33,7 +35,7 @@ export function validateCheckout(value: unknown) {
     return { id: item.id, slug: item.slug, quantity: item.quantity };
   }).sort((a,b) => a.id.localeCompare(b.id));
   return {
-    customer: { firstName: text("firstName",80), lastName: text("lastName",80), email, phone, province: area.province, city: area.label, area: area.id, address: text("address",500), deliveryInstructions: customer.deliveryInstructions === undefined ? "" : text("deliveryInstructions",500,false) },
+    customer: { firstName: text("firstName",80), lastName: text("lastName",80), idNumber: rawIdNumber || null, email, phone, province: area.province, city: area.label, area: area.id, address: text("address",500), deliveryInstructions: customer.deliveryInstructions === undefined ? "" : text("deliveryInstructions",500,false) },
     items, paymentMethod: "BANK_TRANSFER" as const, marketingConsent: body.marketingConsent === true,
   };
 }

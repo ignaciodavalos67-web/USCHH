@@ -28,9 +28,15 @@ test("valid checkout creates unpaid order/payment, reservation and exact authori
   assert.equal((await database.client.product.findUniqueOrThrow({where:{id:"lemon"}})).stock,4);
   assert.equal((await database.client.inventoryMovement.findFirstOrThrow()).type,"RESERVATION");
 });
-test("required fields, email, phone, area, method and quantity are validated",async()=>{
+test("required fields, optional idNumber, email, phone, area, method and quantity are validated",async()=>{
   for(const firstName of ["",null,undefined])assert.throws(()=>validateCheckout(input(1,{customer:{...customer,firstName}})));
   for(const field of ["lastName","email","phone","province","area","address"])assert.throws(()=>validateCheckout(input(1,{customer:{...customer,[field]:""}})));
+  assert.equal(validateCheckout(input(1,{customer:{...customer,idNumber:""}})).customer.idNumber,null);
+  assert.equal(validateCheckout(input(1,{customer:{...customer,idNumber:"1712345678"}})).customer.idNumber,"1712345678");
+  assert.equal(validateCheckout(input(1,{customer:{...customer,idNumber:"1793231533001"}})).customer.idNumber,"1793231533001");
+  assert.equal(validateCheckout(input(1,{customer:{...customer,idNumber:"AB123456"}})).customer.idNumber,"AB123456");
+  assert.throws(()=>validateCheckout(input(1,{customer:{...customer,idNumber:"123"}})));
+  assert.throws(()=>validateCheckout(input(1,{customer:{...customer,idNumber:"invalid@id!"}})));
   assert.throws(()=>validateCheckout(input(1,{customer:{...customer,email:"not-email"}})));
   assert.throws(()=>validateCheckout(input(1,{customer:{...customer,phone:"letters"}})));
   assert.throws(()=>validateCheckout(input(1,{customer:{...customer,area:"guayaquil"}})));

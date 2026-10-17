@@ -162,8 +162,11 @@ test("PayPhone commission calculation: 5.75% commission + 15% VAT on commission"
   assert.equal(comm.estimatedSettlementDecimal.toFixed(2), "14.01");
 });
 
-test("validatePayphoneOrderInput validates fields, methods and items", () => {
+test("validatePayphoneOrderInput validates fields, optional idNumber, methods and items", () => {
   assert.doesNotThrow(() => validatePayphoneOrderInput(input(1)));
+  assert.equal(validatePayphoneOrderInput(input(1, { customer: { ...customer, idNumber: "1712345678" } })).customer.idNumber, "1712345678");
+  assert.equal(validatePayphoneOrderInput(input(1, { customer: { ...customer, idNumber: "" } })).customer.idNumber, null);
+  assert.throws(() => validatePayphoneOrderInput(input(1, { customer: { ...customer, idNumber: "123" } })));
   assert.throws(() => validatePayphoneOrderInput(input(1, { paymentMethod: "BANK_TRANSFER" })));
   assert.throws(() => validatePayphoneOrderInput(input(1, { customer: { ...customer, email: "invalid" } })));
   assert.throws(() => validatePayphoneOrderInput(input(1, { customer: { ...customer, phone: "123" } })));

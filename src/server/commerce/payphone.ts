@@ -20,6 +20,7 @@ export function validatePayphoneOrderInput(value: unknown) {
   const labels: Record<string, string> = {
     firstName: "el nombre",
     lastName: "el apellido",
+    idNumber: "la cédula, RUC o pasaporte",
     email: "el email",
     phone: "el teléfono",
     address: "la dirección",
@@ -33,6 +34,10 @@ export function validatePayphoneOrderInput(value: unknown) {
     }
     return val.trim();
   };
+  const rawIdNumber = customer.idNumber === undefined || customer.idNumber === null ? "" : text("idNumber", 30, false);
+  if (rawIdNumber && (!/^[A-Za-z0-9 .-]{5,30}$/.test(rawIdNumber) || rawIdNumber.replace(/[^A-Za-z0-9]/g, "").length < 5)) {
+    throw new CheckoutError("ID_NUMBER", "Introduce un número de cédula, RUC o pasaporte válido.");
+  }
   const email = text("email", 254).toLowerCase();
   if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)) throw new CheckoutError("EMAIL", "Introduce un email válido.");
   const phone = text("phone", 30);
@@ -75,6 +80,7 @@ export function validatePayphoneOrderInput(value: unknown) {
     customer: {
       firstName: text("firstName", 80),
       lastName: text("lastName", 80),
+      idNumber: rawIdNumber || null,
       email,
       phone,
       province: area.province,
@@ -437,6 +443,7 @@ export function createPayphoneService(
           data: {
             firstName: customer.firstName,
             lastName: customer.lastName,
+            idNumber: customer.idNumber || null,
             email: customer.email,
             phone: customer.phone,
             province: customer.province,

@@ -115,6 +115,12 @@ export function TransferInstructions({ order }: { order: Order }) {
             <span className={styles.detailLabel}>Importe total</span>
             <span className={styles.detailValue}>{order.total}</span>
           </div>
+          {order.idNumber && (
+            <div className={styles.detailRow}>
+              <span className={styles.detailLabel}>Cédula / RUC (Facturación)</span>
+              <span className={styles.detailValue}>{order.idNumber}</span>
+            </div>
+          )}
           <div className={styles.detailRow}>
             <span className={styles.detailLabel}>Correo electrónico</span>
             <span className={styles.detailValue}>{order.email}</span>
@@ -178,6 +184,12 @@ export function TransferInstructions({ order }: { order: Order }) {
             <span className={styles.detailLabel}>Importe total</span>
             <span className={styles.detailValue}>{order.total}</span>
           </div>
+          {order.idNumber && (
+            <div className={styles.detailRow}>
+              <span className={styles.detailLabel}>Cédula / RUC (Facturación)</span>
+              <span className={styles.detailValue}>{order.idNumber}</span>
+            </div>
+          )}
           <div className={styles.detailRow}>
             <span className={styles.detailLabel}>Correo electrónico</span>
             <span className={styles.detailValue}>{order.email}</span>

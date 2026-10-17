@@ -42,6 +42,7 @@ export default async function Detail({ params }: { params: Promise<{ orderNumber
         <section className={styles.section}>
           <h2>CLIENTE</h2>
           <p>{order.firstName} {order.lastName}</p>
+          <p>Cédula / RUC: <strong>{order.idNumber || "Consumidor final (no especificado)"}</strong></p>
           <p>{order.email}</p>
           <p>{order.phone}</p>
         </section>

@@ -14,7 +14,7 @@ export function orderFilter(filters:Filters):Prisma.OrderWhereInput {
   if(filters.payment){if(!Object.values(PaymentStatus).includes(filters.payment as PaymentStatus))throw new AdminError("Estado de pago no válido.");conditions.push({payments:{some:{status:filters.payment as PaymentStatus}}});}
   if(filters.waiting==="true")conditions.push({status:"PENDING_PAYMENT",payments:{some:{method:"BANK_TRANSFER",status:"PENDING",customerMarkedTransferredAt:{not:null}}}});
   if(filters.expired==="true")conditions.push({status:"PENDING_PAYMENT",reservationStatus:"RESERVED",reservationExpiresAt:{lte:new Date()}});
-  if(q){const number=/^(?:USCHH-)?(\d+)$/i.exec(q);conditions.push({OR:[...(number && Number.isSafeInteger(Number(number[1])) && Number(number[1])<=2147483647 ? [{number:Number(number[1])}] : []),{firstName:{contains:q,mode:"insensitive"}},{lastName:{contains:q,mode:"insensitive"}},{email:{contains:q,mode:"insensitive"}}]});}
+  if(q){const number=/^(?:USCHH-)?(\d+)$/i.exec(q);conditions.push({OR:[...(number && Number.isSafeInteger(Number(number[1])) && Number(number[1])<=2147483647 ? [{number:Number(number[1])}] : []),{firstName:{contains:q,mode:"insensitive"}},{lastName:{contains:q,mode:"insensitive"}},{idNumber:{contains:q,mode:"insensitive"}},{email:{contains:q,mode:"insensitive"}}]});}
   const dates=dateRange(filters.from,filters.to);if(dates)conditions.push({createdAt:dates});
   return {AND:conditions};
 }
