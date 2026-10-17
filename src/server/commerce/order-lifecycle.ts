@@ -33,10 +33,10 @@ export function createOrderLifecycle(db: PrismaClient, requireAdmin: () => Promi
       await tx.order.update({where:{id:orderId},data:{status:"PAID",paidAt:now,reservationStatus:"CONFIRMED",reservationConfirmedAt:now}});
       await tx.adminAuditEvent.create({data:{adminId,action:"PAYMENT_CONFIRMED",entityType:"Order",entityId:orderId,details:{paymentIds:pendingBankPayments.map(payment=>payment.id),amount:pendingBankPayments[0].amount.toFixed(2),currency:pendingBankPayments[0].currency,customerMarkedTransferredAt:pendingBankPayments[0].customerMarkedTransferredAt?.toISOString() ?? null}}});
     });
-    // Send customer confirmation email asynchronously after successful commit
+    // Send customer confirmation email after successful commit
     try {
       const confirmedOrder = await db.order.findUniqueOrThrow({ where: { id: orderId }, include: { items: true } });
-      void sendOrderConfirmationEmail(confirmedOrder);
+      await sendOrderConfirmationEmail(confirmedOrder);
     } catch (err) {
       console.error("[EMAIL ERROR] Error triggering confirmation email:", err);
     }
